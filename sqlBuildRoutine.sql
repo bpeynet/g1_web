@@ -14,21 +14,13 @@ CREATE TABLE Utilisateurs (
 INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165,null);
 INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', '2', TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, 5);
 
-CREATE TABLE Evaluations (
-    idEvaluation integer NOT NULL PRIMARY KEY,
-    evaluation integer NOT NULL,
-    dateEval date NOT NULL,
-    commentaire varchar(300),
-    CHECK (evaluation >= 0 AND evaluation <= 5)
-);
-
-
 CREATE TABLE Taches (
     idTache integer NOT NULL PRIMARY KEY,
-    titreTache varchar(100)
+    titreTache varchar(100),
+    idCommanditaire varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE
 );
 
-INSERT INTO Taches VALUES (1, 'Essai');
+INSERT INTO Taches VALUES (1, 'Essai','james.bond@mi6.gov.co.uk');
 
 CREATE TABLE TachesAtom (
     idTacheAtom integer NOT NULL PRIMARY KEY,
@@ -39,14 +31,33 @@ CREATE TABLE TachesAtom (
     longitude decimal(9,6) not null,
     datePlusTot date NOT NULL,
     datePlusTard date NOT NULL,
-    idTacheMere integer foreign key references Taches(idTache),/*a revoir erreur/*
+    idTacheMere integer NOT NULL references Taches(idTache) ON DELETE CASCADE,
+    idExecutant varchar(100) references Utilisateurs(email) ON DELETE SET NULL,
     CHECK (prixTache >= 0)
-/*check dates plus tard que la date d'aujourd'hui*/
 );
 
-INSERT INTO TachesAtom VALUES (1, 'Escorte d''Elizabeth', 'Attention! La mission contient un saut d''hélicoptère', 100.15, 43, 45, TO_date('04/05/2016','dd/mm/yyyy'), TO_date('04/05/2017','dd/mm/yyyy'), 1);
-INSERT INTO TachesAtom VALUES (2, 'Construire une application Web de crowsourcing', 'En équipe de 5', 0, 50, 62, TO_date('04/05/2016','dd/mm/yyyy'), TO_date('04/05/2017','dd/mm/yyyy'), 1);
+INSERT INTO TachesAtom VALUES (1, 'Escorte d''Elizabeth', 'Attention! La mission contient un saut d''hélicoptère', 100.15, 43, 45, TO_date('04/05/2016','dd/mm/yyyy'), TO_date('04/05/2017','dd/mm/yyyy'), 1, null);
+INSERT INTO TachesAtom VALUES (2, 'Construire une application Web de crowsourcing', 'En équipe de 5', 0, 50, 62, TO_date('04/05/2016','dd/mm/yyyy'), TO_date('04/05/2017','dd/mm/yyyy'), 1, null);
 
 CREATE TABLE Competences (
     nomComp varchar(100) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE Evaluations (
+    idEvaluation integer NOT NULL PRIMARY KEY,
+    evaluation integer NOT NULL,
+    dateEval date NOT NULL,
+    idEvalue varchar(100) NOT NULL references Utilisateurs(email) ON DELETE SET NULL,
+    idEvaluateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE SET NULL,
+    idTache integer NOT NULL references TachesAtom(idTacheAtom) ON DELETE SET NULL,
+    commentaire varchar(300),
+    CHECK (evaluation >= 0 AND evaluation <= 5),
+    CHECK (idEvalue != idEvaluateur)/*,
+    CHECK () que la tache a bien été proposé par idEvaluateur et faite par idEvalue*/
+);
+
+CREATE TABLE Candidatures (
+    idCandidature integer NOT NULL PRIMARY KEY,
+    idTacheAtom integer NOT NULL references TachesAtom(idTacheAtom),
+    idCandidat varchar(100) NOT NULL references Utilisateurs(email)
 );
