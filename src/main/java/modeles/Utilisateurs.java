@@ -16,31 +16,59 @@ import modeles.outils.Coordonnees;
  * @date 31/03/2016
  */
 public class Utilisateurs {
-    String email;
-    String mdp;
-    String nom;
-    String prénom;
-    Integer genre;
-    Date date;
-    Coordonnees coordonnees;
-    ArrayList<Competences> competences;
+    private String email;
+    private String mdp;
+    private String nom;
+    private String prénom;
+    private Integer genre;
+    private Date date;
+    private Coordonnees localisation;
+    private ArrayList<Competences> competences;
+    private Evaluation evaluation;
     
-    public Utilisateurs(String email, String mdp, String nom, String prénom, Integer genre, Date date, Coordonnees coordonnees) {
+    public Utilisateurs(String email, String mdp, String nom, String prénom, Integer genre, Date date, Coordonnees coordonnees, ArrayList<Competences> competences, Evaluation evaluation) {
         this.email = email;
         this.mdp = mdp;
         this.nom = nom;
         this.prénom = prénom;
         this.genre = genre;
         this.date = date;
-        this.coordonnees = coordonnees;
+        this.localisation = coordonnees;
         this.competences = new ArrayList<Competences>();
+        this.competences.addAll(competences);
+        this.evaluation = evaluation;
     }
     
-    // on efface et recopie tout à chaque modification
-    // solution plus économique ?
-    public void competencesAJour (ArrayList<Competences> competences) {
-        this.competences.clear();
-        this.competences.addAll(competences);
+    public String getEmail() {
+        return this.email;
+    }
+    
+    public String getMdp() {
+        return this.mdp;
+    }
+    
+    public String getNomPrénom() {
+        return this.prénom + " " + this.nom;
+     }
+    
+    public Integer getGenre() {
+        return this.genre;
+    }
+    
+    public Date getDate() {
+        return this.date;
+    }
+    
+    public Coordonnees getLocalisation() {
+        return this.localisation;
+    }
+    
+    public ArrayList<Competences> getCompetences() {
+        return this.competences;
+    }
+    
+    public Evaluation getEvaluation() {
+        return evaluation;
     }
     
 }
