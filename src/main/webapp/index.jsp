@@ -6,7 +6,7 @@
         <title>Accueil - Place du Marché</title>
     </head>
     <body>
-        <h1>Bievenue sur la <i>Place du Marché</i></h1>
+        <h1>CrowdHelping</h1>
         <p>Vous pouvez trouver ici des services rémunérés proposés par d'autres personnes et en proposer vous-mêmes.</p>
         <div>
             Exemples de tâches:
