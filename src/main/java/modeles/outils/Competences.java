@@ -8,6 +8,7 @@ package modeles.outils;
 /**
  *
  * @author ralambom
+ * @date 31/03/2016
  */
 public enum Competences {
     bricolage, couture, cuisine
