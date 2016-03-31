@@ -24,8 +24,9 @@ public class Utilisateurs {
     private Date date;
     private Coordonnees localisation;
     private ArrayList<Competences> competences;
+    private Evaluation evaluation;
     
-    public Utilisateurs(String email, String mdp, String nom, String prénom, Integer genre, Date date, Coordonnees coordonnees, ArrayList<Competences> competences) {
+    public Utilisateurs(String email, String mdp, String nom, String prénom, Integer genre, Date date, Coordonnees coordonnees, ArrayList<Competences> competences, Evaluation evaluation) {
         this.email = email;
         this.mdp = mdp;
         this.nom = nom;
@@ -35,6 +36,7 @@ public class Utilisateurs {
         this.localisation = coordonnees;
         this.competences = new ArrayList<Competences>();
         this.competences.addAll(competences);
+        this.evaluation = evaluation;
     }
     
     public String getEmail() {
@@ -63,6 +65,10 @@ public class Utilisateurs {
     
     public ArrayList<Competences> getCompetences() {
         return this.competences;
+    }
+    
+    public Evaluation getEvaluation() {
+        return evaluation;
     }
     
 }
