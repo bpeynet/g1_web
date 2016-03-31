@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Accueil - Place du Marché</title>
+        <title>CrowdHelping</title>
     </head>
     <body>
         <h1>CrowdHelping</h1>
