@@ -43,6 +43,18 @@ CREATE TABLE Competences (
     nomComp varchar(100) NOT NULL PRIMARY KEY
 );
 
+CREATE TABLE CompetencesUtilisateurs (
+    idCU integer NOT NULL PRIMARY KEY,
+    idUtilisateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,
+    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE
+);
+
+CREATE TABLE CompetencesTaches (
+    idCT integer NOT NULL PRIMARY KEY,
+    idTacheAtom integer NOT NULL references TachesAtom(idTacheAtom) ON DELETE CASCADE,
+    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE
+);
+
 CREATE TABLE Evaluations (
     idEvaluation integer NOT NULL PRIMARY KEY,
     evaluation integer NOT NULL,
