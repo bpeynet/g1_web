@@ -5,6 +5,8 @@
  */
 package controleur;
 
+import dao.DAOException;
+import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.annotation.Resource;
@@ -24,33 +26,7 @@ public class controleur extends HttpServlet {
     
     @Resource(name = "jdbc/bibliography")
     private DataSource ds;
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet controleur</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet controleur at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,21 +38,22 @@ public class controleur extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        PrintWriter out = response.getWriter();
+        String action = request.getParameter("action");
+        UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
+       
+        try {
+            if(action == null) {
+                actionLogin(request, response, utilisateurDAO);
+            }
+        } catch (DAOException e) {
+          // renvoi vers une page d'erreur bdErreur.jsp
+        }
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    
+    
+    public void actionLogin(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/login_accueil.jsp").forward(request, response);
     }
 
     /**
