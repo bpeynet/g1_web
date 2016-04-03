@@ -11,10 +11,10 @@ package modeles.outils;
  * @date 31/03/2016
  */
 public class Coordonnees {
-    Integer latitude;
-    Integer longitude;
+    private float latitude;
+    private float longitude;
     
-    public Coordonnees (int latitude, Integer longitude) {
+    public Coordonnees (float latitude, float longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

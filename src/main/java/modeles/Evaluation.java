@@ -25,6 +25,10 @@ public class Evaluation {
         this.commentaire = commentaire;
     }
     
+    public Evaluation(Integer evaluation) {
+        this.evaluation = evaluation;
+    }
+    
     public Integer getIdEval() {
         return idEvaluation;
     }

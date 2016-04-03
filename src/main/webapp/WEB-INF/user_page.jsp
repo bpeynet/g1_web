@@ -9,9 +9,19 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Accueil</title>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/skel.min.js"></script>
+        <script src="js/skel-layers.min.js"></script>
+        <script src="js/init.js"></script>
     </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+    <body class="landing">
+        <header id="header" class="alt">
+            <h1><strong>Bienvenue, ${utilisateur.prénom} ${utilisateur.nom}</strong></h1>
+        </header>
+        <section id="banner">
+            <h2>CrowdHelping</h2>
+            
+    </section>
+</body>
 </html>
