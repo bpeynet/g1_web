@@ -46,14 +46,31 @@ public class controleur extends HttpServlet {
             if(action == null) {
                 actionLogin(request, response, utilisateurDAO);
             }
+            if (action.equals("Connexion")) {
+                actionConnexion(request, response, utilisateurDAO);
+            }
+            if(action.equals("Inscription")) {
+                actionInscription(request, response, utilisateurDAO);
+            }
+            else {
+                getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
+            }
         } catch (DAOException e) {
-          // renvoi vers une page d'erreur bdErreur.jsp
+            getServletContext().getRequestDispatcher("/WEB-INF/bdErreur.jsp").forward(request, response);
         }
     }
     
     
     public void actionLogin(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/login_accueil.jsp").forward(request, response);
+    }
+    
+    public void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
+    }
+    
+    public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
     /**
