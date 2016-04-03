@@ -24,7 +24,7 @@
         <section id="banner">
             <h2>CrowdHelping</h2>
             <p>Des rencontres, des services, de l'humain.</p>
-            <form method="get" action="/controleur">
+            <form method="get" action="./controleur">
                 <div class="container 50%">
                     <input name="email" id="email" value="" placeholder="Email" type="email" autofocus required>
                     <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
