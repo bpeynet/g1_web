@@ -327,7 +327,7 @@ input[type="radio"] {
 input[type="checkbox"] + label,
 input[type="radio"] + label {
     text-decoration: none;
-    color: #666;
+    color: #aaa;
     cursor: pointer;
     display: inline-block;
     font-size: 1em;
