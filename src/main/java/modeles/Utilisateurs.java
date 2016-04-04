@@ -20,13 +20,13 @@ public class Utilisateurs {
     private String mdp;
     private String nom;
     private String prénom;
-    private Integer genre;
+    private int genre;
     private Date date;
     private Coordonnees localisation;
     private ArrayList<Competences> competences;
-    private Evaluation evaluation;
+    private float evaluation;
     
-    public Utilisateurs(String email, String mdp, String nom, String prénom, Integer genre, Date date, Coordonnees coordonnees, ArrayList<Competences> competences, Evaluation evaluation) {
+    public Utilisateurs(String email, String mdp, String nom, String prénom, int genre, Date date, Coordonnees coordonnees, ArrayList<Competences> competences, float evaluation) {
         this.email = email;
         this.mdp = mdp;
         this.nom = nom;
@@ -51,7 +51,7 @@ public class Utilisateurs {
         return this.prénom + " " + this.nom;
      }
     
-    public Integer getGenre() {
+    public int getGenre() {
         return this.genre;
     }
     
@@ -67,7 +67,7 @@ public class Utilisateurs {
         return this.competences;
     }
     
-    public Evaluation getEvaluation() {
+    public float getEvaluation() {
         return evaluation;
     }
     

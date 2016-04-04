@@ -45,7 +45,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             requeteSQL = "select * from Utilisateurs";
             rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
-                utilisateur = new Utilisateurs(rs.getString("email"), rs.getString("hash_de_motdepasse"), rs.getString("nom"),rs.getString("prenom"),rs.getInt("genre"),rs.getDate("datedenaissance"),new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),getCompetences(email),new Evaluation(rs.getInt("evaluation")));
+                utilisateur = new Utilisateurs(rs.getString("email"), 
+                        rs.getString("hash_de_motdepasse"), 
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getInt("genre"),
+                        rs.getDate("datedenaissance"),
+                        new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),
+                        getCompetences(email),
+                        rs.getFloat("evaluation"));
                 System.err.println(utilisateur);
             }
         } catch (SQLException e) {

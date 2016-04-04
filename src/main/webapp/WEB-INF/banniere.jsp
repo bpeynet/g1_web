@@ -1,0 +1,31 @@
+<%-- 
+    Document   : bannière
+    Created on : 4 avr. 2016, 15:53:54
+    Author     : ralambom
+--%>
+
+ <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Accueil</title>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/skel.min.js"></script>
+        <script src="js/skel-layers.min.js"></script>
+        <script src="js/init.js"></script>
+    </head>
+    <body class="landing">
+        <header id="header" class="alt">
+            <h1><strong>Bienvenue, ${utilisateur.prénom} ${utilisateur.nom}</strong></h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="#one">Accueil</a></li>
+                    <li><a href="generic.html">Tâches</a></li> <%--TODO--%>
+                    <li><a href="#one">Proposer une tâche</a></li> <%--TODO--%>
+                    <li><a href="#one">Mon Profil</a></li> <%--TODO--%>
+                    <li><a href="login_accueil.jsp">Se déconnecter</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id="banner">
+            <h2>CrowdHelping</h2>
+            
+    </section>
