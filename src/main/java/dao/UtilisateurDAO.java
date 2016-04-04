@@ -38,13 +38,16 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         ResultSet rs = null;
         String requeteSQL = "";
         Connection conn = null;
+        String mail = "'" + email + "'";
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select * from Utilisateurs where email = " + email;
+            requeteSQL = "select * from Utilisateurs";
             rs = st.executeQuery(requeteSQL);
-            utilisateur = new Utilisateurs(rs.getString("email"), rs.getString("mdp"), rs.getString("nom"),rs.getString("prénom"),rs.getInt("genre"),rs.getDate("date"),new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),getCompetences(email),new Evaluation(rs.getInt("evaluation")));
-            System.err.println(utilisateur);
+            if(rs.next()) {
+                utilisateur = new Utilisateurs(rs.getString("email"), rs.getString("hash_de_motdepasse"), rs.getString("nom"),rs.getString("prenom"),rs.getInt("genre"),rs.getDate("datedenaissance"),new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),getCompetences(email),new Evaluation(rs.getInt("evaluation")));
+                System.err.println(utilisateur);
+            }
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally{
@@ -59,7 +62,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         ResultSet rs = null;
         String requeteSQL = "";
         Connection conn = null;
-         try {
+         /*try {
             conn = getConnection();
             Statement st = conn.createStatement();
             requeteSQL = "select competence from CompetencesUtilisateurs where idUtilisateur = " + email;
@@ -74,7 +77,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {
             closeConnection(conn);
-        }
+        }*/
         
         return competencesUtilisateur;
     }

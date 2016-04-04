@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 @WebServlet(name = "controleur", urlPatterns = {"/controleur"})
 public class controleur extends HttpServlet {
     
-    @Resource(name = "jdbc/bibliography")
+    @Resource(name="jdbc/crowdhelping")
     private DataSource ds;
     
     /**
