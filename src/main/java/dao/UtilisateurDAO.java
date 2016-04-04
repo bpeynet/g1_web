@@ -47,7 +47,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select * from Utilisateurs where email =" + email;
+            requeteSQL = "select * from Utilisateurs where email ='" + email + "'";
             rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
                 utilisateur = new Utilisateurs(rs.getString("email"), 
