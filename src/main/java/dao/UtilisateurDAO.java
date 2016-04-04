@@ -6,6 +6,8 @@
 package dao;
 
 import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,9 +99,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     // TODO : ajouter Competences, Evaluation
     public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, Date date, String adresse) throws DAOException {
         Coordonnees coordonnees;
-        GeoApiContext context = new GeoApiContext().setApiKey();
-        GeoCodingResult[] result = null;
-        
+        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
+        GeocodingResult[] results = null;
+        try {
+            results = GeocodingApi.geocode(context, adresse).await();
+        } catch (Exception ex) {
+            throw new DAOException("Erreur Geocoding " + e.getMessage(), ex);
+        }
         Connection conn = null ;
         try {
             conn = getConnection();
