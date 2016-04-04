@@ -57,6 +57,9 @@ public class controleur extends HttpServlet {
             if(action.equals("Validation")) {
                 actionValidation(request, response, utilisateurDAO);
             }
+            if(action.equals("AjoutTache")) {
+                actionAjoutTache(request, response, utilisateurDAO);
+            }
             else {
                 getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
             }
@@ -100,5 +103,9 @@ public class controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
+    }
 
 }

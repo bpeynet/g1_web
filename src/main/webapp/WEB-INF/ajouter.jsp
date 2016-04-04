@@ -10,18 +10,30 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Nouvelle tâche</title>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/skel.min.js"></script>
+        <script src="js/skel-layers.min.js"></script>
+        <script src="js/init.js"></script>
     </head>
-    <body>
-         <form action="controleur" method="post" accept-charset="UTF-8">
-            <label>Titre de la tâche :</label><input type="text" name="titre" /> <br/>
-            <label>Cette tâche fait-elle partie d'un projet plus grand ? </label>
-                <input type="checkbox" name ="tacheatom" value='0'> Oui
-                <input type="checkbox" name="inproject" value='1'> Non
-            <!-- Annuler est un simple lien car il ne soumet pas le formulaire -->
-            <input name="confirm" type="submit" value="Annuler" />
-            <input name="confirm" type="submit" value="Valider" />
-            <!-- Pour indiquer au contrôleur quelle action faire, on utilise un champ caché -->
-            <input type="hidden" name="action" value="ajouter" />
-        </form>
+    <body class="landing">
+
+        <section id="banner">
+            <h2>Nouvelle tâche</h2>
+            <div class="container 50%">
+                <form action="controleur" method="post" accept-charset="UTF-8">
+                    <input type="text" name="titre" placeholder="Titre de la tâche"/><br/>
+                    Cette tâche fait-elle partie d'un projet plus grand ?
+                    <input type="radio" name="composition" id="tacheatom"><label for="tacheatom">Oui</label>
+                    <input type="radio" name="composition" id="inproject"><label for="inproject">Non</label>
+                    <!-- Annuler est un simple lien car il ne soumet pas le formulaire -->
+                    <ul class="actions">
+                        <li><input name="confirm" type="submit" value="Annuler" /></li>
+                        <li><input name="confirm" class="special" type="submit" value="Valider" /></li>
+                        <!-- Pour indiquer au contrôleur quelle action faire, on utilise un champ caché -->
+                        <li><input type="hidden" name="action" value="ajouter" /></li>
+                    </ul>
+                </form>
+            </div>
+        </section>
     </body>
 </html>

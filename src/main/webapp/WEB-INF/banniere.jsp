@@ -24,7 +24,7 @@
                 <ul>
                     <li><a href="#one">Accueil</a></li>
                     <li><a href="generic.html">Tâches</a></li> <%--TODO--%>
-                    <li><a href="#one">Proposer une tâche</a></li> <%--TODO--%>
+                    <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li> <%--TODO--%>
                     <li><a href="#one">Mon Profil</a></li> <%--TODO--%>
                     <li><a href=".">Se déconnecter</a></li>
                 </ul>
