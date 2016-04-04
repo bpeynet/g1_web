@@ -21,7 +21,7 @@
         <section id="banner">
             <h2>CrowdHelping</h2>
         
-            <jsp:include page="form.jsp"/> 
+            <jsp:include page="form.jsp"/>
             
     </section>
 </body>
