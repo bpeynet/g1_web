@@ -23,11 +23,17 @@
                 <form action="controleur" method="post" accept-charset="UTF-8">
                     <input type="text" name="titre" placeholder="Titre de la tâche"/><br/>
                     Cette tâche fait-elle partie d'un projet plus grand ?
-                    <input type="radio" name="composition" id="tacheatom"><label for="tacheatom">Oui</label>
-                    <input type="radio" name="composition" id="inproject"><label for="inproject">Non</label>
+                    <input type="radio" name="composition" id="tacheatom">
+                    <label for="tacheatom">Oui</label>
+                    <input type="radio" name="composition" id="inproject" checked>
+                    <label for="inproject">Non</label>
+                    <input type="date" placeholder="Date d'exécution au plus tôt" id="SoonestDate">
+                    <input type="date" placeholder="Date d'exécution au plus tard" id="LatestDate">
+                    <input type="number" placeholder="Récompense" id="prix" min="0" step="0.01">
+                    <input type="text" placeholder="Description" id="description">
                     <!-- Annuler est un simple lien car il ne soumet pas le formulaire -->
                     <ul class="actions">
-                        <li><input name="confirm" type="submit" value="Annuler" /></li>
+                        <li><a href="."><input name="annuler" type="button" value="Annuler"></a></li>
                         <li><input name="confirm" class="special" type="submit" value="Valider" /></li>
                         <!-- Pour indiquer au contrôleur quelle action faire, on utilise un champ caché -->
                         <li><input type="hidden" name="action" value="ajouter" /></li>
