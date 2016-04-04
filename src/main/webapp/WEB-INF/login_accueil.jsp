@@ -26,13 +26,13 @@
             <p>Des rencontres, des services, de l'humain.</p>
             <form method="get" action="./controleur">
                 <div class="container 50%">
-                    <input name="email" id="email" value="" placeholder="Email" type="email" autofocus required>
-                    <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
-                    <input id="conditions" name="conditions" type="checkbox" required>
+                    <input name="email" id="email" value="" placeholder="Email" type="email" autofocus>
+                    <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password">
+                    <input id="conditions" name="conditions" type="checkbox">
                     <label for="conditions">J'ai lu et j'accepte les conditions générales d'utilisation du service CrowdHelping.</label>
                     <ul class="actions">
-                        <li><input value="Connexion" class="special" type="submit"></li>
-                        <li><input value="Inscription" type="submit"></li>
+                        <li><input value="Connexion" class="special" type="submit" name="action"></li>
+                        <li><input value="Inscription" type="submit" name="action"></li>
                     </ul>
                 </div>
             </form>
