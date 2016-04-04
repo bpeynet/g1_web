@@ -5,11 +5,14 @@
  */
 package dao;
 
+import com.google.maps.GeoApiContext;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import javax.sql.DataSource;
 import modeles.Evaluation;
@@ -88,6 +91,35 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         }*/
         
         return competencesUtilisateur;
+    }
+    
+    
+    // TODO : ajouter Competences, Evaluation
+    public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, Date date, String adresse) throws DAOException {
+        Coordonnees coordonnees;
+        GeoApiContext context = new GeoApiContext().setApiKey();
+        GeoCodingResult[] result = null;
+        
+        Connection conn = null ;
+        try {
+            conn = getConnection();
+            PreparedStatement st =
+                conn.prepareStatement("INSERT INTO Utilisateurs (email,nom,prenom,hash_de_motdepasse,genre,datedenaissance,latitude,longitude,evaluation) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
+            st.setString(1, email);
+            st.setString(2, nom);
+            st.setString(3,prenom);
+            st.setString(4,mdp);
+            st.setInt(5,genre);
+            st.setDate(6, (java.sql.Date) date);
+            st.setFloat(7, coordonnees.getLatitude());
+            st.setFloat(8,coordonnees.getLongitude());
+            st.setFloat(9, -1);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
     }
     
 }

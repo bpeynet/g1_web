@@ -26,7 +26,7 @@
                     <li><a href="generic.html">Tâches</a></li> <%--TODO--%>
                     <li><a href="#one">Proposer une tâche</a></li> <%--TODO--%>
                     <li><a href="#one">Mon Profil</a></li> <%--TODO--%>
-                    <li><a href="login_accueil.jsp">Se déconnecter</a></li>
+                    <li><a href=".">Se déconnecter</a></li>
                 </ul>
             </nav>
         </header>

@@ -19,5 +19,14 @@ public class Coordonnees {
         this.longitude = longitude;
     }
     
+    
     //ajouter fonction convertissant adresse en coordonnées
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
 }

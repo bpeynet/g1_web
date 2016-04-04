@@ -53,6 +53,9 @@ public class controleur extends HttpServlet {
             if(action.equals("Inscription")) {
                 actionInscription(request, response, utilisateurDAO);
             }
+            if(action.equals("Validation")) {
+                actionValidation(request, response, utilisateurDAO);
+            }
             else {
                 getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
             }
@@ -73,6 +76,10 @@ public class controleur extends HttpServlet {
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         request.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+    }
+    
+    public void actionValidation(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        
     }
 
     /**
