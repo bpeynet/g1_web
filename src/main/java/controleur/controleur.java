@@ -24,10 +24,10 @@ import javax.sql.DataSource;
  */
 @WebServlet(name = "controleur", urlPatterns = {"/controleur"})
 public class controleur extends HttpServlet {
-    
-    @Resource(name="jdbc/crowdhelping")
+
+    @Resource(name = "jdbc/crowdhelping")
     private DataSource ds;
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -42,37 +42,39 @@ public class controleur extends HttpServlet {
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
-       
+
         try {
-            if(action == null) {
-                if (request.getSession(false).getAttribute("utilisateur") == null)
+            if (action == null) {
+                if (request.getSession(false).getAttribute("utilisateur") == null) {
                     actionLogin(request, response, utilisateurDAO);
-                else getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
-            } else switch (action) {
-                case "Deconnexion" : {
-                    request.getSession().setAttribute("utilisateur", null);
-                    getServletContext().getRequestDispatcher("/controleur").forward(request, response);
-                    break;
+                } else {
+                    getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
                 }
-                case "Connexion" : {
+            } else if (action.equals("Deconnexion")) {
+                request.getSession().invalidate();
+                actionLogin(request, response, utilisateurDAO);
+            } else switch (action) {
+                case "Connexion": {
                     actionConnexion(request, response, utilisateurDAO);
                     break;
                 }
-                case "Inscription" : {
+                case "Inscription": {
                     actionInscription(request, response, utilisateurDAO);
                     break;
                 }
-                case "Validation" : {
+                case "Validation": {
                     actionValidation(request, response, utilisateurDAO);
                     break;
                 }
-                case "AjoutTache" : {
-                    if (request.getSession(false).getAttribute("utilisateur") != null)
+                case "AjoutTache": {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
                         actionAjoutTache(request, response, utilisateurDAO);
-                    else response.sendRedirect("./controleur");
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
                     break;
                 }
-                default : {
+                default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
                     break;
                 }
@@ -81,38 +83,37 @@ public class controleur extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/bdErreur.jsp").forward(request, response);
         }
     }
-    
-    
+
     public void actionLogin(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/login_accueil.jsp").forward(request, response);
     }
-    
+
     public void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
     }
-    
+
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
-        session.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
+        session.setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
-    
+
     public void actionValidation(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-            String email = request.getParameter("email");
-            String mdp = request.getParameter("mdp");
-            String nom = request.getParameter("nom");
-            String prenom = request.getParameter("prenom");
-            String date = request.getParameter("date");
-            String adresse = request.getParameter("adresse");
-            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
-            request.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
-            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        String email = request.getParameter("email");
+        String mdp = request.getParameter("mdp");
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String date = request.getParameter("date");
+        String adresse = request.getParameter("adresse");
+        utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
+        request.setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
     private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
-    
+
     /**
      * Returns a short description of the servlet.
      *
