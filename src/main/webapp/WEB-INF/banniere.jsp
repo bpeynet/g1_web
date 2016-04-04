@@ -16,13 +16,13 @@
     <body class="landing">
         <header id="header" class="alt">
             <h1>Bienvenue, 
-                <% String user = ((Utilisateurs)request.getAttribute("utilisateur")).getNomPrenom();
+                <% String user = ((Utilisateurs)request.getSession().getAttribute("utilisateur")).getNomPrenom();
                 out.println(user);
                 %>
             </h1>
             <nav id="nav">
                 <ul>
-                    <li><a href="#one">Accueil</a></li>
+                    <li><a href="#">Accueil</a></li>
                     <li><a href="generic.html">Tâches</a></li> <%--TODO--%>
                     <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li> <%--TODO--%>
                     <li><a href="#one">Mon Profil</a></li> <%--TODO--%>

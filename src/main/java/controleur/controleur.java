@@ -78,7 +78,8 @@ public class controleur extends HttpServlet {
     }
     
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-        request.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
+        HttpSession session = request.getSession();
+        session.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
     
