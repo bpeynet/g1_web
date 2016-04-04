@@ -7,7 +7,7 @@
 <form method="get" action="/controleur">
                 <div class="container 50%">
                     <input name="nom" id="nom" value="" placeholder="Nom" type="text" autofocus required>
-                    <input name="prénom" id="prénom" value="" placeholder="Prénom" type="text">
+                    <input name="prenom" id="prenom" value="" placeholder="Prenom" type="text">
                     <input name="email" id="email" value="" placeholder="Email" type="email">
                     <input name="adresse" id="adresse" value="" placeholder="Adresse postale" type="text">
                     <input name="date" id="date" value="" placeholder="Date de naissance" type="date">

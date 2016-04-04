@@ -66,7 +66,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     
     public ArrayList<Competences> getCompetences(String email) throws DAOException {
-        ArrayList<Competences> competencesUtilisateur = null;
+        ArrayList<Competences> competencesUtilisateur = new ArrayList<Competences>();
         ResultSet rs = null;
         String requeteSQL = "";
         Connection conn = null;

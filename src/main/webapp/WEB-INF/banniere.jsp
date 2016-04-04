@@ -4,7 +4,8 @@
     Author     : ralambom
 --%>
 
- <head>
+ <%@page import="modeles.Utilisateurs"%>
+<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Accueil</title>
         <script src="js/jquery.min.js"></script>
@@ -14,7 +15,11 @@
     </head>
     <body class="landing">
         <header id="header" class="alt">
-            <h1><strong>Bienvenue, ${utilisateur.prénom} ${utilisateur.nom}</strong></h1>
+            <h1>Bienvenue, 
+                <% String user = ((Utilisateurs)request.getAttribute("utilisateur")).getNomPrenom();
+                out.println(user);
+                %>
+            </h1>
             <nav id="nav">
                 <ul>
                     <li><a href="#one">Accueil</a></li>
