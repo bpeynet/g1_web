@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import modeles.Utilisateurs;
 
 /**
  *
@@ -63,7 +64,9 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "Validation": {
-                    actionValidation(request, response, utilisateurDAO);
+                    if (request.getSession(false).getAttribute("utilisateur") == null) 
+                        actionValidationInscription(request, response, utilisateurDAO);
+                    else actionValidationUpdateProfil(request, response, utilisateurDAO);
                     break;
                 }
                 case "AjoutTache": {
@@ -71,6 +74,19 @@ public class controleur extends HttpServlet {
                         actionAjoutTache(request, response, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
+                    }
+                    break;
+                }
+                case "Profil": {
+                    if(request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionConsulterProfil(request, response, utilisateurDAO);
+                        getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
+                    }
+                    break;
+                }
+                case "ModificationProfil": {
+                    if(request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionModificationProfil(request, response, utilisateurDAO);
                     }
                     break;
                 }
@@ -98,7 +114,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
-    public void actionValidation(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String nom = request.getParameter("nom");
@@ -112,6 +128,23 @@ public class controleur extends HttpServlet {
 
     private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
+    }
+    
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
+        Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
+        request.setAttribute("nom", user.getNom());
+        request.setAttribute("prenom", user.getPrenom());
+        request.setAttribute("adresse", "a faire, dans controleur actionConsulterProfil, traduire coordonnées");
+        request.setAttribute("date", user.getDate());
+        request.setAttribute("email", user.getEmail());
+    }
+    
+    private void actionModificationProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
+        throw new UnsupportedOperationException();
+    }
+    
+    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
+        throw new UnsupportedOperationException();
     }
 
     /**

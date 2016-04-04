@@ -47,6 +47,14 @@ public class Utilisateurs {
         return this.mdp;
     }
     
+    public String getNom() {
+        return this.nom;
+    }
+    
+    public String getPrenom() {
+        return this.prenom;
+    }
+    
     public String getNomPrenom() {
         return this.prenom + " " + this.nom;
      }

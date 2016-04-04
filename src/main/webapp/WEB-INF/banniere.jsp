@@ -25,12 +25,8 @@
                 <li><a href="#">Accueil</a></li>
                 <li><a href="generic.html">Tâches</a></li> <%--TODO--%>
                 <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li> <%--TODO--%>
-                <li><a href="#one">Mon Profil</a></li> <%--TODO--%>
+                <li><a href="./controleur?action=Profil">Mon Profil</a></li> <%--TODO--%>
                 <li><a href="./controleur?action=Deconnexion">Se déconnecter</a></li>
             </ul>
         </nav>
     </header>
-    <section id="banner">
-        <h2>CrowdHelping</h2>
-
-    </section>

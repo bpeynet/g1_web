@@ -9,5 +9,8 @@
 
 <jsp:include page="banniere.jsp"/>
 
+<section id="banner">
+
+</section>
 </body>
 </html>
