@@ -45,7 +45,7 @@ public class controleur extends HttpServlet {
        
         try {
             if(action == null) {
-                if (request.getSession().getAttribute("utilisateur") == null)
+                if (request.getSession(false).getAttribute("utilisateur") == null)
                     actionLogin(request, response, utilisateurDAO);
                 else getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
             } else switch (action) {
@@ -67,7 +67,7 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "AjoutTache" : {
-                    if (request.getSession().getAttribute("utilisateur") != null)
+                    if (request.getSession(false).getAttribute("utilisateur") != null)
                         actionAjoutTache(request, response, utilisateurDAO);
                     else response.sendRedirect("./controleur");
                     break;
@@ -92,7 +92,7 @@ public class controleur extends HttpServlet {
     }
     
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
         session.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
