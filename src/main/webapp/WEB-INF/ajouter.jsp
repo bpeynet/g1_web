@@ -33,7 +33,7 @@
                     <input type="text" placeholder="Description" id="description">
                     <!-- Annuler est un simple lien car il ne soumet pas le formulaire -->
                     <ul class="actions">
-                        <li><a href="."><input name="annuler" type="button" value="Annuler"></a></li>
+                        <li><a href="./controleur"><input name="annuler" type="button" value="Annuler"></a></li>
                         <li><input name="confirm" class="special" type="submit" value="Valider" /></li>
                         <!-- Pour indiquer au contrôleur quelle action faire, on utilise un champ caché -->
                         <li><input type="hidden" name="action" value="ajouter" /></li>

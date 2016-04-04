@@ -9,7 +9,6 @@ import dao.DAOException;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,22 +45,37 @@ public class controleur extends HttpServlet {
        
         try {
             if(action == null) {
-                actionLogin(request, response, utilisateurDAO);
-            }
-            if (action.equals("Connexion")) {
-                actionConnexion(request, response, utilisateurDAO);
-            }
-            if(action.equals("Inscription")) {
-                actionInscription(request, response, utilisateurDAO);
-            }
-            if(action.equals("Validation")) {
-                actionValidation(request, response, utilisateurDAO);
-            }
-            if(action.equals("AjoutTache")) {
-                actionAjoutTache(request, response, utilisateurDAO);
-            }
-            else {
-                getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
+                if (request.getSession().getAttribute("utilisateur") == null)
+                    actionLogin(request, response, utilisateurDAO);
+                else getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+            } else switch (action) {
+                case "Deconnexion" : {
+                    request.getSession().setAttribute("utilisateur", null);
+                    getServletContext().getRequestDispatcher("/controleur").forward(request, response);
+                    break;
+                }
+                case "Connexion" : {
+                    actionConnexion(request, response, utilisateurDAO);
+                    break;
+                }
+                case "Inscription" : {
+                    actionInscription(request, response, utilisateurDAO);
+                    break;
+                }
+                case "Validation" : {
+                    actionValidation(request, response, utilisateurDAO);
+                    break;
+                }
+                case "AjoutTache" : {
+                    if (request.getSession().getAttribute("utilisateur") != null)
+                        actionAjoutTache(request, response, utilisateurDAO);
+                    else response.sendRedirect("./controleur");
+                    break;
+                }
+                default : {
+                    getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
+                    break;
+                }
             }
         } catch (DAOException e) {
             getServletContext().getRequestDispatcher("/WEB-INF/bdErreur.jsp").forward(request, response);
@@ -95,6 +109,10 @@ public class controleur extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
+    private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
+    }
+    
     /**
      * Returns a short description of the servlet.
      *
@@ -104,9 +122,4 @@ public class controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-        getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
-    }
-
 }
