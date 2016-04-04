@@ -47,7 +47,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select * from Utilisateurs";
+            requeteSQL = "select * from Utilisateurs where email =" + email;
             rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
                 utilisateur = new Utilisateurs(rs.getString("email"), 
@@ -96,16 +96,17 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     
-    // TODO : ajouter Competences, Evaluation
-    public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, Date date, String adresse) throws DAOException {
+    // TODO : ajouter Competences
+    public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
         Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
         GeocodingResult[] results = null;
         try {
             results = GeocodingApi.geocode(context, adresse).await();
         } catch (Exception ex) {
-            throw new DAOException("Erreur Geocoding " + e.getMessage(), ex);
+            throw new DAOException("Erreur Geocoding " + ex.getMessage(), ex);
         }
+        coordonnees = new Coordonnees(results[0].geometry.location.lat, results[0].geometry.location.lng);
         Connection conn = null ;
         try {
             conn = getConnection();
@@ -115,11 +116,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             st.setString(2, nom);
             st.setString(3,prenom);
             st.setString(4,mdp);
-            st.setInt(5,genre);
-            st.setDate(6, (java.sql.Date) date);
-            st.setFloat(7, coordonnees.getLatitude());
-            st.setFloat(8,coordonnees.getLongitude());
-            st.setFloat(9, -1);
+            st.setInt(5,2);
+            String date2 = "TO_date('11/11/1111','dd/mm/yyyy')";
+            st.setString(6, date2);
+            st.setDouble(7, 0);
+            st.setDouble(8,0);
+            st.setFloat(9,0);
             st.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);

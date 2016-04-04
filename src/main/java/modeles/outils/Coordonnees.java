@@ -11,10 +11,10 @@ package modeles.outils;
  * @date 31/03/2016
  */
 public class Coordonnees {
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
     
-    public Coordonnees (float latitude, float longitude) {
+    public Coordonnees (double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -22,11 +22,11 @@ public class Coordonnees {
     
     //ajouter fonction convertissant adresse en coordonnées
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 }

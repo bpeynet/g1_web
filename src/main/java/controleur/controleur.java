@@ -9,6 +9,7 @@ import dao.DAOException;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -79,7 +80,15 @@ public class controleur extends HttpServlet {
     }
     
     public void actionValidation(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-        
+            String email = request.getParameter("email");
+            String mdp = request.getParameter("mdp");
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            String date = request.getParameter("date");
+            String adresse = request.getParameter("adresse");
+            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
+            request.setAttribute("utilisateur",utilisateurDAO.getUtilisateur(request.getParameter("email")));
+            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
     /**

@@ -12,7 +12,7 @@
                     <input name="date" id="date" value="" placeholder="Date de naissance" type="date" required>
                     <input name="email" id="email" value="" placeholder="Email" type="email" required>
                     <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
-                    <input name="mdp" id="mdp" value="" placeholder="Confirmer le mot de passe" type="password" required>
+                    <input name="mdp" value="" placeholder="Confirmer le mot de passe" type="password" required>
                     <input id="conditions" name="conditions" type="checkbox" required>
                     <label for="conditions">J'ai lu et j'accepte les conditions générales d'utilisation du service CrowdHelping.</label>
                     <ul class="actions">
