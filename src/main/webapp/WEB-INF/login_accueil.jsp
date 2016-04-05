@@ -29,7 +29,7 @@
 
                     <ul class="actions">
                         <li><input value="Connexion" class="special" type="submit" name="action"></li>
-                        <li><input value="Inscription" type="submit" name="action"></li>
+                        <li><a href="./controleur?action=Inscription"><input type="button" value="Inscription"></a></li>
                     </ul>
                 </div>
             </form>
