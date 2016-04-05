@@ -96,6 +96,8 @@ public class controleur extends HttpServlet {
                 }
             }
         } catch (DAOException e) {
+            request.setAttribute("erreur", e);
+            request.setAttribute("erreur_message", e.getMessage());
             getServletContext().getRequestDispatcher("/WEB-INF/bdErreur.jsp").forward(request, response);
         }
     }
