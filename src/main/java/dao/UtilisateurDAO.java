@@ -111,7 +111,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             PreparedStatement st =
-                conn.prepareStatement("INSERT INTO Utilisateurs (email,nom,prenom,hash_de_motdepasse,genre,datedenaissance,latitude,longitude,evaluation) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
+                conn.prepareStatement("INSERT INTO Utilisateurs (email,nom,prenom,hash_de_motdepasse,genre,datedenaissance,latitude,longitude,adresse,evaluation) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,? ,?)");
             st.setString(1, email);
             st.setString(2, nom);
             st.setString(3,prenom);
@@ -121,7 +121,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             st.setString(6, date2);
             st.setDouble(7, 0);
             st.setDouble(8,0);
-            st.setFloat(9,0);
+            st.setString(9, adresse);
+            st.setFloat(10, 0);
             st.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
