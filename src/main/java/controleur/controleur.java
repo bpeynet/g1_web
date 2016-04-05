@@ -124,7 +124,7 @@ public class controleur extends HttpServlet {
         String date = request.getParameter("date");
         String adresse = request.getParameter("adresse");
         utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
-        request.setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+        request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
