@@ -4,7 +4,7 @@
     Author     : ralambom
 --%>
 
-<form method="get" action="/controleur">
+<form method="get" action="./controleur">
                 <div class="container 50%">
                     <input name="nom" id="nom" value="<% out.println(request.getAttribute("nom")==null ? "" : request.getAttribute("nom"));%>" placeholder="Nom" type="text" autofocus required>
                     <input name="prenom" id="prenom" value="<% out.println( request.getAttribute("prenom")==null ? "" : request.getAttribute("prenom"));%>" placeholder="Prenom" type="text" required>
