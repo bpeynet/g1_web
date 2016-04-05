@@ -7,6 +7,7 @@ CREATE TABLE Utilisateurs (
     dateDeNaissance date not null,
     latitude double not null,
     longitude double not null,
+    adresse varchar(100),
     evaluation float,
     CHECK (email like '%@%.%'),
     CHECK (genre = 1 OR genre = 2),
