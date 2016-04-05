@@ -56,6 +56,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         rs.getString("prenom"),
                         rs.getInt("genre"),
                         rs.getDate("datedenaissance"),
+                        rs.getString("adresse"),
                         new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),
                         getCompetences(email),
                         rs.getFloat("evaluation"));

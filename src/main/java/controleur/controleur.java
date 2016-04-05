@@ -136,7 +136,7 @@ public class controleur extends HttpServlet {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());
         request.setAttribute("prenom", user.getPrenom());
-        request.setAttribute("adresse", "a faire, dans controleur actionConsulterProfil, traduire coordonnées");
+        request.setAttribute("adresse", user.getAdresse());
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
     }
