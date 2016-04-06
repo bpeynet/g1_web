@@ -121,9 +121,19 @@ public class controleur extends HttpServlet {
         String adresse = request.getParameter("adresse");
         int genre = Integer.valueOf(request.getParameter("genre"));
         if (mdp.equals(mdpConfirm)) {
-            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
-            request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+            try {
+                utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+                getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+            } catch (DAOException ex) {
+                request.setAttribute("erreurMessage", "email déjà utilisé");
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("date", date);
+                request.setAttribute("adresse", adresse);
+                request.setAttribute("genre", genre);
+                actionInscription(request, response, utilisateurDAO);
+            }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
             request.setAttribute("email", email);
@@ -131,6 +141,7 @@ public class controleur extends HttpServlet {
             request.setAttribute("prenom", prenom);
             request.setAttribute("date", date);
             request.setAttribute("adresse", adresse);
+            request.setAttribute("genre", genre);
             actionInscription(request, response, utilisateurDAO);
         }
     }
