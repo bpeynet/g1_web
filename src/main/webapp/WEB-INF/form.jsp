@@ -3,7 +3,7 @@
     Created on : 3 avr. 2016, 14:38:05
     Author     : ralambom
 --%>
-<p><% out.println(request.getAttribute("erreurMessage")==null ? "" : request.getAttribute("erreurMessage")); %></p>
+<p><% out.print(request.getAttribute("erreurMessage")==null ? "" : request.getAttribute("erreurMessage")); %></p>
 <form method="get" action="./controleur">
                 <div class="container 50%">
                     <input name="nom" id="nom"
