@@ -183,6 +183,7 @@ public class controleur extends HttpServlet {
         if (mdp.equals(mdpConfirm)) {
             if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
                 utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
                 getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
             }
         } else {
