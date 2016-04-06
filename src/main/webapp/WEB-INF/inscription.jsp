@@ -18,11 +18,12 @@
         <script src="js/init.js"></script>
     </head>
     <body class="landing">
-        <section id="banner">
-            <h2>CrowdHelping</h2>
-        
-            <jsp:include page="form.jsp"/>
-            
+    <header id="header" class="alt">
+        <h1><a href=".">Accueil</a></h1>
+    </header>
+    <section id="banner">
+        <h2>CrowdHelping</h2>
+        <jsp:include page="form.jsp"/> 
     </section>
 </body>
 </html>

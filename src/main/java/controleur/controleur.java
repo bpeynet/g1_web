@@ -123,13 +123,24 @@ public class controleur extends HttpServlet {
     public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
+        String mdpConfirm = request.getParameter("mdpconfirm");
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String date = request.getParameter("date");
         String adresse = request.getParameter("adresse");
-        utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
-        request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        if (mdp.equals(mdpConfirm)) {
+            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
+            request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        } else {
+            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+            request.setAttribute("email", email);
+            request.setAttribute("nom", nom);
+            request.setAttribute("prenom", prenom);
+            request.setAttribute("date", date);
+            request.setAttribute("adresse", adresse);
+            actionInscription(request, response, utilisateurDAO);
+        }
     }
 
     private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
