@@ -85,14 +85,6 @@ public class controleur extends HttpServlet {
                     }
                     break;
                 }
-                case "ModificationProfil": {
-                    if(request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionModificationProfil(request, response, utilisateurDAO);
-                    } else {
-                        response.sendRedirect("./controleur");
-                    }
-                    break;
-                }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
                     break;
@@ -154,11 +146,8 @@ public class controleur extends HttpServlet {
         request.setAttribute("adresse", user.getAdresse());
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
+        request.setAttribute("genre", user.getGenre());
         getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
-    }
-    
-    private void actionModificationProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
-        throw new UnsupportedOperationException();
     }
     
     private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
