@@ -36,7 +36,7 @@ public class TacheAtom {
         this.datePlusTot = datePlusTot;
         this.datePlusTard = datePlusTard;
         this.competences = new ArrayList<Competences>();
-        this.competences.addAll(competences);
+        if (competences != null) this.competences.addAll(competences);
     }
     
     public Integer getIdTacheAtom() {

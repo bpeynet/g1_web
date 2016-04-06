@@ -6,6 +6,7 @@
 package controleur;
 
 import dao.DAOException;
+import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,6 +44,7 @@ public class controleur extends HttpServlet {
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
+        TacheDAO tacheDAO = new TacheDAO(ds);
 
         try {
             if (action == null) {
@@ -67,6 +69,14 @@ public class controleur extends HttpServlet {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
                         actionValidationInscription(request, response, utilisateurDAO);
                     else actionValidationUpdateProfil(request, response, utilisateurDAO);
+                    break;
+                }
+                case "Taches" : {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionVoirTache(request, response, tacheDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
                     break;
                 }
                 case "AjoutTache": {
@@ -184,6 +194,11 @@ public class controleur extends HttpServlet {
             request.setAttribute("adresse", adresse);
             actionConsulterProfil(request, response, utilisateurDAO);
         }
+    }
+
+    private void actionVoirTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO) throws ServletException, IOException, DAOException {
+        request.setAttribute("taches", tacheDAO.getTache(1));
+        getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
     /**

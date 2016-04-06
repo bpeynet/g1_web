@@ -20,7 +20,7 @@ public class Tache {
         this.idTache = idTache;
         this.titreTache = titreTache;
         this.taches = new ArrayList<TacheAtom>();
-        this.taches.addAll(taches);
+        if(taches != null) this.taches.addAll(taches);
     }
     
     public Integer getIdTache() {
