@@ -120,9 +120,42 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
     }
-
-    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int i, String date, String adresse) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    /**
+     * Modifie les données existantes dans la relation Utilisateurs dont la clé primaire est email.
+     * @param email
+     * @param mdp
+     * @param nom
+     * @param prenom
+     * @param genre
+     * @param date
+     * @param adresse
+     */
+    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
+        Coordonnees coordonnees;
+        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
+        GeocodingResult[] results = null;
+        try {
+            results = GeocodingApi.geocode(context, adresse).await();
+        } catch (Exception ex) {
+            throw new DAOException("Erreur Geocoding " + ex.getMessage(), ex);
+        }
+        coordonnees = new Coordonnees(results[0].geometry.location.lat, results[0].geometry.location.lng);
+        Connection conn = null ;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "UPDATE Utilisateurs SET nom='" + nom + "', prenom='" + prenom
+                    + "', hash_de_motdepasse='" + mdp + "', genre=" + genre
+                    + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude=" + coordonnees.getLatitude()
+                    + ", longitude=" + coordonnees.getLongitude() + ", adresse='" + adresse
+                    + "' WHERE email='"+ email + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
     }
     
 }

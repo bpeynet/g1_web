@@ -158,14 +158,12 @@ public class controleur extends HttpServlet {
         String prenom = request.getParameter("prenom");
         String date = request.getParameter("date");
         String adresse = request.getParameter("adresse");
+        int genre = Integer.valueOf(request.getParameter("genre"));
         if (mdp.equals(mdpConfirm)) {
             if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
-            //utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
-            request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
-            }/* else {
-                utilisateurDAO.remplacerUtilisateur(email, mdp, nom, prenom, genre)
-            }*/
+                utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+            }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
             request.setAttribute("email", email);
