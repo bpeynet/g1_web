@@ -80,7 +80,6 @@ public class controleur extends HttpServlet {
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionConsulterProfil(request, response, utilisateurDAO);
-                        getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -147,21 +146,41 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
-    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws ServletException, IOException {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());
         request.setAttribute("prenom", user.getPrenom());
         request.setAttribute("adresse", user.getAdresse());
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
+        getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
     }
     
     private void actionModificationProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
         throw new UnsupportedOperationException();
     }
     
-    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) {
-        throw new UnsupportedOperationException();
+    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        String email = request.getParameter("email");
+        String mdp = request.getParameter("mdp");
+        String mdpConfirm = request.getParameter("mdpconfirm");
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String date = request.getParameter("date");
+        String adresse = request.getParameter("adresse");
+        if (mdp.equals(mdpConfirm)) {
+            utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
+            request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        } else {
+            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+            request.setAttribute("email", email);
+            request.setAttribute("nom", nom);
+            request.setAttribute("prenom", prenom);
+            request.setAttribute("date", date);
+            request.setAttribute("adresse", adresse);
+            actionConsulterProfil(request, response, utilisateurDAO);
+        }
     }
 
     /**

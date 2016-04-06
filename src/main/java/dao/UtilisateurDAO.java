@@ -120,5 +120,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
     }
+
+    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int i, String date, String adresse) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
