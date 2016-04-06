@@ -112,7 +112,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date('11/11/1111','dd/mm/yyyy')," + 0 + "," + 0 + ",\'" + adresse + "\',null)";
+            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date('"+ date +"','yyyy/mm/dd')," + 0 + "," + 0 + ",\'" + adresse + "\',null)";
             ResultSet rs = st.executeQuery(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
