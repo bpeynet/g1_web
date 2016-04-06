@@ -113,7 +113,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             conn = getConnection();
             Statement st = conn.createStatement();
             String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date('"+ date +"','yyyy/mm/dd')," + 0 + "," + 0 + ",\'" + adresse + "\',null)";
-            assert (1==st.executeUpdate(requeteSQL));
+            st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {
@@ -151,7 +151,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude=" + coordonnees.getLatitude()
                     + ", longitude=" + coordonnees.getLongitude() + ", adresse='" + adresse
                     + "' WHERE email='"+ email + "'";
-            assert (1 == st.executeUpdate(requeteSQL));
+            st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {
