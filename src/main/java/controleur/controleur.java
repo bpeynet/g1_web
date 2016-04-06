@@ -81,12 +81,16 @@ public class controleur extends HttpServlet {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionConsulterProfil(request, response, utilisateurDAO);
                         getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("./controleur");
                     }
                     break;
                 }
                 case "ModificationProfil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionModificationProfil(request, response, utilisateurDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
                     }
                     break;
                 }
