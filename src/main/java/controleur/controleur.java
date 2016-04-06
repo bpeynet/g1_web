@@ -127,8 +127,9 @@ public class controleur extends HttpServlet {
         String prenom = request.getParameter("prenom");
         String date = request.getParameter("date");
         String adresse = request.getParameter("adresse");
+        int genre = Integer.valueOf(request.getParameter("genre"));
         if (mdp.equals(mdpConfirm)) {
-            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, 2, date, adresse);
+            utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
             request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
             getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
         } else {
