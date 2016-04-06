@@ -10,8 +10,8 @@
                            value="<% out.print(request.getAttribute("nom")==null ? "" : request.getAttribute("nom"));%>" placeholder="Nom" type="text" autofocus required>
                     <input name="prenom" id="prenom"
                            value="<% out.print( request.getAttribute("prenom")==null ? "" : request.getAttribute("prenom"));%>" placeholder="Prenom" type="text" required>
-                    <input type="radio" id="genre2" name="genre" value="2" required><label for="genre2">Homme</label>
-                    <input type="radio" id="genre1" name="genre" value="1" required><label for="genre1">Femme</label>
+                    <input type="radio" id="genre2" name="genre" value="2" required <% out.print( request.getAttribute("genre")!=null ? ( (int) request.getAttribute("genre")==2 ? "checked" : "") : "" ); %>><label for="genre2">Femme</label>
+                    <input type="radio" id="genre1" name="genre" value="1" required <% out.print( request.getAttribute("genre")!=null ? ( (int) request.getAttribute("genre")==1 ? "checked" : "") : "" ); %>><label for="genre1">Homme</label>
                     <input name="adresse" id="adresse"
                            value="<% out.print( request.getAttribute("adresse")==null ? "" : request.getAttribute("adresse"));%>" placeholder="Adresse postale" type="text" required>
                     <input name="date" id="date"
