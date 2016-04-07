@@ -15,11 +15,9 @@
 </head>
 <body class="landing">
     <header id="header" class="alt">
-        <h1>Bienvenue, 
-            <% String user = ((Utilisateurs) request.getSession().getAttribute("utilisateur")).getNomPrenom();
-                out.println(user);
-            %>
-        </h1>
+        <h1>Bienvenue, <% String user = ((Utilisateurs) request.getSession().getAttribute("utilisateur")).getNomPrenom();
+                out.print(user);
+            %></h1>
         <nav id="nav">
             <ul>
                 <li><a href="#">Accueil</a></li>
