@@ -27,7 +27,7 @@
                     document.getElementById("boutonAjoutTache").style.display="";
                     document.getElementsByClassName("titre")[0].placeholder="Titre de la première tâche";
                     barres = document.getElementsByClassName("hr")
-                    for (i=0; i<barres.length; i++){
+                    for (i=0; i<barres.length; i++) {
                         barres[i].style.display="";
                     }
                     j=0;
@@ -36,7 +36,7 @@
                     document.getElementById("boutonAjoutTache").style.display='none';
                     document.getElementsByClassName("titre")[0].placeholder="Titre de la tâche";
                     barres = document.getElementsByClassName("hr")
-                    for (i=0; i<barres.length; i++){
+                    for (i=0; i<barres.length; i++) {
                         barres[i].style.display="";
                     }
                     j=1;
@@ -47,8 +47,25 @@
                 numeroDeTache++;
                 var x = document.getElementsByClassName("tache")[0];
                 var clonedElement = x.cloneNode(true);
+                var b = document.createElement("button");
+                b.appendChild(document.createTextNode("Supprimer cette tâche"));
+                b.setAttribute("type","button");
+                b.setAttribute("onclick","this.parentElement.remove()");
+                clonedElement.appendChild(b);
+                clonedElement.insertBefore(document.createElement("hr"),clonedElement.childNodes[0]);
                 document.getElementById("Taches").appendChild(clonedElement);
                 document.getElementsByClassName("titre")[numeroDeTache-1].setAttribute("placeholder", "Titre de la " + numeroDeTache +"ème tâche");
+                
+            }
+            Element.prototype.remove = function() {
+                this.parentElement.removeChild(this);
+            }
+            NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+                for(var i = this.length - 1; i >= 0; i--) {
+                    if(this[i] && this[i].parentElement) {
+                        this[i].parentElement.removeChild(this[i]);
+                    }
+                }
             }
         </script>
         <section id="banner">
@@ -67,9 +84,8 @@
                             <input type="text" class="titre" name="titre" placeholder="Titre de la tâche"/>
                             <input type="date" placeholder="Date d'exécution au plus tôt" class="SoonestDate">
                             <input type="date" placeholder="Date d'exécution au plus tard" class="LatestDate">
-                            <input type="number" placeholder="Récompense" class="prix" min="0" step="0.01">
+                            <input type="number" placeholder="Récompense" class="prix" min="0" step="0.01"><span style="color:white">&euro;</span>
                             <input type="text" placeholder="Description" class="description">
-                            <hr class="hr" style="display:none"><br>
                         </div>
                     </div>
                     <button type="button" id="boutonAjoutTache" onclick="ajoutTache()" style="display:none">Ajouter une tâche</button>
