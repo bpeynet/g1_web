@@ -73,6 +73,9 @@ CREATE TABLE Competences (
     nomComp varchar(100) NOT NULL PRIMARY KEY
 );
 
+INSERT INTO Competences VALUES ('bricolage');
+INSERT INTO Competences VALUES ('couture');
+
 CREATE TABLE CompetencesUtilisateurs (
     idCU integer NOT NULL PRIMARY KEY,
     idUtilisateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,

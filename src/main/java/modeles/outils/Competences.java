@@ -11,9 +11,16 @@ package modeles.outils;
  * @date 31/03/2016
  */
 public class Competences {
-    String nomCompetence;
+    private String nomCompetence;
     
     public Competences(String nomCompetence) {
         this.nomCompetence = nomCompetence;
     }
+
+    public String getNomCompetence() {
+        return nomCompetence;
+    }
+    
+    
+    
 }

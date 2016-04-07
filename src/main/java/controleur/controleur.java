@@ -5,11 +5,13 @@
  */
 package controleur;
 
+import dao.CompetenceDAO;
 import dao.DAOException;
 import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import modeles.Utilisateurs;
+import modeles.outils.Competences;
 
 /**
  *
@@ -44,6 +47,7 @@ public class controleur extends HttpServlet {
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
+        CompetenceDAO competenceDAO = new CompetenceDAO(ds);
         TacheDAO tacheDAO = new TacheDAO(ds);
 
         try {
@@ -62,12 +66,12 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "Inscription": {
-                    actionInscription(request, response, utilisateurDAO);
+                    actionInscription(request, response, utilisateurDAO, competenceDAO);
                     break;
                 }
                 case "Validation": {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
-                        actionValidationInscription(request, response, utilisateurDAO);
+                        actionValidationInscription(request, response, utilisateurDAO, competenceDAO);
                     else actionValidationUpdateProfil(request, response, utilisateurDAO);
                     break;
                 }
@@ -111,7 +115,8 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/login_accueil.jsp").forward(request, response);
     }
 
-    public void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    public void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
+        request.setAttribute("competences",competenceDAO.getListCompetences());
         getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
     }
 
@@ -121,7 +126,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
-    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String mdpConfirm = request.getParameter("mdpconfirm");
@@ -142,7 +147,7 @@ public class controleur extends HttpServlet {
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
-                actionInscription(request, response, utilisateurDAO);
+                actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
@@ -152,7 +157,7 @@ public class controleur extends HttpServlet {
             request.setAttribute("date", date);
             request.setAttribute("adresse", adresse);
             request.setAttribute("genre", genre);
-            actionInscription(request, response, utilisateurDAO);
+            actionInscription(request, response, utilisateurDAO,competenceDAO);
         }
     }
 

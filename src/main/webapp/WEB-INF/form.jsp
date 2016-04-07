@@ -3,6 +3,7 @@
     Created on : 3 avr. 2016, 14:38:05
     Author     : ralambom
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <p><% out.print(request.getAttribute("erreurMessage")==null ? "" : request.getAttribute("erreurMessage")); %></p>
 <form method="get" action="./controleur">
                 <div class="container 50%">
@@ -16,6 +17,13 @@
                            value="<% out.print( request.getAttribute("adresse")==null ? "" : request.getAttribute("adresse"));%>" placeholder="Adresse postale" type="text" required>
                     <input name="date" id="date"
                            value="<% out.print( request.getAttribute("date")==null ? "" : request.getAttribute("date"));%>" placeholder="Date de naissance" type="date" required>
+                     
+                    <label style="color:whitesmoke"> Quelles sont vos compétences ? </label>
+                     
+                    <c:forEach items ="${competences}" var = "element">
+                        <input id="i" value="${element.nomCompetence}" name="${element.nomCompetence}" type="checkbox"> <label for="i">${element.nomCompetence}</label>
+                    </c:forEach>
+                    
                     <input name="email" id="email"
                            value="<% out.print( request.getAttribute("email")==null ? "" : request.getAttribute("email"));%>" placeholder="Email" type="email" required>
                     <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
