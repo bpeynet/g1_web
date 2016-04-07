@@ -77,7 +77,7 @@ public class controleur extends HttpServlet {
                 }
                 case "Taches" : {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionVoirTache(request, response, tacheDAO);
+                        actionVoirTaches(request, response, tacheDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -202,8 +202,8 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionVoirTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO) throws ServletException, IOException, DAOException {
-        request.setAttribute("taches", tacheDAO.getTache(1));
+    private void actionVoirTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO) throws ServletException, IOException, DAOException {
+        request.setAttribute("taches", tacheDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
