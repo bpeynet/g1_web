@@ -16,17 +16,37 @@
         <script src="js/init.js"></script>
     </head>
     <body class="landing">
-
+        <%-- TODO : ajouter required pour chaque champ --%>
+        <script language=javascript>
+        function remplir(){
+            document.getElementById('projet').value=document.getElementById('titre1').value;
+            return true;
+        }
+        function desactiver(){
+            document.getElementById('projet').display="true";
+            //document.form.projet.disabled=true;
+            return true;
+        }
+        function activer(){
+        document.getElementById('projet').display="none";    
+        //document.form.projet.disabled=false;
+            return true;
+        }
+        </script>
         <section id="banner">
             <h2>Nouvelle tâche</h2>
             <div class="container 50%">
                 <form action="controleur" method="post" accept-charset="UTF-8">
-                    <input type="text" name="titre" placeholder="Titre de la tâche"/><br/>
+                    <input type="text" id="titre1" name="titre" placeholder="Titre de la tâche" onkeyup="remplir()"/><br/>
+                    
                     Cette tâche fait-elle partie d'un projet plus grand ?
-                    <input type="radio" name="composition" id="tacheatom">
+                    <input type="radio" name="composition" id="tacheatom"  onclick="activer()">
                     <label for="tacheatom">Oui</label>
-                    <input type="radio" name="composition" id="inproject" checked>
+                    <input type="radio" name="composition" id="inproject" checked onclick="desactiver()">
                     <label for="inproject">Non</label>
+                    
+                    <input type="text" id="projet" name="projet" placeholder="Nom du projet"/>
+                    
                     <input type="date" placeholder="Date d'exécution au plus tôt" id="SoonestDate">
                     <input type="date" placeholder="Date d'exécution au plus tard" id="LatestDate">
                     <input type="number" placeholder="Récompense" id="prix" min="0" step="0.01">
