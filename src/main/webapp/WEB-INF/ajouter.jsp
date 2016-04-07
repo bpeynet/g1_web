@@ -30,7 +30,7 @@
                 } else {
                     i=1;
                     document.getElementById("projet").style.display="";
-                    document.getElementById("projet").placeholder = "Nom de la tâche";
+                    document.getElementById("projet").placeholder = "Nom du projet";
                 }
                 return true;
             }
