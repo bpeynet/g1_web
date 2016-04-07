@@ -6,6 +6,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -98,5 +99,21 @@ public class TacheDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
         return tache;
+    }
+    
+    public void ajouterTache(String titre, int idCommanditaire ) throws DAOException {
+                Connection conn = null ;
+        try {
+            conn = getConnection();
+            PreparedStatement st =
+                conn.prepareStatement("INSERT INTO Taches(titre, idCommanditaire) VALUES (?, ?)");
+            st.setString(1, titre);
+            st.setInt(2, idCommanditaire);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
     }
 }
