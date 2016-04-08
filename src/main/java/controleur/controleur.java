@@ -123,12 +123,17 @@ public class controleur extends HttpServlet {
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
         Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
-        if( usr.getMdp() == request.getParameter("mdp")) {
+        if(usr == null) {
+            request.setAttribute("erreur","Identifiant inconnu");
+            actionLogin(request, response, utilisateurDAO);
+            return;
+        }
+        if( usr.getMdp().equals(request.getParameter("mdp"))) {
             session.setAttribute("utilisateur", usr);
             getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
         }
         else {
-            request.setAttribute("erreurMdp","Mot de passe invalide");
+            request.setAttribute("erreur","Mot de passe invalide");
             actionLogin(request, response, utilisateurDAO);
         }
     }
@@ -153,15 +158,13 @@ public class controleur extends HttpServlet {
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
                 getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
             } catch (DAOException e) {
-                throw e;
-                /* Erreur de mail déjà présent
                 request.setAttribute("erreurMessage", "email déjà utilisé");
                 request.setAttribute("nom", nom);
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
-                actionInscription(request, response, utilisateurDAO, competenceDAO);*/
+                actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
@@ -187,7 +190,8 @@ public class controleur extends HttpServlet {
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
         request.setAttribute("genre", user.getGenre());
-        request.setAttribute("competences",competenceDAO.getListCompetences());
+        request.setAttribute("competences",utilisateurDAO.getUncheckedCompetences(user.getEmail()));
+        request.setAttribute("usrCompetences",utilisateurDAO.getCompetences(user.getEmail()));
         getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
     }
     

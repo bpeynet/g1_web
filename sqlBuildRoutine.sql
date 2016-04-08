@@ -70,7 +70,7 @@ INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une appl
     TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk');
 
 CREATE TABLE Competences (
-    nomComp varchar(100) NOT NULL PRIMARY KEY
+    competence varchar(100) NOT NULL PRIMARY KEY
 );
 
 INSERT INTO Competences VALUES ('bricolage');
@@ -82,7 +82,7 @@ INSERT INTO Competences VALUES ('cuisine');
 
 CREATE TABLE CompetencesUtilisateurs (
     idUtilisateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,
-    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE,
+    competence varchar(100) NOT NULL references Competences(competence) ON DELETE CASCADE,
     PRIMARY KEY (idUtilisateur, competence)
 );
 
@@ -105,7 +105,7 @@ CREATE TABLE CompetencesTaches (
     --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
     constraint FK_CompT_TAtom foreign key (idTacheAtom,idCommanditaire,idExecutant)
         references TachesAtom(idTacheAtom,idCommanditaire,idExecutant) ON DELETE CASCADE,
-    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE
+    competence varchar(100) NOT NULL references Competences(competence) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE CompetencesTaches_Sequence

@@ -32,7 +32,7 @@
                         <li><a href="./controleur?action=Inscription"><input type="button" value="Inscription"></a></li>
                     </ul>                   
                     
-                    <% out.print(request.getAttribute("erreurMdp")==null ? "" : "<p>" + request.getAttribute("erreurMdp") +"</p>");%>
+                    <% out.print(request.getAttribute("erreur")==null ? "" : "<p>" + request.getAttribute("erreur") +"</p>");%>
                 
                 </div>
             </form>

@@ -32,7 +32,7 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM competences");
             while (rs.next()) {
                 Competences competence =
-                    new Competences(rs.getString("nomComp"));
+                    new Competences(rs.getString("competence"));
                 result.add(competence);
             }
         } catch (SQLException e) {

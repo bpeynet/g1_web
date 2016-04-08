@@ -112,6 +112,31 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return competencesUtilisateur;
     }
     
+    public ArrayList<Competences> getUncheckedCompetences(String email) throws DAOException {
+        ArrayList<Competences> uncheckedCompetences = new ArrayList<Competences>();
+        ResultSet rs = null;
+        String requeteSQL = "";
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "(select competence from Competences) MINUS (select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\')";
+            rs = st.executeQuery(requeteSQL);
+
+            while (rs.next()) {
+                Competences competence = new Competences(rs.getString("competence"));
+                System.err.println(competence);
+                uncheckedCompetences.add(competence);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        
+        return uncheckedCompetences;
+    }
+    
     
     public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
         Coordonnees coordonnees;
