@@ -11,9 +11,4 @@ DROP SEQUENCE CompUtilisateurs_Sequence;
 DROP TABLE CompetencesTaches;
 DROP SEQUENCE CompetencesTaches_Sequence;
 DROP SEQUENCE Evaluations_Sequence;
-DROP SEQUENCE Candidatures_Sequence
-
-
-
---SELECT table_name FROM user_tables; 
---SELECT sequence_name FROM user_sequences; 
+DROP SEQUENCE Candidatures_Sequence;

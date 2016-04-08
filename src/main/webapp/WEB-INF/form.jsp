@@ -20,8 +20,10 @@
                      
                     <label style="color:whitesmoke"> Quelles sont vos compétences ? </label>
                      
+                    <% int a = 0; %>
                     <c:forEach items ="${competences}" var = "element">
-                        <input id="i" value="${element.nomCompetence}" name="${element.nomCompetence}" type="checkbox"> <label for="i">${element.nomCompetence}</label>
+                        <input id="id<%=a%>"value="${element.nomCompetence}" name="${element.nomCompetence}" type="checkbox"> <label for="id<%=a%>">${element.nomCompetence}</label>
+                        <% a = a + 1 ;%>
                     </c:forEach>
                     
                     <input name="email" id="email"
