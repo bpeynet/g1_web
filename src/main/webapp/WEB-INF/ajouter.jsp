@@ -71,7 +71,7 @@
         <section id="banner">
             <h2>Ajouter ..?</h2>
             <div class="container 50%">
-                <form id="formAjoutTache" action="controleur" method="post" accept-charset="UTF-8">
+                <form id="formAjoutTache" action="controleur" method="get" accept-charset="UTF-8">
                     <div id="Taches">
                         <input type="radio" name="typeTache" value="TUnique" id="TUnique" checked onchange="change()">
                         <label for="TUnique"><h3 style="color:whitesmoke">une tâche</h3></label>
@@ -82,9 +82,9 @@
                         </div>
                         <div class="tache">
                             <input type="text" class="titre" name="titre" placeholder="Titre de la tâche"/>
-                            <input type="date" placeholder="Date d'exécution au plus tôt" class="SoonestDate">
-                            <input type="date" placeholder="Date d'exécution au plus tard" class="LatestDate">
-                            <input type="number" placeholder="Récompense" class="prix" min="0" step="0.01"><span style="color:white">&euro;</span>
+                            <input type="date" placeholder="Date d'exécution au plus tôt" name="SoonestDate">
+                            <input type="date" placeholder="Date d'exécution au plus tard" name="LatestDate">
+                            <input type="number" placeholder="Récompense" name="prix" min="0" step="0.01"><span style="color:white">&euro;</span>
                             <input type="text" placeholder="Description" class="description">
                         </div>
                     </div>
@@ -92,9 +92,7 @@
                     <!-- Annuler est un simple lien car il ne soumet pas le formulaire -->
                     <ul class="actions">
                         <li><a href="."><input name="annuler" type="button" value="Annuler"></a></li>
-                        <li><input name="confirm" class="special" type="submit" value="Valider" /></li>
-                        <!-- Pour indiquer au contrôleur quelle action faire, on utilise un champ caché -->
-                        <li><input type="hidden" name="action" value="ajouter" /></li>
+                        <li><input name="action" class="special" type="submit" value="ValidationTache" /></li>
                     </ul>
                 </form>
             </div>
