@@ -70,16 +70,32 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return utilisateur;
     }
     
+    public void ajouterCompetences(String email, String competence) throws DAOException {
+        ResultSet rs = null;
+        String requeteSQL = "";
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"+ email + "\',\'" + competence + "\')";
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+    
     
     public ArrayList<Competences> getCompetences(String email) throws DAOException {
         ArrayList<Competences> competencesUtilisateur = new ArrayList<Competences>();
         ResultSet rs = null;
         String requeteSQL = "";
         Connection conn = null;
-         /*try {
+        try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select competence from CompetencesUtilisateurs where idUtilisateur = " + email;
+            requeteSQL = "select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\'";
             rs = st.executeQuery(requeteSQL);
 
             while (rs.next()) {
@@ -91,13 +107,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {
             closeConnection(conn);
-        }*/
+        }
         
         return competencesUtilisateur;
     }
     
     
-    // TODO : ajouter Competences
     public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
         Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
@@ -112,7 +127,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date('"+ date +"','yyyy/mm/dd')," + 0 + "," + 0 + ",\'" + adresse + "\',-1)";
+            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date(\'" + date + "\','dd/mm/yyyy')," + results[0].geometry.location.lat + "," + results[0].geometry.location.lng + ",\'" + adresse + "\',-1)";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);

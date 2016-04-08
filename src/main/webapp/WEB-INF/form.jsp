@@ -22,7 +22,7 @@
                      
                     <% int a = 0; %>
                     <c:forEach items ="${competences}" var = "element">
-                        <input id="id<%=a%>"value="${element.nomCompetence}" name="${element.nomCompetence}" type="checkbox"> <label for="id<%=a%>">${element.nomCompetence}</label>
+                        <input id="id<%=a%>" name="${element.nomCompetence}" type="checkbox"> <label for="id<%=a%>">${element.nomCompetence}</label>
                         <% a = a + 1 ;%>
                     </c:forEach>
                     

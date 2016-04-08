@@ -138,16 +138,23 @@ public class controleur extends HttpServlet {
         if (mdp.equals(mdpConfirm)) {
             try {
                 utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                for(Competences c : competenceDAO.getListCompetences()) {
+                    if(request.getParameter(c.getNomCompetence()) != null) {
+                        utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
+                    }
+                }
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
                 getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
-            } catch (DAOException ex) {
+            } catch (DAOException e) {
+                throw e;
+                /* Erreur de mail déjà présent
                 request.setAttribute("erreurMessage", "email déjà utilisé");
                 request.setAttribute("nom", nom);
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
-                actionInscription(request, response, utilisateurDAO, competenceDAO);
+                actionInscription(request, response, utilisateurDAO, competenceDAO);*/
             }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");

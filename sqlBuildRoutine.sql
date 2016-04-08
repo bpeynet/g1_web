@@ -16,9 +16,9 @@ CREATE TABLE Utilisateurs (
     CHECK (longitude >= 0 AND longitude <= 360)
 );
 
-INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, 5);
-INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, 5);
-INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, 5);
+INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
+INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
+INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
 
 CREATE TABLE Taches (
     idTache integer NOT NULL,
@@ -75,12 +75,18 @@ CREATE TABLE Competences (
 
 INSERT INTO Competences VALUES ('bricolage');
 INSERT INTO Competences VALUES ('couture');
+INSERT INTO Competences VALUES ('défense');
+INSERT INTO Competences VALUES ('programmation');
+INSERT INTO Competences VALUES ('plomberie');
+INSERT INTO Competences VALUES ('cuisine');
 
 CREATE TABLE CompetencesUtilisateurs (
-    idCU integer NOT NULL PRIMARY KEY,
     idUtilisateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,
-    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE
+    competence varchar(100) NOT NULL references Competences(nomComp) ON DELETE CASCADE,
+    PRIMARY KEY (idUtilisateur, competence)
 );
+
+INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','défense');
 
 CREATE SEQUENCE CompUtilisateurs_Sequence
     INCREMENT BY 1
