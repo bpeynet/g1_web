@@ -24,13 +24,16 @@
             <p>Des rencontres, des services, de l'humain.</p>
             <form method="get" action="./controleur">
                 <div class="container 50%">
-                    <input name="email" id="email" value="" placeholder="Email" type="email" autofocus>
-                    <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password">
-
+                    <input name="email" id="email" value="" placeholder="Email" type="email" autofocus required>
+                    <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
+                    
                     <ul class="actions">
                         <li><input value="Connexion" class="special" type="submit" name="action"></li>
                         <li><a href="./controleur?action=Inscription"><input type="button" value="Inscription"></a></li>
-                    </ul>
+                    </ul>                   
+                    
+                    <% out.print(request.getAttribute("erreurMdp")==null ? "" : "<p>" + request.getAttribute("erreurMdp") +"</p>");%>
+                
                 </div>
             </form>
         </section>

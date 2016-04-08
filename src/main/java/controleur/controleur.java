@@ -72,7 +72,7 @@ public class controleur extends HttpServlet {
                 case "Validation": {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
                         actionValidationInscription(request, response, utilisateurDAO, competenceDAO);
-                    else actionValidationUpdateProfil(request, response, utilisateurDAO);
+                    else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO);
                     break;
                 }
                 case "Taches" : {
@@ -93,7 +93,7 @@ public class controleur extends HttpServlet {
                 }
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionConsulterProfil(request, response, utilisateurDAO);
+                        actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -122,8 +122,15 @@ public class controleur extends HttpServlet {
 
     public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
-        session.setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
+        if( usr.getMdp() == request.getParameter("mdp")) {
+            session.setAttribute("utilisateur", usr);
+            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        }
+        else {
+            request.setAttribute("erreurMdp","Mot de passe invalide");
+            actionLogin(request, response, utilisateurDAO);
+        }
     }
 
     public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
@@ -172,7 +179,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
-    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws ServletException, IOException {
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws ServletException, IOException, DAOException {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());
         request.setAttribute("prenom", user.getPrenom());
@@ -180,10 +187,11 @@ public class controleur extends HttpServlet {
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
         request.setAttribute("genre", user.getGenre());
+        request.setAttribute("competences",competenceDAO.getListCompetences());
         getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
     }
     
-    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String mdpConfirm = request.getParameter("mdpconfirm");
@@ -205,7 +213,7 @@ public class controleur extends HttpServlet {
             request.setAttribute("prenom", prenom);
             request.setAttribute("date", date);
             request.setAttribute("adresse", adresse);
-            actionConsulterProfil(request, response, utilisateurDAO);
+            actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
         }
     }
 
