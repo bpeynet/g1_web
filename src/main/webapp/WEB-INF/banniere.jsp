@@ -20,7 +20,7 @@
             %></h1>
         <nav id="nav">
             <ul>
-                <li><a href="#">Accueil</a></li>
+                <li><a href=".">Accueil</a></li>
                 <li><a href="./controleur?action=Taches">Tâches</a></li> <%--TODO--%>
                 <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li> <%--TODO--%>
                 <li><a href="./controleur?action=Profil">Mon Profil</a></li> <%--TODO--%>
