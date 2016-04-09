@@ -239,7 +239,7 @@ public class controleur extends HttpServlet {
     private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         String typeTache = request.getParameter("typeTache");
         if(typeTache.equals("TUnique")) {
-            //tacheAtomDAO.ajouterTache()
+            //TODO : ajout des tâches atomiques
             tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
         }
         else {
