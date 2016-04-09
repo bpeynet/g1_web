@@ -35,7 +35,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "INSERT INTO CompetencesTaches VALUES (" + id + ", \'"+ emailC + ", \'"+ emailEx + "\',\'" + competence + "\')";
+            requeteSQL = "INSERT INTO CompetencesTaches VALUES (" + id + ", \'"+ emailC + ", \'" + competence + "\')";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -68,19 +68,20 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     
         public void ajouterTacheAtom(String titre, String description, double prix, 
-            Date datetot, Date datetard, String idCommanditaire, int idMere ) throws DAOException {
+            String datetot, String datetard, String idCommanditaire, int idMere ) throws DAOException {
             Connection conn = null ;
             ResultSet rs;
             String requestSQL;
             try {
                 conn = getConnection();
                 Statement st = conn.createStatement();
-                requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "';";
+                requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "'";
                 rs = st.executeQuery(requestSQL);
-                requestSQL = "INSERT INTO Taches VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
-                    + description + "', '" + prix + "', '" + rs.getFloat("latitude") + "', '" 
-                    + rs.getFloat("longitude") + "', '" + datetot + "', '" + datetard + "', '" 
-                    + idMere + "', '" + idCommanditaire + "');" ;
+                rs.next();
+                requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
+                    + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
+                    + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','dd/mm/yyyy')" + ", " + "TO_date('"+ datetard + "','dd/mm/yyyy')" + ", " 
+                    + idMere + ", '" + idCommanditaire + "', null)" ;
                 st.executeUpdate(requestSQL);
             } catch (SQLException e) {
                 throw new DAOException("Erreur BD " + e.getMessage(), e);

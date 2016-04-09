@@ -239,4 +239,30 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return tache;
     }
     
+    /**
+     * Récupère la dernière tâche ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
+     * @param email l'identifiant du commanditaire
+     * @return  id l'id de la dernière tâche ajoutée
+     * @throws dao.DAOException
+     */
+    public int getIdLastTache(String email) throws DAOException {
+        ResultSet rs;
+        String requeteSQL;
+        Connection conn = null;
+        int idTache = -1;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
+            rs = st.executeQuery(requeteSQL);
+            if(rs.next()) {
+                idTache = rs.getInt("idTache");
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return idTache;
+    }
 }

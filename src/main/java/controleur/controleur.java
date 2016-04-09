@@ -245,7 +245,7 @@ public class controleur extends HttpServlet {
 
     private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, 
             UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) 
-            throws DAOException, ServletException, IOException, ParseException {
+            throws DAOException, ServletException, IOException {
         
         String typeTache = request.getParameter("typeTache");
         Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
@@ -254,7 +254,7 @@ public class controleur extends HttpServlet {
         
         String titre, description;
         double prix;
-        Date datetot, datetard; 
+        String datetot, datetard; 
         int idMere;
         
         if(typeTache.equals("TUnique")) {  
@@ -265,13 +265,14 @@ public class controleur extends HttpServlet {
         }        
         int k = 1;
         while(request.getParameter("titre"+k) != null){
-            titre = request.getParameter("titre"+k);
-            description = request.getParameter("description"+k);
-            prix = Integer.parseInt(request.getParameter("prix"+k));
-            datetot = format.parse(request.getParameter("SoonestDate"+k));
-            datetard = format.parse(request.getParameter("LatestDate"+k));  
-            idMere = tacheDAO.getDernierId(); // A VERIFIER
-            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+                titre = request.getParameter("titre"+k);
+                description = request.getParameter("description"+k);
+                prix = Integer.parseInt(request.getParameter("prix"+k));
+                datetot = request.getParameter("SoonestDate"+k);
+                datetard = request.getParameter("LatestDate"+k);
+                idMere = utilisateurDAO.getIdLastTache(email);
+                tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+            
         }
         
         request.setAttribute("succesMessage", "Tâche créée");

@@ -53,9 +53,6 @@ CREATE TABLE TachesAtom (
         references Taches(idTache, idCommanditaire) ON DELETE CASCADE,
     idExecutant varchar(100) references Utilisateurs(email) ON DELETE SET NULL,
     PRIMARY KEY (idTacheAtom,idCommanditaire),
-    --Ce triplet est la clé primaire car il faut pouvoir vérifier dans la relation Evaluations
-    --que l'évaluation est donnée pour une tâche vraiment proposée par le bon commanditaire associé
-    --au bon exécutant.
     CHECK (prixTache >= 0)
 );
 

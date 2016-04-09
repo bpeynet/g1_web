@@ -94,7 +94,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
         return liste;
     }
     
-    public int getDernierId()  throws DAOException {
+    /*public int getDernierId()  throws DAOException {
         Connection conn = null ;
         int dernierId;
                 
@@ -110,5 +110,5 @@ public class TacheDAO extends AbstractDataBaseDAO {
         }
         
         return dernierId;
-    }
+    }*/
 }
