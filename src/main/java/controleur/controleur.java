@@ -12,6 +12,11 @@ import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,27 +48,27 @@ public class controleur extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ParseException {
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
         CompetenceDAO competenceDAO = new CompetenceDAO(ds);
         TacheDAO tacheDAO = new TacheDAO(ds);
         TacheAtomDAO tacheAtomDAO = new TacheAtomDAO(ds);
-
+        
         try {
             if (action == null) {
                 if (request.getSession(false).getAttribute("utilisateur") == null) {
                     actionLogin(request, response, utilisateurDAO);
                 } else {
-                    allerPageAccueilConnecté(request, response);
+                    allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
                 }
             } else if (action.equals("Deconnexion")) {
                 request.getSession().invalidate();
                 actionLogin(request, response, utilisateurDAO);
             } else switch (action) {
                 case "Connexion": {
-                    actionConnexion(request, response, utilisateurDAO);
+                    actionConnexion(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                     break;
                 }
                 case "Inscription": {
@@ -72,8 +77,8 @@ public class controleur extends HttpServlet {
                 }
                 case "Validation": {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
-                        actionValidationInscription(request, response, utilisateurDAO, competenceDAO);
-                    else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO);
+                        actionValidationInscription(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
+                    else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
                     break;
                 }
                 case "Taches" : {
@@ -95,6 +100,8 @@ public class controleur extends HttpServlet {
                 case "ValidationAjoutTache": {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
                         actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                        request.setAttribute("succesMessage", "Tâche créée");
+                        allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -129,7 +136,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
     }
 
-    public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
         Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
         if(usr == null) {
@@ -139,7 +146,7 @@ public class controleur extends HttpServlet {
         }
         if( usr.getMdp().equals(request.getParameter("mdp"))) {
             session.setAttribute("utilisateur", usr);
-            allerPageAccueilConnecté(request, response);
+            allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
         }
         else {
             request.setAttribute("erreur","Mot de passe invalide");
@@ -147,7 +154,7 @@ public class controleur extends HttpServlet {
         }
     }
 
-    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
+    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String mdpConfirm = request.getParameter("mdpconfirm");
@@ -165,7 +172,7 @@ public class controleur extends HttpServlet {
                     }
                 }
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-                allerPageAccueilConnecté(request, response);
+                allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
             } catch (DAOException e) {
                 request.setAttribute("erreurMessage", "email déjà utilisé");
                 request.setAttribute("nom", nom);
@@ -205,7 +212,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
     }
     
-    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String mdpConfirm = request.getParameter("mdpconfirm");
@@ -218,7 +225,7 @@ public class controleur extends HttpServlet {
             if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
                 utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
-                allerPageAccueilConnecté(request, response);
+                allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
             }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
@@ -236,19 +243,41 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
-    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, 
+            UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) 
+            throws DAOException, ServletException, IOException, ParseException {
+        
         String typeTache = request.getParameter("typeTache");
-        if(typeTache.equals("TUnique")) {
-            //TODO : ajout des tâches atomiques
-            tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
+        Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        String email = ut.getEmail();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        
+        String titre, description;
+        double prix;
+        Date datetot, datetard; 
+        int idMere;
+        
+        if(typeTache.equals("TUnique")) {  
+            tacheDAO.ajouterTache(request.getParameter("titre1"), email);
         }
         else {
-            //TODO
+            tacheDAO.ajouterTache(request.getParameter("projetName"), email);
+        }        
+        int k = 1;
+        while(request.getParameter("titre"+k) != null){
+            titre = request.getParameter("titre"+k);
+            description = request.getParameter("description"+k);
+            prix = Integer.parseInt(request.getParameter("prix"+k));
+            datetot = format.parse(request.getParameter("SoonestDate"+k));
+            datetard = format.parse(request.getParameter("LatestDate"+k));  
+            idMere = tacheDAO.getDernierId(); // A VERIFIER
+            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
         }
+        
         request.setAttribute("succesMessage", "Tâche créée");
-        allerPageAccueilConnecté(request, response);
+        allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
     }
-
+  
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -260,7 +289,11 @@ public class controleur extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(controleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -274,7 +307,11 @@ public class controleur extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(controleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -287,7 +324,8 @@ public class controleur extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
+        request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 }
