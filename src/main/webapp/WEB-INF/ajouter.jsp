@@ -19,6 +19,7 @@
         <%-- TODO : ajouter required pour chaque champ --%>
         <script language=javascript>
             var j = 1,i;
+            var l = 1; // permet d'afficher 2 taches atomiques au minimum pour un projet
             var numeroDeTache = 1;
             var barres;
             var bloc_tache;
@@ -36,6 +37,10 @@
                     for (i=1; i<bloc_tache.length; i++){
                         bloc_tache[i].style.display="";
                     }
+                    if (l==1) {
+                        ajoutTache();
+                    }
+                    l=0;
                     j=0;
                 } else {
                     document.getElementById("projet").style.display='none';
