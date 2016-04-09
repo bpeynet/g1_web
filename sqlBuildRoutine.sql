@@ -19,6 +19,7 @@ CREATE TABLE Utilisateurs (
 INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
 INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
 INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
+INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Archibald', 'ddd', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
 
 CREATE TABLE Taches (
     idTache integer NOT NULL,
@@ -33,7 +34,9 @@ CREATE SEQUENCE Taches_Sequence
     NOMAXVALUE
     NOCYCLE;
 
-INSERT INTO Taches VALUES (taches_sequence.nextval, 'Essai','m@mi6.gov.co.uk');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Première tâche','m@mi6.gov.co.uk');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Deuxième tâche','picsou@disney.com');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Troisième tâche','m@mi6.gov.co.uk');
 
 CREATE TABLE TachesAtom (
     idTacheAtom integer NOT NULL,
@@ -64,10 +67,17 @@ CREATE SEQUENCE TachesAtom_Sequence
 
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Escorte d''Elizabeth',
     'Attention! La mission contient un saut d''hélicoptère', 100.15, 43, 45, TO_date('04/05/2016','dd/mm/yyyy'),
-    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk');
+    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une application Web de crowsourcing',
     'En équipe de 5', 0, 50, 62, TO_date('04/05/2016','dd/mm/yyyy'),
     TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk');
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Battre le Chiffre au poker',
+    '6 millions de livres appartenant au gouvernement seront mis à disposition. A rendre.',
+    5005,55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
+    3,'m@mi6.gov.co.uk', null);
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire un niche pour Pluto',
+    'En bois', 1, 55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
+    2,'picsou@disney.com', null);
 
 CREATE TABLE Competences (
     competence varchar(100) NOT NULL PRIMARY KEY

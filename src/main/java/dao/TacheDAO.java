@@ -6,15 +6,13 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import modeles.Tache;
-import modeles.TacheAtom;
-import modeles.outils.Coordonnees;
+import modeles.Utilisateurs;
 
 /**
  *
@@ -29,12 +27,13 @@ public class TacheDAO extends AbstractDataBaseDAO {
     /**
      * Récupère la tâche à partir de son id dans la base de données
      * @param id l'identifiant de la tâche recherchée
+     * @param tacheAtomDAO
      * @return la tâche trouvée ou null
      * @throws dao.DAOException
      */
-    public Tache getTache(int id) throws DAOException {
+    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO) throws DAOException {
         Tache  tache = null ;
-        ResultSet rs, rsAtomiques;
+        ResultSet rs;
         String requeteSQL;
         Connection conn = null;
         try {
@@ -42,19 +41,11 @@ public class TacheDAO extends AbstractDataBaseDAO {
             Statement st = conn.createStatement();
             requeteSQL = "SELECT * FROM Taches where idTache =" + id;
             rs = st.executeQuery(requeteSQL);
-            requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + id;
-            rsAtomiques = st.executeQuery(requeteSQL);
             if(rs.next()) {
-                ArrayList<TacheAtom> listTachesAtomiques = new ArrayList<>();
-                while (rsAtomiques.next()){
-                    listTachesAtomiques.add(new TacheAtom(rsAtomiques.getInt("idTacheAtom"), rsAtomiques.getInt("idTacheMere"),rsAtomiques.getString("titreTacheAtom"),
-                            rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
-                            new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
-                            rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null));
-                }
                 tache = new Tache(rs.getInt("idTache"),
                     rs.getString("idCommanditaire"),
-                    rs.getString("titreTache"),null);
+                    rs.getString("titreTache"),
+                    tacheAtomDAO.getTaches(rs.getInt("idTache")));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -65,7 +56,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
     }
 
     public void ajouterTache(String titre, String idCommanditaire ) throws DAOException {
-                Connection conn = null ;
+        Connection conn = null ;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
@@ -78,4 +69,28 @@ public class TacheDAO extends AbstractDataBaseDAO {
         }
     }
     
+    public ArrayList<Tache> getTaches(Utilisateurs utilisateur, TacheAtomDAO tacheAtomDAO) throws DAOException {
+        ArrayList<Tache> liste = null;
+        ResultSet rs;
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT * FROM Taches WHERE idCommanditaire !='" + utilisateur.getEmail() + "'";
+            rs = st.executeQuery(requeteSQL);
+            if (rs.getFetchSize()>0) {
+                liste = new ArrayList<>();
+                while (rs.next()) {
+                    liste.add(new Tache(rs.getInt("idTache"), rs.getString("idCommanditaire"),
+                        rs.getString("titreTache"), tacheAtomDAO.getTaches(rs.getInt("idTache"))));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Erreur BD " + ex.getMessage(), ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return liste;
+    }
 }

@@ -29,6 +29,10 @@ public class Tache {
         return idTache;
     }
     
+    public String getEmail() {
+        return email;
+    }
+    
     public String getTitreTache() {
         return titreTache;
     }
