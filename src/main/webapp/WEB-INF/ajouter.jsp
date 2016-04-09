@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -115,6 +116,17 @@
                             <input type="date" class="LatestDate" placeholder="Date d'exécution au plus tard" name="LatestDate1">
                             <input type="number" placeholder="Récompense" class="prix" name="prix1" min="0" step="0.01"><span style="color:white">&euro;</span>
                             <input type="text" placeholder="Description" class="description" name="description1" class="description">
+                            
+                            <br>
+                            <label style="color:whitesmoke">Compétences requises pour cette tâche : </label>
+                    
+                            <% int a = 0; %>
+                            <c:forEach items ="${competences}" var = "element">
+                                <input id="id<%=a%>" name="${element.nomCompetence}" type="checkbox" > <label for="id<%=a%>">${element.nomCompetence}</label>
+                                <% a = a + 1 ;%>
+                            </c:forEach>
+                                
+                            <br>
                         </div>
                     </div>
                     <button type="button" id="boutonAjoutTache" onclick="ajoutTache()" style="display:none">Ajouter une tâche</button>

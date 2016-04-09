@@ -84,7 +84,7 @@ public class controleur extends HttpServlet {
                 }
                 case "AjoutTache": {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionAjoutTache(request, response, utilisateurDAO);
+                        actionAjoutTache(request, response, utilisateurDAO, competenceDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -93,8 +93,6 @@ public class controleur extends HttpServlet {
                 case "ValidationAjoutTache": {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
                         actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO);
-                        request.setAttribute("succesMessage", "Tâche créée");
-                        allerPageAccueilConnecté(request, response);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -187,7 +185,8 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    private void actionAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
+        request.setAttribute("competences",competenceDAO.getListCompetences());
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
@@ -236,8 +235,12 @@ public class controleur extends HttpServlet {
     }
 
     private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException, ServletException, IOException {
-        tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
-        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        String typeTache = request.getParameter("typeTache");
+        if(typeTache.equals("TUnique")) {
+            tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
+        }
+        request.setAttribute("succesMessage", "Tâche créée");
+        allerPageAccueilConnecté(request, response);
     }
 
     /**
