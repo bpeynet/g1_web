@@ -10,7 +10,8 @@
 <jsp:include page="banniere.jsp"/>
 
 <section id="banner">
-    <% out.print(request.getAttribute("succesMessage")==null ? "" : "<p>" + request.getAttribute("succesMessage") + "</p>"); %>
+    <% out.print(request.getAttribute("succesMessage")==null ? "" :
+            "<p>" + request.getAttribute("succesMessage") + "</p>"); %>
 </section>
 </body>
 </html>

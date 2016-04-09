@@ -11,7 +11,6 @@ import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -55,7 +54,7 @@ public class controleur extends HttpServlet {
                 if (request.getSession(false).getAttribute("utilisateur") == null) {
                     actionLogin(request, response, utilisateurDAO);
                 } else {
-                    getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+                    allerPageAccueilConnecté(request, response);
                 }
             } else if (action.equals("Deconnexion")) {
                 request.getSession().invalidate();
@@ -95,7 +94,7 @@ public class controleur extends HttpServlet {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
                         actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO);
                         request.setAttribute("succesMessage", "Tâche créée");
-                        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+                        allerPageAccueilConnecté(request, response);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -140,7 +139,7 @@ public class controleur extends HttpServlet {
         }
         if( usr.getMdp().equals(request.getParameter("mdp"))) {
             session.setAttribute("utilisateur", usr);
-            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+            allerPageAccueilConnecté(request, response);
         }
         else {
             request.setAttribute("erreur","Mot de passe invalide");
@@ -166,7 +165,7 @@ public class controleur extends HttpServlet {
                     }
                 }
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-                getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+                allerPageAccueilConnecté(request, response);
             } catch (DAOException e) {
                 request.setAttribute("erreurMessage", "email déjà utilisé");
                 request.setAttribute("nom", nom);
@@ -218,7 +217,7 @@ public class controleur extends HttpServlet {
             if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
                 utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
-                getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+                allerPageAccueilConnecté(request, response);
             }
         } else {
             request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
@@ -277,4 +276,8 @@ public class controleur extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+    }
 }
