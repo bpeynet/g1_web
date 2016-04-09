@@ -34,9 +34,9 @@ CREATE SEQUENCE Taches_Sequence
     NOMAXVALUE
     NOCYCLE;
 
-INSERT INTO Taches VALUES (taches_sequence.nextval, 'Première tâche','m@mi6.gov.co.uk');
-INSERT INTO Taches VALUES (taches_sequence.nextval, 'Deuxième tâche','picsou@disney.com');
-INSERT INTO Taches VALUES (taches_sequence.nextval, 'Troisième tâche','m@mi6.gov.co.uk');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Missions 00*','m@mi6.gov.co.uk');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Mon argent','picsou@disney.com');
+INSERT INTO Taches VALUES (taches_sequence.nextval, 'Casino Royale','m@mi6.gov.co.uk');
 
 CREATE TABLE TachesAtom (
     idTacheAtom integer NOT NULL,

@@ -33,7 +33,7 @@
                         out.print("<strong>" + t.getTitreTache()+"</strong><br>");
                         //out.println("</a>");
                         //out.print("<a class='button fit'>");
-                        out.print("<i>" + t.getEmail() + "</i>");
+                        out.print("proposé par <i>" + t.getEmail() + "</i>");
                         //out.println("</a>");
                         if (t.getTaches().size()>1) {
                             out.print("<hr>");

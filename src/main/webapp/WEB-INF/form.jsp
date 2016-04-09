@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <p><% out.print(request.getAttribute("erreurMessage")==null ? "" : request.getAttribute("erreurMessage")); %></p>
-<form method="get" action="./controleur">
+<form method="post" action="./controleur">
                 <div class="container 50%">
                     <input name="nom" id="nom"
                            value="<% out.print(request.getAttribute("nom")==null ? "" : request.getAttribute("nom"));%>" placeholder="Nom" type="text" autofocus required>
