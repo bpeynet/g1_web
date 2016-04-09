@@ -229,7 +229,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
                             rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"), null));
                 }
-                tache = new Tache(idTache, titre, listTachesAtomiques);
+                tache = new Tache(idTache, email, titre, listTachesAtomiques);
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
