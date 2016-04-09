@@ -174,7 +174,7 @@ public class controleur extends HttpServlet {
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
                 allerPageAccueilConnecté(request, response, tacheDAO, tacheAtomDAO);
             } catch (DAOException e) {
-                request.setAttribute("erreurMessage", "email déjà utilisé");
+                request.setAttribute("erreurMessage", e);
                 request.setAttribute("nom", nom);
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
