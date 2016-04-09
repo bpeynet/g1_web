@@ -7,6 +7,7 @@ package controleur;
 
 import dao.CompetenceDAO;
 import dao.DAOException;
+import dao.TacheAtomDAO;
 import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class controleur extends HttpServlet {
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
         CompetenceDAO competenceDAO = new CompetenceDAO(ds);
         TacheDAO tacheDAO = new TacheDAO(ds);
+        TacheAtomDAO tacheAtomDAO = new TacheAtomDAO(ds);
 
         try {
             if (action == null) {
@@ -92,7 +94,7 @@ public class controleur extends HttpServlet {
                 }
                 case "ValidationAjoutTache": {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO);
+                        actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -234,10 +236,14 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
-    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         String typeTache = request.getParameter("typeTache");
         if(typeTache.equals("TUnique")) {
+            //tacheAtomDAO.ajouterTache()
             tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
+        }
+        else {
+            //TODO
         }
         request.setAttribute("succesMessage", "Tâche créée");
         allerPageAccueilConnecté(request, response);

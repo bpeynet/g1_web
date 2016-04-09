@@ -53,6 +53,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                             rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null));
                 }
                 tache = new Tache(rs.getInt("idTache"),
+                    rs.getString("idCommanditaire"),
                     rs.getString("titreTache"),null);
             }
         } catch (SQLException e) {

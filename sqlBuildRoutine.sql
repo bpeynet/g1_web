@@ -49,7 +49,7 @@ CREATE TABLE TachesAtom (
     constraint FK_TAtom_T foreign key (idTacheMere, idCommanditaire)
         references Taches(idTache, idCommanditaire) ON DELETE CASCADE,
     idExecutant varchar(100) references Utilisateurs(email) ON DELETE SET NULL,
-    PRIMARY KEY (idTacheAtom,idCommanditaire,idExecutant),
+    PRIMARY KEY (idTacheAtom,idCommanditaire),
     --Ce triplet est la clé primaire car il faut pouvoir vérifier dans la relation Evaluations
     --que l'évaluation est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
@@ -98,12 +98,8 @@ CREATE TABLE CompetencesTaches (
     idTacheAtom integer NOT NULL,
     idCommanditaire varchar(100) NOT NULL,
     --On est obligé d'ajouter la colonne idCommanditaire
-    idExecutant varchar(100) NOT NULL,
-    --et la colonne idExecutant car pour associer
-    --une compétence à une tâche, on a besoin d'au moins idTacheAtom
-    --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
-    constraint FK_CompT_TAtom foreign key (idTacheAtom,idCommanditaire,idExecutant)
-        references TachesAtom(idTacheAtom,idCommanditaire,idExecutant) ON DELETE CASCADE,
+    constraint FK_CompT_TAtom foreign key (idTacheAtom,idCommanditaire)
+        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
     competence varchar(100) NOT NULL references Competences(competence) ON DELETE CASCADE
 );
 
@@ -120,8 +116,8 @@ CREATE TABLE Evaluations (
     idTache integer NOT NULL,
     idEvaluateur varchar(100) NOT NULL,
     idEvalue varchar(100) NOT NULL,
-    constraint FK_Ev_TAtom foreign key (idTache,idEvaluateur,idEvalue)
-        references TachesAtom(idTacheAtom,idCommanditaire,idExecutant) ON DELETE SET NULL,
+    constraint FK_Ev_TAtom foreign key (idTache,idEvaluateur)
+        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE SET NULL,
     --Cette contrainte d'intégrité est vitale afin de vérifier que l'évaluation
     --est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
@@ -145,8 +141,8 @@ CREATE TABLE Candidatures (
     --et la colonne idExecutant car pour associer
     --une compétence à une tâche, on a besoin d'au moins idTacheAtom
     --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
-    constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire,idExecutant)
-        references TachesAtom(idTacheAtom,idCommanditaire,idExecutant) ON DELETE CASCADE,
+    constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
+        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
     idCandidat varchar(100) NOT NULL references Utilisateurs(email)
 );
 
