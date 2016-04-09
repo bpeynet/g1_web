@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
 import java.util.Date;
 import javax.sql.DataSource;
 import modeles.Tache;
@@ -29,7 +30,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
     
     public void ajouterCompetence(int id, String emailC, String emailEx, String competence) throws DAOException {
         ResultSet rs = null;
-        String requeteSQL = "";
+        String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
@@ -64,7 +65,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             closeConnection(conn);
         }
         return tache;
-    }
+        }
     
         public void ajouterTacheAtom(String titre, String description, double prix, 
                 Date datetot, Date datetard, String idCommanditaire, int idMere ) throws DAOException {
@@ -86,6 +87,29 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         } finally {
             closeConnection(conn);
         }
+        }
+    public ArrayList<TacheAtom> getTaches(int idTacheMere) throws DAOException {
+        Connection conn=null;
+        ResultSet rs;
+        ArrayList<TacheAtom> listTachesAtomiques = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + idTacheMere;
+            rs = st.executeQuery(requeteSQL);
+            listTachesAtomiques = new ArrayList<>();
+            while (rs.next()) {
+                listTachesAtomiques.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),
+                        rs.getString("titreTacheAtom"),rs.getString("descriptionTache"), rs.getFloat("prixTache"),
+                        new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Erreur SQL", ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return listTachesAtomiques;
     }
     
 }
