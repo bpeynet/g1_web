@@ -265,14 +265,14 @@ public class controleur extends HttpServlet {
         }        
         int k = 1;
         while(request.getParameter("titre"+k) != null){
-                titre = request.getParameter("titre"+k);
-                description = request.getParameter("description"+k);
-                prix = Integer.parseInt(request.getParameter("prix"+k));
-                datetot = request.getParameter("SoonestDate"+k);
-                datetard = request.getParameter("LatestDate"+k);
-                idMere = utilisateurDAO.getIdLastTache(email);
-                tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
-            
+            titre = request.getParameter("titre"+k);
+            description = request.getParameter("description"+k);
+            prix = Integer.parseInt(request.getParameter("prix"+k));
+            datetot = request.getParameter("SoonestDate"+k);
+            datetard = request.getParameter("LatestDate"+k);
+            idMere = utilisateurDAO.getIdLastTache(email);
+            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+            k++;
         }
         
         request.setAttribute("succesMessage", "Tâche créée");

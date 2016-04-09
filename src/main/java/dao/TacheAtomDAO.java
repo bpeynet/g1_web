@@ -80,7 +80,8 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                 rs.next();
                 requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
                     + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
-                    + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','dd/mm/yyyy')" + ", " + "TO_date('"+ datetard + "','dd/mm/yyyy')" + ", " 
+                    + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','yyyy/mm/dd')"
+                    + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
                     + idMere + ", '" + idCommanditaire + "', null)" ;
                 st.executeUpdate(requestSQL);
             } catch (SQLException e) {
