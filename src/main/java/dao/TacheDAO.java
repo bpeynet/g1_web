@@ -53,45 +53,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                             rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null));
                 }
                 tache = new Tache(rs.getInt("idTache"),
-                rs.getString("titreTache"),null);
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage(), e);
-        } finally {
-            closeConnection(conn);
-        }
-        return tache;
-    }
-    
-    /**
-     * Récupère la tâche à partir de son id dans la base de données
-     * @param id l'identifiant de la tâche recherchée
-     * @return la tâche trouvée ou null
-     * @throws dao.DAOException
-     */
-    public Tache getTache(String email) throws DAOException {
-        Tache  tache = null ;
-        ResultSet rs, rsAtomiques;
-        String requeteSQL;
-        Connection conn = null;
-        try {
-            conn = getConnection();
-            Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
-            rs = st.executeQuery(requeteSQL);
-            if(rs.next()) {
-                int idTache = rs.getInt("idTache");
-                String titre = rs.getString("titreTache");
-                requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + idTache;
-                rsAtomiques = st.executeQuery(requeteSQL);
-                ArrayList<TacheAtom> listTachesAtomiques = new ArrayList<>();
-                while (rsAtomiques.next()) {
-                    listTachesAtomiques.add(new TacheAtom(rsAtomiques.getInt("idTacheAtom"), rsAtomiques.getInt("idTacheMere"),
-                            rsAtomiques.getString("titreTacheAtom"),rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
-                            new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
-                            rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"), null));
-                }
-                tache = new Tache(idTache, titre, listTachesAtomiques);
+                    rs.getString("titreTache"),null);
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -114,4 +76,5 @@ public class TacheDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
     }
+    
 }

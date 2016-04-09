@@ -191,6 +191,14 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
+    private void actionValiderTacheAtom(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException  {
+        
+    }
+    
+    private void actionValiderGroupeTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException  {
+        
+    }
+    
     private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws ServletException, IOException, DAOException {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());

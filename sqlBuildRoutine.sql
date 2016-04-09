@@ -95,7 +95,6 @@ CREATE SEQUENCE CompUtilisateurs_Sequence
     NOCYCLE;
 
 CREATE TABLE CompetencesTaches (
-    idCT integer NOT NULL PRIMARY KEY,
     idTacheAtom integer NOT NULL,
     idCommanditaire varchar(100) NOT NULL,
     --On est obligé d'ajouter la colonne idCommanditaire
