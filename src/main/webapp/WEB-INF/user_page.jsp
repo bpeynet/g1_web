@@ -42,7 +42,7 @@
                             }
                         }
                         out.println("</td>");
-                        if (largeur == 3) {
+                        if (largeur == 2) {
                             out.println("</tr>");
                             largeur = 0;
                         }
