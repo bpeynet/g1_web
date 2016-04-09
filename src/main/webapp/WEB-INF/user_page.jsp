@@ -22,21 +22,24 @@
             if (request.getAttribute("taches") != null) {
                 ArrayList<Tache> rs = (ArrayList<Tache>) request.getAttribute("taches");
                 if (rs.size() > 0) {
-                    out.println("<table>");
+                    out.println("<div  class='card'><table>");
                     int largeur = 0;
                     for (Tache t : rs) {
                         if (largeur == 0) {
                             out.println("<tr>");
                         }
                         out.println("<td>");
-                        out.print("<a class='button fit special'>");
-                        out.print(t.getTitreTache());
-                        out.println("</a>");
-                        out.print("<a class='button fit'>");
-                        out.print(t.getEmail());
-                        out.println("</a>");
-                        for (TacheAtom ta : t.getTaches()) {
-                            out.println("<a class='button fit special'>" + ta.getTitreTacheAtom() + "</a>");
+                        //out.print("<a class='button fit special'>");
+                        out.print("<strong>" + t.getTitreTache()+"</strong><br>");
+                        //out.println("</a>");
+                        //out.print("<a class='button fit'>");
+                        out.print("<i>" + t.getEmail() + "</i>");
+                        //out.println("</a>");
+                        if (t.getTaches().size()>1) {
+                            out.print("<hr>");
+                            for (TacheAtom ta : t.getTaches()) {
+                                out.println(/*"<a class='button fit special'>" +*/ ta.getTitreTacheAtom() /*+ "</a>"*/ + "<br>");
+                            }
                         }
                         out.println("</td>");
                         if (largeur == 3) {
@@ -45,7 +48,7 @@
                         }
                         largeur++;
                     }
-                    out.println("</tr></table>");
+                    out.println("</tr></table></div>");
                 }
             }
         %>
