@@ -82,7 +82,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
             if (rs.getFetchSize()>0) {
                 liste = new ArrayList<>();
                 while (rs.next()) {
-                    liste.add(new Tache(rs.getInt("idTache"), utilisateur.getEmail(),
+                    liste.add(new Tache(rs.getInt("idTache"), rs.getString("idCommanditaire"),
                         rs.getString("titreTache"), tacheAtomDAO.getTaches(rs.getInt("idTache"))));
                 }
             }
