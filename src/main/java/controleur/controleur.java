@@ -12,6 +12,9 @@ import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -236,19 +239,41 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
-    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, 
+            UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) 
+            throws DAOException, ServletException, IOException, ParseException {
+        
         String typeTache = request.getParameter("typeTache");
-        if(typeTache.equals("TUnique")) {
-            //tacheAtomDAO.ajouterTache()
-            tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
+        Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        String email = ut.getEmail();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        
+        String titre, description;
+        double prix;
+        Date datetot, datetard; 
+        int idMere;
+        
+        if(typeTache.equals("TUnique")) {  
+            tacheDAO.ajouterTache(request.getParameter("titre1"), email);
         }
         else {
-            //TODO
+            tacheDAO.ajouterTache(request.getParameter("projetName"), email);
+        }        
+        int k = 1;
+        while(request.getParameter("titre"+k) != null){
+            titre = request.getParameter("titre"+k);
+            description = request.getParameter("description"+k);
+            prix = Integer.parseInt(request.getParameter("prix"+k));
+            datetot = format.parse(request.getParameter("SoonestDate"+k));
+            datetard = format.parse(request.getParameter("LatestDate"+k));  
+            //idMere = ???
+            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
         }
+        
         request.setAttribute("succesMessage", "Tâche créée");
         allerPageAccueilConnecté(request, response);
     }
-
+  
     /**
      * Handles the HTTP <code>GET</code> method.
      *

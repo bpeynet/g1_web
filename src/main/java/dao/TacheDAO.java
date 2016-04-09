@@ -63,7 +63,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
         }
         return tache;
     }
-    
+
     public void ajouterTache(String titre, String idCommanditaire ) throws DAOException {
                 Connection conn = null ;
         try {
