@@ -91,6 +91,16 @@ public class controleur extends HttpServlet {
                     }
                     break;
                 }
+                case "ValidationAjoutTache": {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO);
+                        request.setAttribute("succesMessage", "Tâche créée");
+                        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
+                    break;
+                }
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
@@ -226,8 +236,8 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
-    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException {
+        tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
     }
 
     /**

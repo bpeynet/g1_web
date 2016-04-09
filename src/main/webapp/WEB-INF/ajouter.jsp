@@ -113,11 +113,12 @@
                         </div>
                     </div>
                     <button type="button" id="boutonAjoutTache" onclick="ajoutTache()" style="display:none">Ajouter une tâche</button>
-                    <!-- Annuler est un simple lien car il ne soumet pas le formulaire --><br><br>
+                    <br><br>
                     <ul class="actions">
                         <li><a href="."><input name="annuler" type="button" value="Annuler"></a></li>
-                        <li><input name="action" class="special" type="submit" value="ValidationTache" onclick="correction()"/></li>
+                        <li><input class="special" type="submit" value="Valider" onclick="correction()"/></li>
                     </ul>
+                    <input type="text" value="ValidationAjoutTache" name="action" style="display:none" />
                 </form>
             </div>
         </section>

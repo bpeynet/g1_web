@@ -101,15 +101,13 @@ public class TacheDAO extends AbstractDataBaseDAO {
         return tache;
     }
     
-    public void ajouterTache(String titre, int idCommanditaire ) throws DAOException {
+    public void ajouterTache(String titre, String idCommanditaire ) throws DAOException {
                 Connection conn = null ;
         try {
             conn = getConnection();
-            PreparedStatement st =
-                conn.prepareStatement("INSERT INTO Taches(titre, idCommanditaire) VALUES (?, ?)");
-            st.setString(1, titre);
-            st.setInt(2, idCommanditaire);
-            st.executeUpdate();
+            Statement st = conn.createStatement();
+            String requestSQL = "INSERT INTO Taches VALUES (taches_sequence.nextval, '" + titre + "', '" + idCommanditaire + "')";
+            st.executeUpdate(requestSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {
