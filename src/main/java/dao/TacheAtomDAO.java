@@ -75,12 +75,13 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             try {
                 conn = getConnection();
                 Statement st = conn.createStatement();
-                requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "';";
+                requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "'";
                 rs = st.executeQuery(requestSQL);
+                rs.next();
                 requestSQL = "INSERT INTO Taches VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
                     + description + "', '" + prix + "', '" + rs.getFloat("latitude") + "', '" 
                     + rs.getFloat("longitude") + "', '" + datetot + "', '" + datetard + "', '" 
-                    + idMere + "', '" + idCommanditaire + "');" ;
+                    + idMere + "', '" + idCommanditaire + "')" ;
                 st.executeUpdate(requestSQL);
             } catch (SQLException e) {
                 throw new DAOException("Erreur BD " + e.getMessage(), e);

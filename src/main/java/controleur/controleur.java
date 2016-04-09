@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -243,7 +245,7 @@ public class controleur extends HttpServlet {
 
     private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, 
             UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) 
-            throws DAOException, ServletException, IOException, ParseException {
+            throws DAOException, ServletException, IOException {
         
         String typeTache = request.getParameter("typeTache");
         Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
@@ -263,13 +265,17 @@ public class controleur extends HttpServlet {
         }        
         int k = 1;
         while(request.getParameter("titre"+k) != null){
-            titre = request.getParameter("titre"+k);
-            description = request.getParameter("description"+k);
-            prix = Integer.parseInt(request.getParameter("prix"+k));
-            datetot = format.parse(request.getParameter("SoonestDate"+k));
-            datetard = format.parse(request.getParameter("LatestDate"+k));  
-            //idMere = ???
-            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+            try {
+                titre = request.getParameter("titre"+k);
+                description = request.getParameter("description"+k);
+                prix = Integer.parseInt(request.getParameter("prix"+k));
+                datetot = format.parse(request.getParameter("SoonestDate"+k));
+                datetard = format.parse(request.getParameter("LatestDate"+k));
+                idMere = utilisateurDAO.getIdLastTache(email);
+                tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+            } catch (ParseException ex) {
+                Logger.getLogger(controleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         request.setAttribute("succesMessage", "Tâche créée");
