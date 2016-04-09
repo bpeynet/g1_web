@@ -76,7 +76,7 @@ public class controleur extends HttpServlet {
                 }
                 case "Taches" : {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionVoirTaches(request, response, tacheDAO);
+                        actionVoirTaches(request, response, tacheDAO, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -191,14 +191,6 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
-    private void actionValiderTacheAtom(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException  {
-        
-    }
-    
-    private void actionValiderGroupeTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException  {
-        
-    }
-    
     private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws ServletException, IOException, DAOException {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());
@@ -238,13 +230,14 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionVoirTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO) throws ServletException, IOException, DAOException {
-        request.setAttribute("taches", tacheDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
+    private void actionVoirTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
+        request.setAttribute("taches", utilisateurDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
-    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException {
+    private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException, ServletException, IOException {
         tacheDAO.ajouterTache(request.getParameter("titre1"), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail());
+        getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
     /**
