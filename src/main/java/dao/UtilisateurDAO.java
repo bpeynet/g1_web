@@ -227,7 +227,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     listTachesAtomiques.add(new TacheAtom(rsAtomiques.getInt("idTacheAtom"), rsAtomiques.getInt("idTacheMere"),
                             rsAtomiques.getString("titreTacheAtom"),rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
                             new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
-                            rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"), null));
+                            rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
+                            rsAtomiques.getString("idCommanditaire"), null));
                 }
                 tache = new Tache(idTache, email, titre, listTachesAtomiques);
             }

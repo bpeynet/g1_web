@@ -11,9 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import java.util.Date;
 import javax.sql.DataSource;
-import modeles.Tache;
 import modeles.TacheAtom;
 import modeles.Utilisateurs;
 import modeles.outils.Coordonnees;
@@ -44,7 +42,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
     
-    public TacheAtom getTacheAtom(int id) throws DAOException {
+    public TacheAtom getTacheAtom(int idTacheAtom) throws DAOException {
         TacheAtom  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -52,13 +50,14 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + id;
+            requeteSQL = "SELECT * FROM TachesAtom where idTacheAtom=" + idTacheAtom;
             rs = st.executeQuery(requeteSQL);
-      
+            rs.next();
             tache = new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),rs.getString("titreTacheAtom"),
                         rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null);
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
+                        null);
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         } finally {
@@ -67,29 +66,29 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return tache;
         }
     
-        public void ajouterTacheAtom(String titre, String description, double prix, 
-            String datetot, String datetard, String idCommanditaire, int idMere ) throws DAOException {
-            Connection conn = null ;
-            ResultSet rs;
-            String requestSQL;
-            try {
-                conn = getConnection();
-                Statement st = conn.createStatement();
-                requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "'";
-                rs = st.executeQuery(requestSQL);
-                rs.next();
-                requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
-                    + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
-                    + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','yyyy/mm/dd')"
-                    + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
-                    + idMere + ", '" + idCommanditaire + "', null)" ;
-                st.executeUpdate(requestSQL);
-            } catch (SQLException e) {
-                throw new DAOException("Erreur BD " + e.getMessage(), e);
-            } finally {
-                closeConnection(conn);
-            }
+    public void ajouterTacheAtom(String titre, String description, double prix, 
+        String datetot, String datetard, String idCommanditaire, int idMere ) throws DAOException {
+        Connection conn = null ;
+        ResultSet rs;
+        String requestSQL;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "'";
+            rs = st.executeQuery(requestSQL);
+            rs.next();
+            requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
+                + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
+                + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','yyyy/mm/dd')"
+                + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
+                + idMere + ", '" + idCommanditaire + "', null)" ;
+            st.executeUpdate(requestSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
         }
+    }
         
         
     public ArrayList<TacheAtom> getTaches(int idTacheMere) throws DAOException {
@@ -106,7 +105,8 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                 listTachesAtomiques.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),
                         rs.getString("titreTacheAtom"),rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), null));
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
+                        null));
             }
         } catch (SQLException ex) {
             throw new DAOException("Erreur SQL", ex);
@@ -114,6 +114,22 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             closeConnection(conn);
         }
         return listTachesAtomiques;
+    }
+
+    public void postuler(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
+        Connection conn = null;
+        String emailCommanditaire = getTacheAtom(idTacheAtom).getEmailCommanditaire();
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "INSERT INTO Candidatures VALUES (Candidatures_Sequence.nextval," + idTacheAtom
+                    + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'postuler'",e);
+        } finally {
+            closeConnection(conn);
+        }
     }
     
 }

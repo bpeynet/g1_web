@@ -24,9 +24,13 @@ public class TacheAtom {
     private Coordonnees localisation;
     private Date datePlusTot;
     private Date datePlusTard;
+    private String emailCommanditaire;
+    private String emailExecutant=null;
     private ArrayList<Competences> competences;
     
-    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache, Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, ArrayList<Competences> competences) {
+    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
+            Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, String emailCommanditaire,
+            ArrayList<Competences> competences) {
         this.idTacheAtom = idTacheAtom;
         this.idTache = idTache;
         this.titreTacheAtom = titreTacheAtom;
@@ -35,7 +39,8 @@ public class TacheAtom {
         this.localisation = localisation;
         this.datePlusTot = datePlusTot;
         this.datePlusTard = datePlusTard;
-        this.competences = new ArrayList<Competences>();
+        this.emailCommanditaire = emailCommanditaire;
+        this.competences = new ArrayList<>();
         if (competences != null) this.competences.addAll(competences);
     }
     
@@ -73,5 +78,13 @@ public class TacheAtom {
     
     public ArrayList<Competences> getCompetences() {
         return competences;
+    }
+
+    public String getEmailCommanditaire() {
+        return emailCommanditaire;
+    }
+    
+    public String getEmailExecutant() {
+        return emailExecutant;
     }
 }

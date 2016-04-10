@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controleur;
 
 import dao.CompetenceDAO;
@@ -14,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -118,6 +112,14 @@ public class controleur extends HttpServlet {
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
+                    break;
+                }
+                case "Postuler": {
+                    if(request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionPostuler(request,response,tacheAtomDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -345,5 +347,10 @@ public class controleur extends HttpServlet {
         } else {
             response.sendRedirect("./controleur");
         }
+    }
+
+    private void actionPostuler(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+        tacheAtomDAO.postuler(((Utilisateurs) request.getSession().getAttribute("utilisateur")), Integer.valueOf(request.getParameter("idTacheAtom")));
+        getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
     }
 }
