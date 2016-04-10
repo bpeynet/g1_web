@@ -144,9 +144,8 @@ CREATE TABLE Candidatures (
     idTacheAtom integer NOT NULL,
     idCommanditaire varchar(100) NOT NULL,
     --On est obligé d'ajouter la colonne idCommanditaire
-    idExecutant varchar(100) NOT NULL,
-    --et la colonne idExecutant car pour associer
-    --une compétence à une tâche, on a besoin d'au moins idTacheAtom
+    --car pour associer
+    --un candidat à une tâche, on a besoin d'au moins idTacheAtom
     --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
     constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
         references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
