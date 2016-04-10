@@ -72,6 +72,10 @@ INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Battre le Chiffre a
     '6 millions de livres appartenant au gouvernement seront mis à disposition. A rendre.',
     5005,55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
     3,'m@mi6.gov.co.uk', null);
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Rattrapper l''africain',
+    'Savoir monter et sauter sur une grue',
+    5005,55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
+    3,'m@mi6.gov.co.uk', null);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire un niche pour Pluto',
     'En bois', 1, 55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
     2,'picsou@disney.com', null);
