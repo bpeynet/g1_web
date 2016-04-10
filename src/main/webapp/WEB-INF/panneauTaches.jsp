@@ -52,7 +52,7 @@
                                             : "<td></td>");
                             }
                         }
-                        out.println("<td><a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "'>Supprimer</a></td>");
+                        out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "'>Supprimer</a></td>");
                         out.println("</tr>");
                     }
                     out.println("</table>");
