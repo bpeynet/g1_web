@@ -10,6 +10,5 @@
     <body>
         <h1>Erreur dans la base de données</h1>
         <p><% out.println(request.getAttribute("erreur")); %></p>
-        <p><% out.println(request.getAttribute("erreur_message")); %></p>
     </body>
 </html>
