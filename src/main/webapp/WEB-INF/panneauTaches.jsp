@@ -39,12 +39,11 @@
                                                             + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
                                                         : "<td></td>")
                                                 : "<td></td>");
-                                    out.println("<td><a href='#'>Supprimer</a></td>");
+                                    out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td>");
                                 }
                                 out.println("</table></td>");
                             } else {
                                 TacheAtom ta = t.getTaches().get(0);
-                                out.println("<td></td><td>");
                                 out.println(candidatures != null ?
                                             (candidatures.get(ta.getIdTacheAtom())!= null ?
                                                 "<td>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
@@ -53,7 +52,7 @@
                                             : "<td></td>");
                             }
                         }
-                        out.println("<td><a href='#'>Supprimer</a></td>");
+                        out.println("<td><a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "'>Supprimer</a></td>");
                         out.println("</tr>");
                     }
                     out.println("</table>");
