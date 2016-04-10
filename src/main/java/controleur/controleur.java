@@ -107,6 +107,14 @@ public class controleur extends HttpServlet {
                     }
                     break;
                 }
+                case "voirTache" : {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionConsulterTache(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
+                    break;
+                }
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
@@ -328,5 +336,14 @@ public class controleur extends HttpServlet {
     private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+    }
+
+    private void actionConsulterTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
+        if (request.getParameter("idTache")!=null) {
+            request.setAttribute("tache", tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO));
+            getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("./controleur");
+        }
     }
 }

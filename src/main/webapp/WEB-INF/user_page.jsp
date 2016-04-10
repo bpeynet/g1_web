@@ -22,26 +22,27 @@
             if (request.getAttribute("taches") != null) {
                 ArrayList<Tache> rs = (ArrayList<Tache>) request.getAttribute("taches");
                 if (rs.size() > 0) {
-                    out.println("<div  class='card'><table>");
+                    out.println("<br><h2>Quelques tâches</h2>\n\t<div  class='cards'>\n\t\t<table id='cardtable'>");
                     int largeur = 0;
                     for (Tache t : rs) {
                         if (largeur == 0) {
                             out.println("<tr>");
                         }
-                        out.println("<td>");
-                        //out.print("<a class='button fit special'>");
-                        out.print("<strong>" + t.getTitreTache()+"</strong><br>");
-                        //out.println("</a>");
-                        //out.print("<a class='button fit'>");
+                        out.println("<td><a href='./controleur?action=voirTache&idTache=" + t.getIdTache() + "'>");
+                        out.print("<span class='titreTache'>" + t.getTitreTache()+"</span><br>");
                         out.print("proposé par <i>" + t.getEmail() + "</i>");
-                        //out.println("</a>");
                         if (t.getTaches().size()>1) {
-                            out.print("<hr>");
+                            out.print("<hr><table id='card'>");
                             for (TacheAtom ta : t.getTaches()) {
-                                out.println(/*"<a class='button fit special'>" +*/ ta.getTitreTacheAtom() /*+ "</a>"*/ + "<br>");
+                                out.println("<tr><td>" + ta.getTitreTacheAtom() + "</td><td>");
+                                //out.println(ta.getDescription() + "<br>");
+                                out.println(ta.getPrix() + "&euro;</td></tr>");
                             }
+                            out.print("</table>");
+                        } else {
+                            out.println("<br>" + t.getTaches().get(0).getPrix() + "&euro;<br>");
                         }
-                        out.println("</td>");
+                        out.println("</a></td>");
                         if (largeur == 2) {
                             out.println("</tr>");
                             largeur = 0;
