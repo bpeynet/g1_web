@@ -1026,6 +1026,10 @@ input[type="button"]:disabled,
     padding: 0 0.75em;
 }
 
+#tableauMesTachesAtom td:nth-of-type(3) {
+    text-align: right;
+}
+
 /* Header */
 
 #skel-layers-wrapper {
