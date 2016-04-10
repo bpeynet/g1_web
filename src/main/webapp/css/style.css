@@ -950,6 +950,20 @@ input[type="button"]:disabled,
     margin: 0.5em 0;
 }
 
+.card a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+.titreTache {
+    font-size: 1.4em;
+}
+
 /* Header */
 
 #skel-layers-wrapper {
@@ -1094,13 +1108,17 @@ body.landing #skel-layers-wrapper {
 /* Banner */
 
 #banner {
-    padding: 13em 0 14em 0;
+    padding: 9em 0 1em 0;
     background-attachment: fixed;
     background-image: url("images/overlay.png"), url("../images/banner.jpg");
     background-position: center;
     background-size: cover;
     line-height: 1.75;
     text-align: center;
+}
+
+#banner form {
+    padding-bottom: 6em;
 }
 
 #banner :last-child {
