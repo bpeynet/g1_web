@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Profil</title>
+        <title>Profil de <% out.println(((Utilisateurs) request.getSession().getAttribute("utilisateur")).getNomPrenom());%></title>
     </head>
     <body>
         <jsp:include page="banniere.jsp"/>

@@ -12,7 +12,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title><% out.print(request.getAttribute("tache")!=null ? ((Tache)request.getAttribute("tache")).getTitreTache() : "Tache non spécifiée"); %></title>
     </head>
     <body>
     <jsp:include page="banniere.jsp" />
@@ -26,13 +26,21 @@
     <section class="container">
         <% if (request.getAttribute("tache")!=null) {
             out.println("<table id='ficheTacheTableau'>");
+            out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
+                out.println("Titre</td>\n<td>");
+                out.println("Description</td>\n<td>");
+                out.println("Réalisation au plus tôt le</td>\n<td>");
+                out.println("Réalisation au plus tard le</td>\n<td>");
+                out.println("Récompense</td>\n<td>");
+                out.println("Compétences nécessaires</td>\n<td hidden>");
+                out.println("Postuler</td>\n</tr>");
             for (TacheAtom ta : ((Tache) request.getAttribute("tache")).getTaches()) {
                 out.println("<tr>\n<td>");
-                out.println(ta.getTitreTacheAtom() + "</td><td>");
-                out.println(ta.getDescription() + "</td><td>");
-                out.println(ta.getDateTot() + "</td><td>");
-                out.println(ta.getDatetard()+ "</td><td>");
-                out.println(ta.getPrix()+ "&euro;</td><td>");
+                out.println(ta.getTitreTacheAtom() + "</td>\n<td>");
+                out.println(ta.getDescription() + "</td>\n<td>");
+                out.println(ta.getDateTot() + "</td>\n<td>");
+                out.println(ta.getDatetard()+ "</td>\n<td>");
+                out.println(ta.getPrix()+ "&euro;</td>\n<td>");
                 if (ta.getCompetences().size()>0) {
                     for (Competences c : ta.getCompetences()) {
                         out.println(c.getNomCompetence() + "<br>");
@@ -40,9 +48,10 @@
                 } else {
                     out.println("Pas de compétence particulière attendue");
                 }
-                out.println("<td><td><a href='./controleur?action=Postuler&idTacheAtom=" +
-                        ta.getIdTacheAtom() + "'>Postuler</a></td></tr>\n</td>");
+                out.println("</td><td><a href='./controleur?action=Postuler&idTacheAtom=" +
+                        ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
             }
+            out.println("</table>");
           }
         %>
     </section>

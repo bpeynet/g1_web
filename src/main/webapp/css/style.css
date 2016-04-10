@@ -988,6 +988,19 @@ input[type="button"]:disabled,
     vertical-align: middle;
 }
 
+#ficheTacheTableau td:nth-of-type(3) {
+    width: 11%;
+}
+#ficheTacheTableau td:nth-of-type(4) {
+    width: 11%;
+}
+
+#ficheTacheTableauHaut {
+    color: black;
+    font-weight: bold;
+    font-size: medium;
+}
+
 /* Header */
 
 #skel-layers-wrapper {
