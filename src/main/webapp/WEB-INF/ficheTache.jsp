@@ -4,6 +4,7 @@
     Author     : ben
 --%>
 
+<%@page import="java.util.HashSet"%>
 <%@page import="modeles.outils.Competences"%>
 <%@page import="modeles.TacheAtom"%>
 <%@page import="modeles.Tache"%>
@@ -25,8 +26,9 @@
     </section>
     <section class="container">
         <% if (request.getAttribute("tache")!=null) {
-            out.println("<table id='ficheTacheTableau'>");
-            out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
+                HashSet candidatures = (HashSet) request.getAttribute("candidatures");
+                out.println("<table id='ficheTacheTableau'>");
+                out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                 out.println("Titre</td>\n<td>");
                 out.println("Description</td>\n<td>");
                 out.println("Réalisation au plus tôt le</td>\n<td>");
@@ -48,8 +50,14 @@
                 } else {
                     out.println("Pas de compétence particulière attendue");
                 }
-                out.println("</td><td><a href='./controleur?action=Postuler&idTacheAtom=" +
-                        ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
+                out.print("</td><td><a href='./controleur?action=");
+                if (candidatures.contains(ta.getIdTacheAtom())) {
+                    out.println("Depostuler&idTacheAtom=" +
+                            ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
+                } else {
+                    out.println("Postuler&idTacheAtom=" + 
+                            ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
+                }
             }
             out.println("</table>");
           }

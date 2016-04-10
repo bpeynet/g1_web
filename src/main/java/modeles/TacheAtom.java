@@ -48,7 +48,7 @@ public class TacheAtom {
         return idTacheAtom;
     }
     
-    public Integer getIdTache() {
+    public Integer getIdTacheMere() {
         return idTache;
     }
     

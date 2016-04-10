@@ -116,20 +116,41 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return listTachesAtomiques;
     }
 
-    public void postuler(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
+    public int postuler(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
         Connection conn = null;
-        String emailCommanditaire = getTacheAtom(idTacheAtom).getEmailCommanditaire();
+        TacheAtom ta = getTacheAtom(idTacheAtom);
+        int idTacheARetourner = ta.getIdTacheMere();
+        String emailCommanditaire = ta.getEmailCommanditaire();
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
             String requeteSQL = "INSERT INTO Candidatures VALUES (Candidatures_Sequence.nextval," + idTacheAtom
                     + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
+            //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas.
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur SQL 'postuler'",e);
         } finally {
             closeConnection(conn);
         }
+        return idTacheARetourner;
+    }
+
+    public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom) throws DAOException {
+        Connection conn = null;
+        int idTacheARetourner = getTacheAtom(idTacheAtom).getIdTacheMere();
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom +
+                    "AND idCandidat='" + utilisateur.getEmail() + "'";
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'depostuler'",e);
+        } finally {
+            closeConnection(conn);
+        }
+        return idTacheARetourner;
     }
     
 }

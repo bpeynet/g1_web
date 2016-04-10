@@ -9,15 +9,12 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
+import java.util.HashSet;
 import javax.sql.DataSource;
-import modeles.Evaluation;
 import modeles.Tache;
 import modeles.TacheAtom;
 import modeles.Utilisateurs;
@@ -265,5 +262,24 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
         return idTache;
+    }
+
+    public HashSet getCandidatures(Utilisateurs utilisateur) throws DAOException {
+        HashSet<Integer> candidatures = new HashSet<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT * FROM Candidatures WHERE idCandidat='" + utilisateur.getEmail() + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                candidatures.add(rs.getInt("idTacheAtom"));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Erreur SQL 'getCandidatures'", ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return candidatures;
     }
 }
