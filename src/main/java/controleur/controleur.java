@@ -127,11 +127,18 @@ public class controleur extends HttpServlet {
                 }
                 case "Depostuler": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionDepostuler(request,response,tacheAtomDAO, tacheDAO, utilisateurDAO);
+                        actionDepostuler(request,response, tacheAtomDAO, tacheDAO, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
                     break;
+                }
+                case "SupprimerTache": {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionSupprimerTache(request, response, tacheDAO, utilisateurDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
                 }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
@@ -376,6 +383,15 @@ public class controleur extends HttpServlet {
             request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO));
             request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
             getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("./controleur");
+        }
+    }
+
+    private void actionSupprimerTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws DAOException, IOException, ServletException {
+        if (utilisateurDAO.proposedThisTask(Integer.valueOf(request.getParameter("idTache")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
+            tacheDAO.supprimerTache(Integer.valueOf(request.getParameter("idTache")));
+            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }

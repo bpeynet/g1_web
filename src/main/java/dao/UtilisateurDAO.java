@@ -201,8 +201,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Récupère les tâches d'un utilisateur (en tant que commanditaire) dans la base de données
-     * @param id l'identifiant de la tâche recherchée
-     * @return la tâche trouvée ou null
+     * @param email l'identifiant de la tâche recherchée
+     * @return la liste des tâches trouvées ou null
      * @throws dao.DAOException
      */
     public ArrayList<Tache> getTache(String email) throws DAOException {
@@ -303,5 +303,26 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
         return candidatures;
+    }
+
+    public boolean proposedThisTask(int parameter, Utilisateurs utilisateur) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT idTache FROM Taches WHERE idCommanditaire='" + utilisateur.getEmail() + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                if (rs.getInt("idTache")==parameter) {
+                    closeConnection(conn);
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'proposedThisTask'", e);
+        } finally {
+            closeConnection(conn);
+        }
+        return false;
     }
 }

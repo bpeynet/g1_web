@@ -111,4 +111,18 @@ public class TacheDAO extends AbstractDataBaseDAO {
         
         return dernierId;
     }*/
+
+    public void supprimerTache(Integer idTache) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "DELETE FROM Taches WHERE idTache=" + idTache;
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'supprimerTache'", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 }
