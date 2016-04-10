@@ -75,9 +75,9 @@ public class controleur extends HttpServlet {
                     else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
                     break;
                 }
-                case "Taches" : {
+                case "MesTaches" : {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionVoirTaches(request, response, tacheDAO, utilisateurDAO);
+                        actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -256,8 +256,9 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionVoirTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
+    private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
         request.setAttribute("taches", utilisateurDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
+        request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
@@ -351,7 +352,7 @@ public class controleur extends HttpServlet {
     private void actionConsulterTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         if (request.getParameter("idTache")!=null) {
             request.setAttribute("tache", tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO));
-            request.setAttribute("candidatures", utilisateurDAO.getCandidatures((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+            request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
             getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
         } else {
             response.sendRedirect("./controleur");
@@ -362,7 +363,7 @@ public class controleur extends HttpServlet {
         if (request.getSession(false).getAttribute("utilisateur")!=null) {
             int idTacheRetour = tacheAtomDAO.postuler(((Utilisateurs) request.getSession().getAttribute("utilisateur")), Integer.valueOf(request.getParameter("idTacheAtom")));
             request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO));
-            request.setAttribute("candidatures", utilisateurDAO.getCandidatures((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+            request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
             getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
         } else {
             response.sendRedirect("./controleur");
@@ -373,7 +374,7 @@ public class controleur extends HttpServlet {
         if (request.getSession(false).getAttribute("utilisateur")!=null) {
             int idTacheRetour = tacheAtomDAO.depostuler(((Utilisateurs) request.getSession().getAttribute("utilisateur")), Integer.valueOf(request.getParameter("idTacheAtom")));
             request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO));
-            request.setAttribute("candidatures", utilisateurDAO.getCandidatures((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+            request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
             getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
         } else {
             response.sendRedirect("./controleur");

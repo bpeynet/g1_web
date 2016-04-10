@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import javax.sql.DataSource;
 import modeles.Tache;
@@ -204,8 +205,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @return la tâche trouvée ou null
      * @throws dao.DAOException
      */
-    public Tache getTache(String email) throws DAOException {
-        Tache  tache = null ;
+    public ArrayList<Tache> getTache(String email) throws DAOException {
+        ArrayList<Tache>  listeTaches = new ArrayList<>() ;
         ResultSet rs, rsAtomiques;
         String requeteSQL;
         Connection conn = null;
@@ -214,11 +215,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             Statement st = conn.createStatement();
             requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
             rs = st.executeQuery(requeteSQL);
-            if(rs.next()) {
+            while(rs.next()) {
                 int idTache = rs.getInt("idTache");
                 String titre = rs.getString("titreTache");
                 requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + idTache;
-                rsAtomiques = st.executeQuery(requeteSQL);
+                Statement st1 = conn.createStatement();
+                rsAtomiques = st1.executeQuery(requeteSQL);
                 ArrayList<TacheAtom> listTachesAtomiques = new ArrayList<>();
                 while (rsAtomiques.next()) {
                     listTachesAtomiques.add(new TacheAtom(rsAtomiques.getInt("idTacheAtom"), rsAtomiques.getInt("idTacheMere"),
@@ -227,14 +229,14 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
                             rsAtomiques.getString("idCommanditaire"), null));
                 }
-                tache = new Tache(idTache, email, titre, listTachesAtomiques);
+                listeTaches.add(new Tache(idTache, email, titre, listTachesAtomiques));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
-        return tache;
+        return listeTaches;
     }
     
     /**
@@ -264,7 +266,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return idTache;
     }
 
-    public HashSet getCandidatures(Utilisateurs utilisateur) throws DAOException {
+    public HashSet<Integer> getCandidaturesExecutant(Utilisateurs utilisateur) throws DAOException {
         HashSet<Integer> candidatures = new HashSet<>();
         Connection conn = null;
         try {
@@ -276,7 +278,27 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                 candidatures.add(rs.getInt("idTacheAtom"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Erreur SQL 'getCandidatures'", ex);
+            throw new DAOException("Erreur SQL 'getCandidaturesExecutant'", ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return candidatures;
+    }
+
+    public HashMap<Integer, Integer> getCandidaturesCommanditaire(Utilisateurs utilisateur) throws DAOException {
+        HashMap<Integer, Integer> candidatures = new HashMap<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT idTacheAtom, COUNT(idCandidat) AS nombre FROM Candidatures WHERE idCommanditaire='" + utilisateur.getEmail()
+                    + "' GROUP BY idTacheAtom";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                candidatures.put(rs.getInt("idTacheAtom"), rs.getInt("nombre"));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'getCandidaturesCommanditaire'", e);
         } finally {
             closeConnection(conn);
         }

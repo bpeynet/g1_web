@@ -50,13 +50,17 @@
                 } else {
                     out.println("Pas de compétence particulière attendue");
                 }
-                out.print("</td><td><a href='./controleur?action=");
-                if (candidatures.contains(ta.getIdTacheAtom())) {
-                    out.println("Depostuler&idTacheAtom=" +
-                            ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
+                if (ta.getEmailExecutant()==null) {
+                    out.print("</td><td><a href='./controleur?action=");
+                    if (candidatures.contains(ta.getIdTacheAtom())) {
+                        out.println("Depostuler&idTacheAtom=" +
+                                ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
+                    } else {
+                        out.println("Postuler&idTacheAtom=" + 
+                                ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
+                    }
                 } else {
-                    out.println("Postuler&idTacheAtom=" + 
-                            ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
+                    out.println("</td></tr>");
                 }
             }
             out.println("</table>");

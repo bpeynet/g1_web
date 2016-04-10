@@ -1001,6 +1001,31 @@ input[type="button"]:disabled,
     font-size: medium;
 }
 
+/* Tableau MesTâches */
+
+#tableauMesTaches {
+    margin: 0;
+}
+
+#tableauMesTaches td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tableauMesTachesAtom {
+    margin: 0;
+    border: none;
+}
+
+#tableauMesTachesAtom tr {
+    border: none;
+}
+
+#tableauMesTachesAtom td {
+    text-align: left;
+    padding: 0 0.75em;
+}
+
 /* Header */
 
 #skel-layers-wrapper {
