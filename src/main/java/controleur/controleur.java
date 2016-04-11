@@ -196,6 +196,7 @@ public class controleur extends HttpServlet {
             request.setAttribute("prenom", prenom);
             request.setAttribute("adresse", adresse);
             request.setAttribute("genre", genre);
+            request.setAttribute("email", email);
             actionInscription(request, response, utilisateurDAO, competenceDAO);
         }
         if (mdp.equals(mdpConfirm)) {
@@ -215,6 +216,7 @@ public class controleur extends HttpServlet {
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
+                request.setAttribute("email", email);
                 actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
         } else {
