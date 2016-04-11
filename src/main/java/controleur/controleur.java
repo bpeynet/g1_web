@@ -185,12 +185,19 @@ public class controleur extends HttpServlet {
         String mdpConfirm = request.getParameter("mdpconfirm");
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
-        String date = request.getParameter("date");
-        if (date.matches("../../....")){
-            date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
-        }
         String adresse = request.getParameter("adresse");
         int genre = Integer.valueOf(request.getParameter("genre"));
+        String date = request.getParameter("date");
+        if (date.matches("../../....") || date.matches("..-..-....")){
+            date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
+        } else if (!date.matches("..../../..")) {
+            request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
+            request.setAttribute("nom", nom);
+            request.setAttribute("prenom", prenom);
+            request.setAttribute("adresse", adresse);
+            request.setAttribute("genre", genre);
+            actionInscription(request, response, utilisateurDAO, competenceDAO);
+        }
         if (mdp.equals(mdpConfirm)) {
             try {
                 utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
