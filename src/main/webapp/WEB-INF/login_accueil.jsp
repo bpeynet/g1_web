@@ -33,6 +33,7 @@
                     </ul>                   
                     
                     <% out.print(request.getAttribute("erreur")==null ? "" : "<p>" + request.getAttribute("erreur") +"</p>");%>
+                    <% out.print(request.getAttribute("message")==null ? "" : "<p>" + request.getAttribute("message") +"</p>");%>
                 
                 </div>
             </form>
