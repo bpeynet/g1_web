@@ -360,7 +360,7 @@ public class controleur extends HttpServlet {
 
     private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         request.setAttribute("tachesCommanditaire", utilisateurDAO.getTache(((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail()));
-        request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
+        //request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 

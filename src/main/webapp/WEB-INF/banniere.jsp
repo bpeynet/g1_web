@@ -21,9 +21,10 @@
         <nav id="nav">
             <ul>
                 <li><a href=".">Accueil</a></li>
-                <li><a href="./controleur?action=MesTaches">Mes tâches</a></li> <%--TODO--%>
-                <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li> <%--TODO--%>
-                <li><a href="./controleur?action=Profil">Mon Profil</a></li> <%--TODO--%>
+                <li><a href="./controleur?action=MesTaches">Mes tâches</a></li> 
+                <li><a href="./controleur?action=MesCandidatures">Mes candidatures</a></li> <%-- TODO --%> 
+                <li><a href="./controleur?action=AjoutTache">Proposer une tâche</a></li>
+                <li><a href="./controleur?action=Profil">Mon Profil</a></li> 
                 <li><a href="./controleur?action=Deconnexion">Se déconnecter</a></li>
             </ul>
         </nav>
