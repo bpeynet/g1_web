@@ -1018,6 +1018,7 @@ input[type="button"]:disabled,
 }
 
 #tableauMesTachesAtom tr {
+    background-color:transparent;
     border: none;
 }
 
