@@ -153,4 +153,18 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return idTacheARetourner;
     }
     
+    public void supprimerTacheAtom(Integer idTacheAtom) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "DELETE FROM TachesAtom WHERE idTacheAtom=" + idTacheAtom;
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'supprimerTacheAtom'", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+    
 }

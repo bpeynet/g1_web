@@ -8,8 +8,6 @@ import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -138,6 +136,15 @@ public class controleur extends HttpServlet {
                     } else {
                         response.sendRedirect("./controleur");
                     }
+                    break;
+                }
+                case "SupprimerTacheAtom": {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionSupprimerTacheAtom(request, response, tacheAtomDAO, utilisateurDAO, tacheDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
+                    break;
                 }
                 case "SupprimerCompte": {
                     actionSupprimerCompte(request, response, utilisateurDAO);
@@ -414,6 +421,16 @@ public class controleur extends HttpServlet {
                 request.setAttribute("message", "Compte supprimé");
             }
             response.sendRedirect("./controleur");
+        } else {
+            response.sendRedirect("./controleur");
+        }
+    }
+
+    private void actionSupprimerTacheAtom(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO) throws DAOException, IOException, ServletException {
+        if (request.getParameter("idTacheAtom") != null && 
+                utilisateurDAO.proposedThisAtomTask(Integer.valueOf(request.getParameter("idTacheAtom")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
+            tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
+            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }
