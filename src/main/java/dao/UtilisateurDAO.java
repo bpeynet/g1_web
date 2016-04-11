@@ -325,4 +325,18 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         }
         return false;
     }
+    
+    public void supprimerUtilisateur(String email) throws DAOException{
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "DELETE FROM Utilisateurs WHERE email='" + email + "'";
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'supprimerUtilisateur'", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 }

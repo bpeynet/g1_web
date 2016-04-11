@@ -51,7 +51,7 @@ public class controleur extends HttpServlet {
         
         try {
             if (action == null) {
-                if (request.getSession(false).getAttribute("utilisateur") == null) {
+                if (request.getSession(false) == null || request.getSession(false).getAttribute("utilisateur") == null) {
                     actionLogin(request, response, utilisateurDAO);
                 } else {
                     allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
@@ -138,6 +138,10 @@ public class controleur extends HttpServlet {
                     } else {
                         response.sendRedirect("./controleur");
                     }
+                }
+                case "SupprimerCompte": {
+                    actionSupprimerCompte(request, response, utilisateurDAO);
+                    break;
                 }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
@@ -396,6 +400,20 @@ public class controleur extends HttpServlet {
         if (utilisateurDAO.proposedThisTask(Integer.valueOf(request.getParameter("idTache")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheDAO.supprimerTache(Integer.valueOf(request.getParameter("idTache")));
             actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+        } else {
+            response.sendRedirect("./controleur");
+        }
+    }
+    
+    private void actionSupprimerCompte(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws IOException, DAOException, ServletException {
+        if (request.getSession(false).getAttribute("utilisateur") != null && request.getParameter("email") != null) {
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            if (utilisateur.getEmail().equals(request.getParameter("email"))) {
+                utilisateurDAO.supprimerUtilisateur(utilisateur.getEmail());
+                request.getSession(false).invalidate();
+                request.setAttribute("message", "Compte supprimé");
+            }
+            response.sendRedirect("./controleur");
         } else {
             response.sendRedirect("./controleur");
         }

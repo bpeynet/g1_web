@@ -17,6 +17,7 @@
         <section id="banner">
             <h2>Profil de <% out.println(((Utilisateurs) request.getSession().getAttribute("utilisateur")).getNomPrenom());%></h2>
             <jsp:include page="form.jsp"/>
+            <a href="./controleur?action=SupprimerCompte&email=<% out.println(((Utilisateurs) request.getSession().getAttribute("utilisateur")).getEmail());%>" >Supprimer votre compte</a>
         </section>
     </body>
 </html>

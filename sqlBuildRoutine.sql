@@ -97,7 +97,7 @@ CREATE TABLE CompetencesUtilisateurs (
     PRIMARY KEY (idUtilisateur, competence)
 );
 
-INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','défense');
+INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','self-défense');
 
 CREATE SEQUENCE CompUtilisateurs_Sequence
     INCREMENT BY 1
@@ -120,6 +120,19 @@ CREATE SEQUENCE CompetencesTaches_Sequence
     NOMAXVALUE
     NOCYCLE;
 
+CREATE TABLE Candidatures (
+    idTacheAtom integer NOT NULL,
+    idCommanditaire varchar(100) NOT NULL,
+    --On est obligé d'ajouter la colonne idCommanditaire
+    --car pour associer
+    --un candidat à une tâche, on a besoin d'au moins idTacheAtom
+    --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
+    constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
+        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
+    idCandidat varchar(100) NOT NULL references Utilisateurs(email),
+    PRIMARY KEY (idTacheAtom,idCommanditaire,idCandidat)
+);
+
 CREATE TABLE Evaluations (
     idEvaluation integer NOT NULL PRIMARY KEY,
     evaluation integer NOT NULL,
@@ -128,7 +141,7 @@ CREATE TABLE Evaluations (
     idEvaluateur varchar(100) NOT NULL,
     idEvalue varchar(100) NOT NULL,
     constraint FK_Ev foreign key (idTache,idEvaluateur,idEvalue)
-        references Candidatures(idCandidature,idCommanditaire,idCandidat) ON DELETE SET NULL,
+        references Candidatures(idTacheAtom,idCommanditaire,idCandidat) ON DELETE SET NULL,
     --Cette contrainte d'intégrité est vitale afin de vérifier que l'évaluation
     --est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
@@ -142,16 +155,3 @@ CREATE SEQUENCE Evaluations_Sequence
     START WITH 1
     NOMAXVALUE
     NOCYCLE;
-
-CREATE TABLE Candidatures (
-    idTacheAtom integer NOT NULL,
-    idCommanditaire varchar(100) NOT NULL,
-    --On est obligé d'ajouter la colonne idCommanditaire
-    --car pour associer
-    --un candidat à une tâche, on a besoin d'au moins idTacheAtom
-    --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
-    constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
-        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
-    idCandidat varchar(100) NOT NULL references Utilisateurs(email),
-    PRIMARY KEY (idTacheAtom,idCommanditaire,idCandidat)
-);
