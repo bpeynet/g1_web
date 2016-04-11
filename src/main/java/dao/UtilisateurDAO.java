@@ -305,7 +305,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return candidatures;
     }
 
-    public boolean proposedThisTask(int parameter, Utilisateurs utilisateur) throws DAOException {
+    public boolean proposedThisTask(int idTache, Utilisateurs utilisateur) throws DAOException {
         Connection conn = null;
         try {
             conn = getConnection();
@@ -313,7 +313,28 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             String requeteSQL = "SELECT idTache FROM Taches WHERE idCommanditaire='" + utilisateur.getEmail() + "'";
             ResultSet rs = st.executeQuery(requeteSQL);
             while (rs.next()) {
-                if (rs.getInt("idTache")==parameter) {
+                if (rs.getInt("idTache")==idTache) {
+                    closeConnection(conn);
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'proposedThisTask'", e);
+        } finally {
+            closeConnection(conn);
+        }
+        return false;
+    }
+    
+    public boolean proposedThisAtomTask(int idTacheAtom, Utilisateurs utilisateur) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT idTacheAtom FROM TachesAtom WHERE idCommanditaire='" + utilisateur.getEmail() + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                if (rs.getInt("idTacheAtom")==idTacheAtom) {
                     closeConnection(conn);
                     return true;
                 }
