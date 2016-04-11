@@ -186,6 +186,9 @@ public class controleur extends HttpServlet {
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String date = request.getParameter("date");
+        if (date.matches("../../....")){
+            date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
+        }
         String adresse = request.getParameter("adresse");
         int genre = Integer.valueOf(request.getParameter("genre"));
         if (mdp.equals(mdpConfirm)) {
