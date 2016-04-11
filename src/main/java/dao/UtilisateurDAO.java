@@ -242,7 +242,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     /**
      * Récupère la dernière tâche ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
      * @param email l'identifiant du commanditaire
-     * @return  id l'id de la dernière tâche ajoutée
+     * @return  idTache l'id de la dernière tâche ajoutée
      * @throws dao.DAOException
      */
     public int getIdLastTache(String email) throws DAOException {
@@ -359,5 +359,55 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         } finally {
             closeConnection(conn);
         }
+    }
+    
+     /**
+     * Récupère la liste des tâches auxquelles l'utilisateur peut postuler, 
+     * selon ses compétences
+     * @param utilisateur
+     * @return
+     * @throws DAOException 
+     */
+    public ArrayList<TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException {
+        ArrayList<TacheAtom> liste = null;
+        ArrayList<Competences> comp = null;
+        String email = utilisateur.getEmail();
+        TacheAtom tache;
+        ResultSet rs;
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
+                    + "AND t.idcommandiditaire=c.idcommanditaire AND idCommanditaire !='" 
+                    + email + "' AND c.competence IN (SELECT * FROM CompetencesUtilisateur"
+                    + "WHERE idutilisateur='" + email + "')" ;
+            rs = st.executeQuery(requeteSQL);
+            if (rs.getFetchSize()>0) {
+                liste = new ArrayList<>();
+                while (rs.next()) {
+                    int idTacheAtom = rs.getInt("idTacheAtom");
+                    
+                    //TODO : 
+                    //if(il exite une tache de id idTacheAtom dans liste) {
+                    // on ajoute la compétence à la liste de compétence de cette tache
+                    //}
+                    //else {
+                    comp = new ArrayList<Competences>();
+                    comp.add(new Competences(rs.getString("competence")));
+                    liste.add(new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
+                        rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitutde")),
+                        rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
+                        comp));
+                    //}
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Erreur BD " + ex.getMessage(), ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return liste;
     }
 }

@@ -69,6 +69,13 @@ public class TacheDAO extends AbstractDataBaseDAO {
         }
     }
     
+    /**
+     * Récupère la liste des tâches auxquelles l'utilisateur peut postuler
+     * @param utilisateur
+     * @param tacheAtomDAO
+     * @return
+     * @throws DAOException 
+     */
     public ArrayList<Tache> getTaches(Utilisateurs utilisateur, TacheAtomDAO tacheAtomDAO) throws DAOException {
         ArrayList<Tache> liste = null;
         ResultSet rs;
