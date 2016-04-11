@@ -190,7 +190,7 @@ public class controleur extends HttpServlet {
         String date = request.getParameter("date");
         if (date.matches("../../....") || date.matches("..-..-....")){
             date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
-        } else if (!date.matches("..../../..")) {
+        } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
             request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
             request.setAttribute("nom", nom);
             request.setAttribute("prenom", prenom);
