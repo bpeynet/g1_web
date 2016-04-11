@@ -42,7 +42,7 @@ public class controleur extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
+            throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
@@ -328,11 +328,7 @@ public class controleur extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
             processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(controleur.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -346,11 +342,7 @@ public class controleur extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
             processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(controleur.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     /**

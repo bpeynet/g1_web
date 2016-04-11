@@ -86,8 +86,8 @@ CREATE TABLE Competences (
 
 INSERT INTO Competences VALUES ('bricolage');
 INSERT INTO Competences VALUES ('couture');
-INSERT INTO Competences VALUES ('défense');
-INSERT INTO Competences VALUES ('programmation');
+INSERT INTO Competences VALUES ('self-défense');
+INSERT INTO Competences VALUES ('informatique');
 INSERT INTO Competences VALUES ('plomberie');
 INSERT INTO Competences VALUES ('cuisine');
 
@@ -127,8 +127,8 @@ CREATE TABLE Evaluations (
     idTache integer NOT NULL,
     idEvaluateur varchar(100) NOT NULL,
     idEvalue varchar(100) NOT NULL,
-    constraint FK_Ev_TAtom foreign key (idTache,idEvaluateur)
-        references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE SET NULL,
+    constraint FK_Ev foreign key (idTache,idEvaluateur,idEvalue)
+        references Candidatures(idCandidature,idCommanditaire,idCandidat) ON DELETE SET NULL,
     --Cette contrainte d'intégrité est vitale afin de vérifier que l'évaluation
     --est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
@@ -144,7 +144,6 @@ CREATE SEQUENCE Evaluations_Sequence
     NOCYCLE;
 
 CREATE TABLE Candidatures (
-    idCandidature integer NOT NULL PRIMARY KEY,
     idTacheAtom integer NOT NULL,
     idCommanditaire varchar(100) NOT NULL,
     --On est obligé d'ajouter la colonne idCommanditaire
@@ -153,11 +152,6 @@ CREATE TABLE Candidatures (
     --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
     constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
         references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
-    idCandidat varchar(100) NOT NULL references Utilisateurs(email)
+    idCandidat varchar(100) NOT NULL references Utilisateurs(email),
+    PRIMARY KEY (idTacheAtom,idCommanditaire,idCandidat)
 );
-
-CREATE SEQUENCE Candidatures_Sequence
-    INCREMENT BY 1
-    START WITH 1
-    NOMAXVALUE
-    NOCYCLE;

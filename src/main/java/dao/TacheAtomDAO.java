@@ -124,7 +124,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "INSERT INTO Candidatures VALUES (Candidatures_Sequence.nextval," + idTacheAtom
+            String requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
                     + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
             //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas.
             st.executeUpdate(requeteSQL);
