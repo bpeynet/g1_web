@@ -4,6 +4,9 @@
     Author     : ben
 --%>
 
+<%@page import="java.util.HashMap"%>
+<%@page import="modeles.Utilisateurs"%>
+<%@page import="dao.UtilisateurDAO"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="modeles.outils.Competences"%>
 <%@page import="modeles.TacheAtom"%>
@@ -20,13 +23,12 @@
     <section id="banner">
         <% if (request.getAttribute("tache")!=null) {
             out.println("<h2>" + ((Tache)request.getAttribute("tache")).getTitreTache() + "</h2>");
-            out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + ((Tache)request.getAttribute("tache")).getEmail() + "</i></span>");
+            out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + ((Tache)request.getAttribute("tache")).getEmailCommanditaire()+ "</i></span>");
           }
         %>
     </section>
     <section class="container">
         <% if (request.getAttribute("tache")!=null) {
-                HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                 out.println("<table id='ficheTacheTableau'>");
                 out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                 out.println("Titre</td>\n<td>");
@@ -50,20 +52,34 @@
                 } else {
                     out.println("Pas de compétence particulière attendue");
                 }
-                if (ta.getEmailExecutant()==null) {
-                    out.print("</td><td><a href='./controleur?action=");
-                    if (candidatures.contains(ta.getIdTacheAtom())) {
-                        out.println("Depostuler&idTacheAtom=" +
-                                ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
-                    } else {
-                        out.println("Postuler&idTacheAtom=" + 
-                                ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
-                    }
+                if (ta.getEmailCommanditaire().equals(((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail())) {
+                    HashMap<Integer, Integer> candidatures = (HashMap<Integer, Integer>) request.getAttribute("candidatures");
+                    out.println(candidatures != null ?
+                                    (candidatures.get(ta.getIdTacheAtom())!= null ?
+                                        "<td>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
+                                                + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
+                                            : "<td>0 candidature</td>")
+                                    : "<td>0 candidature</td>");
+                    out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td>");
                 } else {
-                    out.println("</td></tr>");
+                    HashSet candidatures = (HashSet) request.getAttribute("candidatures");
+                    if (ta.getEmailExecutant()==null) {
+                        out.print("</td><td><a href='./controleur?action=");
+                        if (candidatures.contains(ta.getIdTacheAtom())) {
+                            out.println("Depostuler&idTacheAtom=" +
+                                    ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
+                        } else {
+                            out.println("Postuler&idTacheAtom=" + 
+                                    ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
+                        }
+                    } else {
+                        out.println("</td></tr>");
+                    }
                 }
             }
             out.println("</table>");
           }
         %>
     </section>
+    </body>
+</html>

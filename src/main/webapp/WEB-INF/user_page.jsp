@@ -30,7 +30,7 @@
                         }
                         out.println("<td><a href='./controleur?action=voirTache&idTache=" + t.getIdTache() + "'>");
                         out.print("<span class='titreTache'>" + t.getTitreTache()+"</span><br>");
-                        out.print("proposé par <i>" + t.getEmail() + "</i>");
+                        out.print("proposé par <i>" + t.getEmailCommanditaire()+ "</i>");
                         if (t.getTaches().size()>1) {
                             out.print("<hr><table id='card'>");
                             for (TacheAtom ta : t.getTaches()) {

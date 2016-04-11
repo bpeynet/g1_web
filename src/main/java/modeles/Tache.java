@@ -13,13 +13,13 @@ import java.util.ArrayList;
  */
 public class Tache {
     private Integer idTache;
-    private String email;
+    private String emailCommanditaire;
     private String titreTache;
     private ArrayList<TacheAtom> taches;
     
     public Tache(Integer idTache, String email, String titreTache, ArrayList<TacheAtom> taches) {
         this.idTache = idTache;
-        this.email = email;
+        this.emailCommanditaire = email;
         this.titreTache = titreTache;
         this.taches = new ArrayList<TacheAtom>();
         if(taches != null) this.taches.addAll(taches);
@@ -29,8 +29,8 @@ public class Tache {
         return idTache;
     }
     
-    public String getEmail() {
-        return email;
+    public String getEmailCommanditaire() {
+        return emailCommanditaire;
     }
     
     public String getTitreTache() {

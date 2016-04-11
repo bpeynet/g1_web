@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import modeles.Tache;
 import modeles.Utilisateurs;
 import modeles.outils.Competences;
 
@@ -373,8 +374,14 @@ public class controleur extends HttpServlet {
 
     private void actionConsulterTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         if (request.getParameter("idTache")!=null) {
-            request.setAttribute("tache", tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO));
-            request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+            Tache tache = tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO);
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession().getAttribute("utilisateur");
+            request.setAttribute("tache", tache);
+            if (tache.getEmailCommanditaire().equals(utilisateur.getEmail())) {
+                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
+            } else {
+                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant(utilisateur));
+            }
             getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
         } else {
             response.sendRedirect("./controleur");
