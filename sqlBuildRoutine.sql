@@ -11,9 +11,9 @@ CREATE TABLE Utilisateurs (
     evaluation float,
     CHECK (email like '%@%.%'),
     CHECK (genre = 1 OR genre = 2),
-    CHECK (evaluation >= -1 AND evaluation <= 5),
+    CHECK (evaluation >= -1 AND evaluation <= 5)/*,
     CHECK (latitude >= 0 AND latitude <= 90),
-    CHECK (longitude >= 0 AND longitude <= 360)
+    CHECK (longitude >= 0 AND longitude <= 360)*/
 );
 
 INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
