@@ -398,7 +398,7 @@ public class controleur extends HttpServlet {
             request.setAttribute("tache", tache);
             if (tache.getEmailCommanditaire().equals(utilisateur.getEmail())) {
                 request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
-                request.setAttribute("candidaturesDetails", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, Integer.valueOf(request.getParameter("idTache"))));
+                //request.setAttribute("candidaturesDetails", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, Integer.valueOf(request.getParameter("idTache"))));
             } else {
                 request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant(utilisateur));
             }

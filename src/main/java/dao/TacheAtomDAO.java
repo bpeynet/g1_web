@@ -106,7 +106,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                         rs.getString("titreTacheAtom"),rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
                         rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
-                        null));
+                        rs.getString("idExecutant"), null));
             }
         } catch (SQLException ex) {
             throw new DAOException("Erreur SQL", ex);

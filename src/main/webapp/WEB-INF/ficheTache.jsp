@@ -55,21 +55,26 @@
                                 out.println(c.getNomCompetence() + "<br>");
                             }
                         } else {
-                            out.println("Pas de compétence particulière attendue");
+                            out.println("Pas de compétence particulière attendue</td>");
                         }
                         if (ta.getEmailCommanditaire().equals(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail())) {
-                            HashMap<Integer, Integer> candidatures = (HashMap<Integer, Integer>) request.getAttribute("candidatures");
-                            out.println(candidatures != null
-                                    ? (candidatures.get(ta.getIdTacheAtom()) != null
-                                    ? "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
-                                    + (candidatures.get(ta.getIdTacheAtom()) > 1 ? "s" : "") + "</a></td>"
-                                    : "<td>0 candidature</td>")
-                                    : "<td>0 candidature</td>");
-                            out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td></tr>");
+                            if (ta.getEmailExecutant() == null) {
+                                HashMap<Integer, Integer> candidatures = (HashMap<Integer, Integer>) request.getAttribute("candidatures");
+                                out.println(candidatures != null ?
+                                        (candidatures.get(ta.getIdTacheAtom()) != null ?
+                                                "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>"
+                                                        + candidatures.get(ta.getIdTacheAtom()) + " candidature"
+                                        + (candidatures.get(ta.getIdTacheAtom()) > 1 ? "s" : "") + "</a></td>"
+                                        : "<td>0 candidature</td>")
+                                        : "<td>0 candidature</td>");
+                                out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td></tr>");
+                            } else {
+                                out.println("<td>" + ta.getEmailExecutant() + "</td>");
+                            }
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                             if (ta.getEmailExecutant() == null) {
-                                out.print("</td><td><a href='./controleur?action=");
+                                out.print("<td><a href='./controleur?action=");
                                 if (candidatures.contains(ta.getIdTacheAtom())) {
                                     out.println("Depostuler&idTacheAtom="
                                             + ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
@@ -78,7 +83,7 @@
                                             + ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
                                 }
                             } else {
-                                out.println("</td></tr>");
+                                out.println("</tr>");
                             }
                         }
                     }

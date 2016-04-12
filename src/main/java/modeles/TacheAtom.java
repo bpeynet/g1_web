@@ -44,6 +44,23 @@ public class TacheAtom {
         if (competences != null) this.competences.addAll(competences);
     }
     
+    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
+            Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, String emailCommanditaire,
+            String emailExecutant, ArrayList<Competences> competences) {
+        this.idTacheAtom = idTacheAtom;
+        this.idTache = idTache;
+        this.titreTacheAtom = titreTacheAtom;
+        this.descriptionTache = descriptionTache;
+        this.prixTache = prixTache;
+        this.localisation = localisation;
+        this.datePlusTot = datePlusTot;
+        this.datePlusTard = datePlusTard;
+        this.emailCommanditaire = emailCommanditaire;
+        this.emailExecutant = emailExecutant;
+        this.competences = new ArrayList<>();
+        if (competences != null) this.competences.addAll(competences);
+    }
+    
     public Integer getIdTacheAtom() {
         return idTacheAtom;
     }
