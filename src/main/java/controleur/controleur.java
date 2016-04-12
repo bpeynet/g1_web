@@ -162,6 +162,10 @@ public class controleur extends HttpServlet {
                     actionVoirMesCandidatures(request, response, utilisateurDAO, tacheAtomDAO);
                     break;
                 }
+                case "voirCandidaturesTache": {
+                    actionVoirCandidaturesTache(request,response, utilisateurDAO, tacheAtomDAO);
+                    break;
+                }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
                     break;
@@ -454,6 +458,7 @@ public class controleur extends HttpServlet {
             response.sendRedirect("./controleur");
         }
     }
+
         
     private void actionVoirMesCandidatures(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, IOException, ServletException {
         ArrayList<TacheAtom> candidatures = new ArrayList<TacheAtom>();
@@ -467,5 +472,24 @@ public class controleur extends HttpServlet {
         request.setAttribute("candidatures",candidatures);
         request.setAttribute("services",services);
         getServletContext().getRequestDispatcher("/WEB-INF/panneauCandidatures.jsp").forward(request, response);
+        
+    }
+
+
+    private void actionVoirCandidaturesTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws IOException, DAOException, ServletException {
+        if (request.getSession(false).getAttribute("utilisateur") != null && request.getParameter("idTacheAtom") != null) {
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
+            if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
+                request.setAttribute("tacheAtom", tacheAtomDAO.getTacheAtom(idTacheAtom));
+                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, idTacheAtom));
+                getServletContext().getRequestDispatcher("/WEB-INF/candidaturesTache.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("./controleur");
+            }
+        } else {
+            response.sendRedirect("./controleur");
+        }
+
     }
 }

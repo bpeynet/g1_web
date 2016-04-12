@@ -285,6 +285,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return candidatures;
     }
 
+    /**
+     * Récupère le nombre de candidatures reçues par le commanditaire pour toutes ses tâches (atomiques)
+     * @param utilisateur commanditaire
+     * @return table de hachage liant les numéros des tâches du commanditaire au nombre de candidature qu'a chaque tâche (atomique)
+     * @throws DAOException 
+     */
     public HashMap<Integer, Integer> getNbCandidaturesCommanditaire(Utilisateurs utilisateur) throws DAOException {
         HashMap<Integer, Integer> candidatures = new HashMap<>();
         Connection conn = null;
@@ -305,6 +311,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return candidatures;
     }
 
+    /**
+     * Récupère les détails de candidatures reçues par un commanditaire pour une tâche atomique particulière
+     * @param utilisateur commanditaire
+     * @param idTacheAtom numéro de tâche atomique dont on veut récupérer les candidatures
+     * @return Liste contenant les emails des candidats à une tâche atomique
+     * @throws DAOException 
+     */
     public ArrayList<String> getCandidaturesCommanditaire(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
         ArrayList<String> listeCandidats = new ArrayList<>();
         Connection conn = null;
@@ -316,7 +329,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             ResultSet rs = st.executeQuery(requeteSQL);
             while (rs.next()) {
                 listeCandidats.add(rs.getString("idCandidat"));
-            }
+                }
         } catch (SQLException e) {
             throw new DAOException("Erreur SQL 'getCandidaturesCommanditaire'", e);
         } finally {
