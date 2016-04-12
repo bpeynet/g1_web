@@ -111,12 +111,11 @@
                             <input type="text" id="projetName" name="projetName" placeholder="Nom du projet" disabled/><br>
                         </div>
                         <div class="tache">
-                            <input type="text" class="titre" name="titre1" placeholder="Titre de la tâche"/>
-                            <input type="date" class="SoonestDate" placeholder="Date d'exécution au plus tôt" name="SoonestDate1">
-                            <input type="date" class="LatestDate" placeholder="Date d'exécution au plus tard" name="LatestDate1">
-                            <input type="number" placeholder="Récompense" class="prix" name="prix1" min="0" step="0.01"><span style="color:white">&euro;</span>
-                            <input type="text" placeholder="Description" class="description" name="description1" class="description">
-                            
+                            <input type="text" class="titre" name="titre1" placeholder="Titre de la tâche" required>
+                            <input type="date" class="SoonestDate" placeholder="Date d'exécution au plus tôt" name="SoonestDate1" required>
+                            <input type="date" class="LatestDate" placeholder="Date d'exécution au plus tard" name="LatestDate1" required>
+                            <input type="number" placeholder="Récompense" class="prix" name="prix1" min="0" step="0.01" required><span style="color:white">&euro;</span>
+                            <input type="text" placeholder="Description" class="description" name="description1" class="description" required>
                             <br>
                             <label style="color:whitesmoke">Compétences requises pour cette tâche : </label>
                     
