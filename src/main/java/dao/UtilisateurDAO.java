@@ -285,7 +285,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return candidatures;
     }
 
-    public HashMap<Integer, Integer> getCandidaturesCommanditaire(Utilisateurs utilisateur) throws DAOException {
+    public HashMap<Integer, Integer> getNbCandidaturesCommanditaire(Utilisateurs utilisateur) throws DAOException {
         HashMap<Integer, Integer> candidatures = new HashMap<>();
         Connection conn = null;
         try {
@@ -298,11 +298,31 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                 candidatures.put(rs.getInt("idTacheAtom"), rs.getInt("nombre"));
             }
         } catch (SQLException e) {
-            throw new DAOException("Erreur SQL 'getCandidaturesCommanditaire'", e);
+            throw new DAOException("Erreur SQL 'getNbCandidaturesCommanditaire'", e);
         } finally {
             closeConnection(conn);
         }
         return candidatures;
+    }
+
+    public ArrayList<String> getCandidaturesCommanditaire(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
+        ArrayList<String> listeCandidats = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT idCandidat FROM Candidatures WHERE idTacheAtom="
+                    + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                listeCandidats.add(rs.getString("idCandidat"));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'getCandidaturesCommanditaire'", e);
+        } finally {
+            closeConnection(conn);
+        }
+        return listeCandidats;
     }
 
     public boolean proposedThisTask(int idTache, Utilisateurs utilisateur) throws DAOException {

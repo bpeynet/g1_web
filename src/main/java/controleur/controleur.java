@@ -288,7 +288,7 @@ public class controleur extends HttpServlet {
 
     private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
         request.setAttribute("taches", utilisateurDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
-        request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
+        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
@@ -378,7 +378,8 @@ public class controleur extends HttpServlet {
             Utilisateurs utilisateur = (Utilisateurs) request.getSession().getAttribute("utilisateur");
             request.setAttribute("tache", tache);
             if (tache.getEmailCommanditaire().equals(utilisateur.getEmail())) {
-                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
+                request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
+                request.setAttribute("candidaturesDetails", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, Integer.valueOf(request.getParameter("idTache"))));
             } else {
                 request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant(utilisateur));
             }
