@@ -19,6 +19,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><% out.print(t != null ? t.getTitreTache() : "Tache non spécifiée"); %></title>
+        <script language="javascript">
+            function confirmSupp(){
+                if(confirm("Supprimer la tâche ?")===true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        </script>   
     </head>
     <body>
         <jsp:include page="banniere.jsp" />
@@ -26,6 +35,7 @@
             <% if (t != null) {
                     out.println("<h2>" + t.getTitreTache() + "</h2>");
                     out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + t.getEmailCommanditaire() + "</i></span>");
+                    out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
                 }
             %>
         </section>
@@ -67,9 +77,9 @@
                                         + (candidatures.get(ta.getIdTacheAtom()) > 1 ? "s" : "") + "</a></td>"
                                         : "<td>0 candidature</td>")
                                         : "<td>0 candidature</td>");
-                                out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td></tr>");
                             } else {
                                 out.println("<td>" + ta.getEmailExecutant() + "</td>");
+                                out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
                             }
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");

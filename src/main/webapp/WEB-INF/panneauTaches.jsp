@@ -14,6 +14,22 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tâches</title>
+        <script language="javascript">
+            function confirmSupp(){
+                if(confirm("Supprimer la tâche ?")===true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function confirmFinTache(){
+                if(confirm("Marquer la tâche comme finie ?")===true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        </script>
     </head>
     <jsp:include page="banniere.jsp"/>
     <section id="banner" class="wrapper" style=" color: rgb(202, 202, 202);">
@@ -27,7 +43,7 @@
                     out.println("<table id='tableauMesTaches'>");
                     for (Tache t : listeTaches) {
                         out.print("<tr>");
-                        out.print("<td>" + t.getTitreTache() + "</td>");
+                        out.print("<td><a href='./controleur?action=voirTache&idTache=" + t.getIdTache() + "'>" + t.getTitreTache() + "</a></td>");
                         if (t.getTaches() != null) {
                             if (t.getTaches().size() > 1) {
                                 out.print("<td><table id='tableauMesTachesAtom'>");
@@ -39,8 +55,8 @@
                                                             + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
                                                         : "<td></td>")
                                                 : "<td></td>");
-                                    out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td>");
-                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>Tâche finie</a></td>");
+                                    out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
                                 }
                                 out.println("</table></td>");
                             } else {
@@ -53,7 +69,7 @@
                                             : "<td></td>");
                             }
                         }
-                        out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "'>Supprimer</a></td>");
+                        out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
                         out.println("</tr>");
                     }
                     out.println("</table>");
