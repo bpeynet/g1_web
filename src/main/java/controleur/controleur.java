@@ -166,6 +166,10 @@ public class controleur extends HttpServlet {
                     actionVoirCandidaturesTache(request,response, utilisateurDAO, tacheAtomDAO);
                     break;
                 }
+                case "AccepterCandidature": {
+                    actionAccepterCandidature(request, response, tacheAtomDAO, utilisateurDAO);
+                    break;
+                }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
                     break;
@@ -490,5 +494,23 @@ public class controleur extends HttpServlet {
             response.sendRedirect("./controleur");
         }
 
+    }
+
+    private void actionAccepterCandidature(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO) throws DAOException, IOException, ServletException {
+        if (request.getSession(false).getAttribute("utilisateur") != null
+                && request.getParameter("idTacheAtom") != null
+                && request.getParameter("idCandidat") != null) {
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
+            String idCandidat = request.getParameter("idCandidat");
+            if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
+                tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom);
+                actionVoirMesTaches(request, response, null, utilisateurDAO);
+            } else {
+                response.sendRedirect("./controleur");
+            }
+        } else {
+            response.sendRedirect("./controleur");
+        }
     }
 }

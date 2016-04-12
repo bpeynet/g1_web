@@ -166,5 +166,20 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             closeConnection(conn);
         }
     }
-    
+
+    public void accepterCandidature(String idCandidat, int idTacheAtom) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "UPDATE TachesAtom SET idExecutant='" + idCandidat + "' WHERE idTacheAtom=" + idTacheAtom;
+            st.executeUpdate(requeteSQL);
+            requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom;
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'accepterCandidature", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }   
 }

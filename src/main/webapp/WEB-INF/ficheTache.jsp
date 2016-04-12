@@ -13,23 +13,24 @@
 <%@page import="modeles.TacheAtom"%>
 <%@page import="modeles.Tache"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% Tache t = request.getAttribute("tache") != null ? (Tache) request.getAttribute("tache") : null; %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title><% out.print(request.getAttribute("tache") != null ? ((Tache) request.getAttribute("tache")).getTitreTache() : "Tache non spécifiée"); %></title>
+        <title><% out.print(t != null ? t.getTitreTache() : "Tache non spécifiée"); %></title>
     </head>
     <body>
         <jsp:include page="banniere.jsp" />
         <section id="banner">
-            <% if (request.getAttribute("tache") != null) {
-                    out.println("<h2>" + ((Tache) request.getAttribute("tache")).getTitreTache() + "</h2>");
-                    out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + ((Tache) request.getAttribute("tache")).getEmailCommanditaire() + "</i></span>");
+            <% if (t != null) {
+                    out.println("<h2>" + t.getTitreTache() + "</h2>");
+                    out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + t.getEmailCommanditaire() + "</i></span>");
                 }
             %>
         </section>
         <section class="container">
-            <% if (request.getAttribute("tache") != null) {
+            <% if (t != null) {
                     out.println("<table id='ficheTacheTableau'>");
                     out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                     out.println("Titre</td>\n<td>");
@@ -37,9 +38,12 @@
                     out.println("Réalisation au plus tôt le</td>\n<td>");
                     out.println("Réalisation au plus tard le</td>\n<td>");
                     out.println("Récompense</td>\n<td>");
-                    out.println("Compétences nécessaires</td>\n<td hidden>");
-                    out.println("Postuler</td>\n</tr>");
-                    for (TacheAtom ta : ((Tache) request.getAttribute("tache")).getTaches()) {
+                    out.println("Compétences nécessaires</td>\n<td>");
+                    if (t.getEmailCommanditaire().equals(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail())) {
+                        out.println("Exécutant");
+                    }
+                    out.println("</td>\n</tr>");
+                    for (TacheAtom ta : t.getTaches()) {
                         out.println("<tr>\n<td>");
                         out.println(ta.getTitreTacheAtom() + "</td>\n<td>");
                         out.println(ta.getDescription() + "</td>\n<td>");
