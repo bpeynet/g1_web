@@ -31,7 +31,10 @@
         <c:if test="${candidatures.size() == 0}">
             <p>Aucune candidature soumise.<p>
         </c:if>
-                
+            <h2> Mes candidatures validées </h2>
+            
+            <%--TODO : les candidatures validées, à chercher dans TacheAtom --%>
+            
             <h2>Vos services rendus</h2>
         <c:if test="${services.size() > 0}">
             <table id='tableauMesCandidatures'>   

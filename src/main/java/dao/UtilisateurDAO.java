@@ -451,7 +451,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @throws DAOException 
      */
     public ArrayList<TacheAtom> getTachesExecutantFinies(Utilisateurs utilisateur) throws DAOException {
-        ArrayList<TacheAtom> liste = null;
+        ArrayList<TacheAtom> liste = new ArrayList<TacheAtom>();
         String email = utilisateur.getEmail();
         TacheAtom tache;
         ResultSet rs;

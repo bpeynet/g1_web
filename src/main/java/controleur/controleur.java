@@ -462,15 +462,14 @@ public class controleur extends HttpServlet {
         
     private void actionVoirMesCandidatures(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, IOException, ServletException {
         ArrayList<TacheAtom> candidatures = new ArrayList<TacheAtom>();
-        ArrayList<TacheAtom> services = new ArrayList<TacheAtom>();
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
         HashSet<Integer> list = utilisateurDAO.getCandidaturesExecutant(utilisateur);
         for(Integer i : list) {
             candidatures.add(tacheAtomDAO.getTacheAtom(i));
         }
-        services = utilisateurDAO.getTachesExecutantFinies(utilisateur);
+        
         request.setAttribute("candidatures",candidatures);
-        request.setAttribute("services",services);
+        request.setAttribute("services",utilisateurDAO.getTachesExecutantFinies(utilisateur));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauCandidatures.jsp").forward(request, response);
         
     }
