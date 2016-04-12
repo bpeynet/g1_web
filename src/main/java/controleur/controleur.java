@@ -151,6 +151,10 @@ public class controleur extends HttpServlet {
                     actionSupprimerCompte(request, response, utilisateurDAO);
                     break;
                 }
+                case "voirCandidaturesTache": {
+                    actionVoirCandidaturesTache(request,response, utilisateurDAO, tacheAtomDAO);
+                    break;
+                }
                 default: {
                     getServletContext().getRequestDispatcher("/WEB-INF/controleurErreur.jsp").forward(request, response);
                     break;
@@ -439,6 +443,22 @@ public class controleur extends HttpServlet {
                 utilisateurDAO.proposedThisAtomTask(Integer.valueOf(request.getParameter("idTacheAtom")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
             actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+        } else {
+            response.sendRedirect("./controleur");
+        }
+    }
+
+    private void actionVoirCandidaturesTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws IOException, DAOException, ServletException {
+        if (request.getSession(false).getAttribute("utilisateur") != null && request.getParameter("idTacheAtom") != null) {
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
+            if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
+                request.setAttribute("tacheAtom", tacheAtomDAO.getTacheAtom(idTacheAtom));
+                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, idTacheAtom));
+                getServletContext().getRequestDispatcher("/WEB-INF/candidaturesTache.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("./controleur");
+            }
         } else {
             response.sendRedirect("./controleur");
         }

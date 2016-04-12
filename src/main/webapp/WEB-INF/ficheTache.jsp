@@ -57,16 +57,11 @@
                             HashMap<Integer, Integer> candidatures = (HashMap<Integer, Integer>) request.getAttribute("candidatures");
                             out.println(candidatures != null
                                     ? (candidatures.get(ta.getIdTacheAtom()) != null
-                                    ? "<td><a onclick='afficheCandidature()' style='cursor:pointer'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
+                                    ? "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
                                     + (candidatures.get(ta.getIdTacheAtom()) > 1 ? "s" : "") + "</a></td>"
                                     : "<td>0 candidature</td>")
                                     : "<td>0 candidature</td>");
                             out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td></tr>");
-                            out.println("<tr><td>");
-                            for (String s : ((ArrayList<String>) request.getAttribute("candidaturesDetails"))) {
-                                out.println(s + "<br>");
-                            }
-                            out.println("</td></tr>");
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                             if (ta.getEmailExecutant() == null) {
