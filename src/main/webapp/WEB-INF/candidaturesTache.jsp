@@ -25,7 +25,7 @@
         </section>
         <section class="container">
         <%
-            if (listeCandidatures != null && ta != null && listeCandidatures.get(ta.getIdTacheAtom()) != null) {
+            if (listeCandidatures != null && ta != null) {
                 out.println("<table id='ficheTacheTableau'>");
                 out.println("<tr id='ficheTacheTableauHaut'>");
                 out.println("<td>Candidats</td>");

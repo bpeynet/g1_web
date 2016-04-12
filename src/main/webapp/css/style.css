@@ -1027,8 +1027,9 @@ input[type="button"]:disabled,
     padding: 0 0.75em;
 }
 
-#tableauMesTachesAtom td:nth-of-type(3) {
+#tableauMesTachesAtom td:nth-of-type(3), td:last-of-type {
     text-align: right;
+    width: 100px;
 }
 
 /* Header */
