@@ -430,4 +430,45 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         }
         return liste;
     }
+    
+    /**
+     * Retourne les tâches finies de l'exécutant
+     * @param utilisateur
+     * @return
+     * @throws DAOException 
+     */
+    public ArrayList<TacheAtom> getTachesExecutantFinies(Utilisateurs utilisateur) throws DAOException {
+        ArrayList<TacheAtom> liste = null;
+        String email = utilisateur.getEmail();
+        TacheAtom tache;
+        ResultSet rs;
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "' AND indicateurFin = 1";
+            rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                tache = new TacheAtom(rs.getInt("idTacheAtom"),
+                                rs.getInt("idTacheMere"),
+                                rs.getString("titreTacheAtom"),
+                                rs.getString("descriptionTache"),
+                                rs.getFloat("prixTache"),
+                                new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),
+                                rs.getDate("datePlusTot"),
+                                rs.getDate("datePlusTard"),
+                                rs.getString("idCommanditaire"),
+                                null);
+                System.err.println(tache);
+                liste.add(tache);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        
+        return liste;
+    }       
 }

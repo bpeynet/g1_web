@@ -81,7 +81,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                 + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
                 + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','yyyy/mm/dd')"
                 + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
-                + idMere + ", '" + idCommanditaire + "', null)" ;
+                + idMere + ", '" + idCommanditaire + "', null, false)" ;
             st.executeUpdate(requestSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);

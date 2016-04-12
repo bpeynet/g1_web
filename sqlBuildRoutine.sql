@@ -52,6 +52,7 @@ CREATE TABLE TachesAtom (
     constraint FK_TAtom_T foreign key (idTacheMere, idCommanditaire)
         references Taches(idTache, idCommanditaire) ON DELETE CASCADE,
     idExecutant varchar(100) references Utilisateurs(email) ON DELETE SET NULL,
+    indicateurFin integer,    
     PRIMARY KEY (idTacheAtom,idCommanditaire),
     CHECK (prixTache >= 0)
 );
@@ -64,21 +65,21 @@ CREATE SEQUENCE TachesAtom_Sequence
 
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Escorte d''Elizabeth',
     'Attention! La mission contient un saut d''hélicoptère', 100.15, 43, 45, TO_date('04/05/2016','dd/mm/yyyy'),
-    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null);
+    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une application Web de crowsourcing',
     'En équipe de 5', 0, 50, 62, TO_date('04/05/2016','dd/mm/yyyy'),
-    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk');
+    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk',0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Battre le Chiffre au poker',
     '6 millions de livres appartenant au gouvernement seront mis à disposition. A rendre.',
     5005,55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
-    3,'m@mi6.gov.co.uk', null);
+    3,'m@mi6.gov.co.uk', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Rattrapper l''africain',
     'Savoir monter et sauter sur une grue',
     5005,55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
-    3,'m@mi6.gov.co.uk', null);
+    3,'m@mi6.gov.co.uk', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire un niche pour Pluto',
     'En bois', 1, 55.4, 1.6, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
-    2,'picsou@disney.com', null);
+    2,'picsou@disney.com', null,0);
 
 CREATE TABLE Competences (
     competence varchar(100) NOT NULL PRIMARY KEY

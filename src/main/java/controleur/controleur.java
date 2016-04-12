@@ -8,6 +8,8 @@ import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import modeles.Tache;
+import modeles.TacheAtom;
 import modeles.Utilisateurs;
 import modeles.outils.Competences;
 
@@ -149,6 +152,14 @@ public class controleur extends HttpServlet {
                 }
                 case "SupprimerCompte": {
                     actionSupprimerCompte(request, response, utilisateurDAO);
+                    break;
+                }
+                case "FinDeTache": {
+                    //TODO : faire la fonction de validation de fin de tâche => lien vers page d'évalutation
+                    break;
+                }
+                case "MesCandidatures": {
+                    actionVoirMesCandidatures(request, response, utilisateurDAO, tacheAtomDAO);
                     break;
                 }
                 default: {
@@ -442,5 +453,19 @@ public class controleur extends HttpServlet {
         } else {
             response.sendRedirect("./controleur");
         }
+    }
+        
+    private void actionVoirMesCandidatures(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, IOException, ServletException {
+        ArrayList<TacheAtom> candidatures = new ArrayList<TacheAtom>();
+        ArrayList<TacheAtom> services = new ArrayList<TacheAtom>();
+        Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
+        HashSet<Integer> list = utilisateurDAO.getCandidaturesExecutant(utilisateur);
+        for(Integer i : list) {
+            candidatures.add(tacheAtomDAO.getTacheAtom(i));
+        }
+        services = utilisateurDAO.getTachesExecutantFinies(utilisateur);
+        request.setAttribute("candidatures",candidatures);
+        request.setAttribute("services",services);
+        getServletContext().getRequestDispatcher("/WEB-INF/panneauCandidatures.jsp").forward(request, response);
     }
 }

@@ -40,6 +40,7 @@
                                                         : "<td></td>")
                                                 : "<td></td>");
                                     out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "'>Supprimer</a></td>");
+                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>Tâche finie</a></td>");
                                 }
                                 out.println("</table></td>");
                             } else {

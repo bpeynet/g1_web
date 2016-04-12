@@ -1147,7 +1147,7 @@ body.landing #skel-layers-wrapper {
 #header.alt h1 {
     color: #ffffff;
     left: 2.5em;
-    top: 2em;
+    top: 0;
 }
 
 #header.alt h1 a {

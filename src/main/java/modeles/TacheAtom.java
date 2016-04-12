@@ -25,7 +25,7 @@ public class TacheAtom {
     private Date datePlusTot;
     private Date datePlusTard;
     private String emailCommanditaire;
-    private String emailExecutant=null;
+    private String emailExecutant;
     private ArrayList<Competences> competences;
     
     public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
