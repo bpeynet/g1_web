@@ -115,11 +115,7 @@ CREATE TABLE CompetencesTaches (
     competence varchar(100) NOT NULL references Competences(competence) ON DELETE CASCADE
 );
 
-CREATE SEQUENCE CompetencesTaches_Sequence
-    INCREMENT BY 1
-    START WITH 1
-    NOMAXVALUE
-    NOCYCLE;
+INSERT INTO CompetencesTaches VALUES (1, 'm@mi6.gov.co.uk','self-défense');
 
 CREATE TABLE Candidatures (
     idTacheAtom integer NOT NULL,

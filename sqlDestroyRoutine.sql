@@ -9,5 +9,4 @@ DROP TABLE Candidatures;
 DROP TABLE CompetencesUtilisateurs;
 DROP SEQUENCE CompUtilisateurs_Sequence;
 DROP TABLE CompetencesTaches;
-DROP SEQUENCE CompetencesTaches_Sequence;
 DROP SEQUENCE Evaluations_Sequence;

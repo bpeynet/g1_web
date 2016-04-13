@@ -104,4 +104,8 @@ public class TacheAtom {
     public String getEmailExecutant() {
         return emailExecutant;
     }
+    
+    public void ajouterCompetences(String competence) {
+        this.competences.add(new Competences(competence));
+    }
 }

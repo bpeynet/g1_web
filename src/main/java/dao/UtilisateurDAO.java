@@ -394,15 +394,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         }
     }
     
-     /**
+    /**
      * Récupère la liste des tâches auxquelles l'utilisateur peut postuler, 
      * selon ses compétences
      * @param utilisateur
      * @return
      * @throws DAOException 
      */
-    public ArrayList<TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException {
-        ArrayList<TacheAtom> liste = null;
+    public HashMap<Integer,TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException {
+        HashMap<Integer,TacheAtom> liste = null;
         ArrayList<Competences> comp = null;
         String email = utilisateur.getEmail();
         TacheAtom tache;
@@ -412,28 +412,26 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
-                    + "AND t.idcommandiditaire=c.idcommanditaire AND idCommanditaire !='" 
-                    + email + "' AND c.competence IN (SELECT * FROM CompetencesUtilisateur"
+            requeteSQL = "SELECT DISTINCT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
+                    + "AND t.idcommanditaire=c.idcommanditaire AND t.idCommanditaire !='" 
+                    + email + "' AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
                     + "WHERE idutilisateur='" + email + "')" ;
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {
-                liste = new ArrayList<>();
+                liste = new HashMap<>();
                 while (rs.next()) {
                     int idTacheAtom = rs.getInt("idTacheAtom");
-                    
-                    //TODO : 
-                    //if(il exite une tache de id idTacheAtom dans liste) {
-                    // on ajoute la compétence à la liste de compétence de cette tache
-                    //}
-                    //else {
-                    comp = new ArrayList<Competences>();
-                    comp.add(new Competences(rs.getString("competence")));
-                    liste.add(new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
-                        rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitutde")),
-                        rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
-                        comp));
-                    //}
+                    if (liste.containsKey(idTacheAtom)) {
+                        liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
+                    }
+                    else {
+                        comp = new ArrayList<Competences>();
+                        comp.add(new Competences(rs.getString("competence")));
+                        liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
+                            rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
+                            rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
+                            comp));
+                    }
                 }
             }
         } catch (SQLException ex) {

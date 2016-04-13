@@ -4,6 +4,8 @@
     Author     : ralambom
 --%>
 
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="modeles.TacheAtom"%>
 <%@page import="modeles.Tache"%>
 <%@page import="java.util.ArrayList"%>
@@ -15,9 +17,7 @@
 <section id="banner">
     <% out.print(request.getAttribute("succesMessage") == null ? ""
                 : "<p>" + request.getAttribute("succesMessage") + "</p>"); %>
-</section>
 <div class="container">
-    <section>
         
         <%if (request.getAttribute("tachesCommanditaire") != null) {
                 ArrayList<Tache> rs = (ArrayList<Tache>) request.getAttribute("tachesCommanditaire");
@@ -52,13 +52,18 @@
                 }
             }
         %>
-        
-        <%-- <%if (request.getAttribute("tachesExecutant") != null) {
-                ArrayList<TacheAtom> rs = (ArrayList<TacheAtom>) request.getAttribute("tachesExecutant");
+</div>
+</section>
+<section>
+    <div class="container">
+         <%if (request.getAttribute("tachesExecutant") != null) {
+                HashMap<Integer,TacheAtom> rs = (HashMap<Integer,TacheAtom>) request.getAttribute("tachesExecutant");
+                
                 if (rs.size() > 0) {
-                    out.println("<br><h2>Mes offres</h2>\n\t<div  class='cards'>\n\t\t<table id='cardtable'>");
+                    out.println("<br><h2> Candidatez ! </h2>\n\t<div  class='cards'>\n\t\t<table id='cardtable'>");
                     int largeur = 0;
-                    for (TacheAtom t : rs) {
+                    Collection<TacheAtom> result = rs.values();
+                    for (TacheAtom t : result) {
                         if (largeur == 0) {
                             out.println("<tr>");
                         }
@@ -76,11 +81,10 @@
                     out.println("</tr></table></div>");
                 }
             }
-        %> --%>
+        %>
         
         
-        
+    </div> 
     </section>
-</div>
 </body>
 </html>
