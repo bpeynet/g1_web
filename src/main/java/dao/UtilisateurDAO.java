@@ -421,7 +421,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             Statement st = conn.createStatement();
             requeteSQL = "SELECT DISTINCT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
                     + "AND t.idcommanditaire=c.idcommanditaire AND t.idCommanditaire !='" 
-                    + email + "' AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
+                    + email + "' AND t.indicateurfin = 0 AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
                     + "WHERE idutilisateur='" + email + "') AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')" ;
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {
