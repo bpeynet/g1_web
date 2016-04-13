@@ -51,8 +51,8 @@
                                     out.println("<tr><td>" + ta.getTitreTacheAtom() + "</td>");
                                     out.println(candidatures != null ?
                                                 (candidatures.get(ta.getIdTacheAtom())!= null ?
-                                                    "<td>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
-                                                            + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
+                                                    "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
+                                                            + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</a></td>"
                                                         : "<td></td>")
                                                 : "<td></td>");
                                     out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
