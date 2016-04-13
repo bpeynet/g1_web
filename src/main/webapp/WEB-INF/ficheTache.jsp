@@ -87,7 +87,7 @@
                                 out.print("<td><a href='./controleur?action=");
                                 if (candidatures.contains(ta.getIdTacheAtom())) {
                                     out.println("Depostuler&idTacheAtom="
-                                            + ta.getIdTacheAtom() + "'>Dépostuler</a></td></tr>");
+                                            + ta.getIdTacheAtom() + "'>Retirer ma candidature</a></td></tr>");
                                 } else {
                                     out.println("Postuler&idTacheAtom="
                                             + ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");

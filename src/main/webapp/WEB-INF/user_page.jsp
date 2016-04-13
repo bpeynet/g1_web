@@ -53,6 +53,12 @@
             }
         %>
 </div>
+
+
+<br><h2> Mes candidatures validées </h2>
+            
+            <%--TODO : les candidatures validées, à chercher dans TacheAtom --%>
+
 </section>
 <section>
     <div class="container">

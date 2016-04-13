@@ -266,6 +266,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return idTache;
     }
 
+    
+    /**
+     * Retourne liste des idTacheAtom des tâches où il a candidaté
+     * @param utilisateur
+     * @return
+     * @throws DAOException 
+     */
     public HashSet<Integer> getCandidaturesExecutant(Utilisateurs utilisateur) throws DAOException {
         HashSet<Integer> candidatures = new HashSet<>();
         Connection conn = null;
@@ -415,7 +422,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             requeteSQL = "SELECT DISTINCT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
                     + "AND t.idcommanditaire=c.idcommanditaire AND t.idCommanditaire !='" 
                     + email + "' AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
-                    + "WHERE idutilisateur='" + email + "')" ;
+                    + "WHERE idutilisateur='" + email + "') AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')" ;
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {
                 liste = new HashMap<>();

@@ -13,35 +13,36 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Tâches</title>
+        <title>Candidatures</title>
     </head>
     <jsp:include page="banniere.jsp"/>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <section id="banner" class="wrapper" style=" color: rgb(202, 202, 202);">
-        <h2>Vos Candidatures</h2>
+        <h2>Mes Candidatures</h2>
     </section>
     <section class="container">
-        <c:if test="${candidature.size() > 0}">
-            <table id='tableauMesCandidatures'>   
-            <c:forEach items="candidatures" var="element">
+        <c:if test="${candidature.size() != 0}">
+            <td><table id='tableauMesCandidatures'>   
+            <c:forEach items="${candidatures}" var="element">
                 <tr><td> ${element.titreTacheAtom} de ${element.emailCommanditaire} </td>
                     <td><a class ='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
                 </c:forEach>
+            </table></td>
         </c:if>
         <c:if test="${candidatures.size() == 0}">
             <p>Aucune candidature soumise.<p>
         </c:if>
-            <h2> Mes candidatures validées </h2>
-            
-            <%--TODO : les candidatures validées, à chercher dans TacheAtom --%>
-            
-            <h2>Vos services rendus</h2>
+   
+    </section>
+    <section class="container">
+            <h2>Mes services rendus</h2>
         <c:if test="${services.size() > 0}">
-            <table id='tableauMesCandidatures'>   
+            <td><table id='tableauMesCandidatures'>   
             <c:forEach items="services" var="element">
                 <tr><td> ${element.titreTacheAtom} de ${element.emailCommanditaire} </td>
                     <td><a class ='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
                 </c:forEach>
+                </table></td>
         </c:if>
         <c:if test="${services.size() == 0}">
             <p>Aucun service rendu.<p>
