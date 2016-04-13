@@ -253,10 +253,10 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
+            requeteSQL = "SELECT Max(idTache) as max FROM Taches where idCommanditaire ='" + email + "'";
             rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
-                idTache = rs.getInt("idTache");
+                idTache = rs.getInt("max");
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);

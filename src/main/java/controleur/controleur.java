@@ -335,7 +335,7 @@ public class controleur extends HttpServlet {
         while(request.getParameter("titre"+k) != null){
             titre = request.getParameter("titre"+k);
             description = request.getParameter("description"+k);
-            prix = Integer.parseInt(request.getParameter("prix"+k));
+            prix = Double.valueOf(request.getParameter("prix"+k));
             datetot = request.getParameter("SoonestDate"+k);
             datetard = request.getParameter("LatestDate"+k);
             idMere = utilisateurDAO.getIdLastTache(email);
