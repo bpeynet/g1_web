@@ -386,7 +386,9 @@ public class controleur extends HttpServlet {
     }// </editor-fold>
 
     private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
-        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTache(((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail()));
+        Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
+        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTache(utilisateur.getEmail()));
+        request.setAttribute("tachesEnCours", utilisateurDAO.getTachesEnCours(utilisateur.getEmail()));
         //request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
         request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles((Utilisateurs)request.getSession(false).getAttribute("utilisateur")));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);

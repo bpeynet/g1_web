@@ -489,4 +489,39 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         
         return liste;
     }       
+
+    /**
+     * Récupère les tâches (atomiques) pour lequel un utilisateur est exécutant
+     * @param email utilisateur dont on veut trouver les tâches qu'il exécute
+     * @return une liste des tâches atomiques
+     * @throws DAOException 
+     */
+    public ArrayList<TacheAtom> getTachesEnCours(String email) throws DAOException {
+        Connection conn = null;
+        ArrayList<TacheAtom> listeTachesAtom = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            if (rs.next()) {
+                listeTachesAtom = new ArrayList<>();
+                listeTachesAtom.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"), rs.getString("titreTacheAtom"),
+                        rs.getString("descriptionTache"), rs.getFloat("prixTache"),
+                        new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null));
+                while (rs.next()) {
+                    listeTachesAtom.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"), rs.getString("titreTacheAtom"),
+                        rs.getString("descriptionTache"), rs.getFloat("prixTache"),
+                        new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'getTachesEnCours' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return listeTachesAtom;
+    }
 }
