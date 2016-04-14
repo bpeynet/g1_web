@@ -56,7 +56,9 @@
                                                         : "<td></td>")
                                                 : "<td></td>");
                                     out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
-                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                    if(ta.getEmailExecutant() != null) {
+                                        out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                    }
                                 }
                                 out.println("</table></td>");
                             } else {

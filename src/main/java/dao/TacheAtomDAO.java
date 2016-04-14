@@ -182,4 +182,22 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             closeConnection(conn);
         }
     }   
+
+    /**
+     * Indique une tâche comme finie
+     * @param valueOf 
+     */
+    public void finir(int idTacheAtom) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "UPDATE TachesAtom SET indicateurFin=1 WHERE idTacheAtom=" + idTacheAtom;
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD 'finir une tâche' : " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 }

@@ -155,7 +155,7 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "FinDeTache": {
-                    //TODO : faire la fonction de validation de fin de tâche => lien vers page d'évalutation
+                    actionFinDeTache(request, response, tacheAtomDAO, utilisateurDAO);
                     break;
                 }
                 case "MesCandidatures": {
@@ -168,6 +168,10 @@ public class controleur extends HttpServlet {
                 }
                 case "AccepterCandidature": {
                     actionAccepterCandidature(request, response, tacheAtomDAO, utilisateurDAO);
+                    break;
+                }
+                case "Evaluer" : {
+                    //TODO : rentrer l'évaluation dans la BD
                     break;
                 }
                 default: {
@@ -512,6 +516,24 @@ public class controleur extends HttpServlet {
             }
         } else {
             response.sendRedirect("./controleur");
+        }
+    }
+
+    /**
+     * Lorsque le commanditaire déclare une tâche comme finie
+     * Aller à la page pour évaluation
+     * @param request
+     * @param response
+     * @param utilisateurDAO 
+     */
+    private void actionFinDeTache(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        if (request.getSession(false).getAttribute("utilisateur") != null && request.getParameter("idTacheAtom") != null
+                && request.getParameter("idCandidat") != null) {
+            tacheAtomDAO.finir(Integer.valueOf(request.getParameter("idTacheAtom")));
+            request.setAttribute("commanditaire", (Utilisateurs)request.getSession(false).getAttribute("utilisateur"));
+            request.setAttribute("tache", tacheAtomDAO.getTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom"))));
+            request.setAttribute("executant",utilisateurDAO.getUtilisateur(request.getParameter("idCandidat")));
+            getServletContext().getRequestDispatcher("/WEB-INF/evaluations.jsp").forward(request, response);
         }
     }
 }
