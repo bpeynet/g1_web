@@ -395,17 +395,26 @@ public class controleur extends HttpServlet {
     }
 
     private void actionConsulterTache(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
-        if (request.getParameter("idTache")!=null) {
-            Tache tache = tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO);
-            Utilisateurs utilisateur = (Utilisateurs) request.getSession().getAttribute("utilisateur");
-            request.setAttribute("tache", tache);
-            if (tache.getEmailCommanditaire().equals(utilisateur.getEmail())) {
-                request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
-                //request.setAttribute("candidaturesDetails", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, Integer.valueOf(request.getParameter("idTache"))));
-            } else {
-                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant(utilisateur));
+        String numeroDeTache = request.getParameter("idTache");
+        if (numeroDeTache != null) {
+            try {
+                Tache tache = tacheDAO.getTache(Integer.valueOf(request.getParameter("idTache")), tacheAtomDAO);
+                if (tache != null) {
+                    Utilisateurs utilisateur = (Utilisateurs) request.getSession().getAttribute("utilisateur");
+                    request.setAttribute("tache", tache);
+                    if (tache.getEmailCommanditaire().equals(utilisateur.getEmail())) {
+                        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
+                        //request.setAttribute("candidaturesDetails", utilisateurDAO.getCandidaturesCommanditaire(utilisateur, Integer.valueOf(request.getParameter("idTache"))));
+                    } else {
+                        request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant(utilisateur));
+                    }
+                    getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("./controleur");
+                }
+            } catch (NumberFormatException nEx) {
+                response.sendRedirect("./controleur");
             }
-            getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
         } else {
             response.sendRedirect("./controleur");
         }
