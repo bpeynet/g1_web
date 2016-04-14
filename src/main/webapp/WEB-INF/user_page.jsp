@@ -52,11 +52,31 @@
                 }
             }
         %>
+        <%if (request.getAttribute("tachesEnCours") != null) {
+                ArrayList<TacheAtom> rs = (ArrayList<TacheAtom>) request.getAttribute("tachesEnCours");
+                if (rs != null) {
+                    out.println("<br><h2>Les tâches que j'effectue</h2>\n\t<div  class='cards'>\n\t\t<table id='cardtable'>");
+                    int largeur = 0;
+                    for (TacheAtom ta : rs) {
+                        if (largeur == 0) {
+                            out.println("<tr>");
+                        }
+                        out.println("<td><a href='./controleur?action=voirTache&idTache=" + ta.getIdTacheMere() + "'>");
+                        out.print("<span class='titreTache'>" + ta.getTitreTacheAtom()+"</span><br>");
+                        out.print("proposé par <i>" + ta.getEmailCommanditaire()+ "</i>");
+                        out.println("<br>" + ta.getPrix() + "&euro;<br>");
+                        out.println("</a></td>");
+                        if (largeur == 2) {
+                            out.println("</tr>");
+                            largeur = 0;
+                        }
+                        largeur++;
+                    }
+                    out.println("</tr></table></div>");
+                }
+            }
+        %>
 </div>
-
-            <%--TODO : <br><h2> Mes candidatures validées </h2>
-               les candidatures validées, à chercher dans TacheAtom --%>
-
 </section>
 <section>
     <div class="container">

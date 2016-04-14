@@ -18,19 +18,19 @@
     </head>
     <body class="landing">
         <%-- TODO : ajouter required pour chaque champ --%>
-        <script language=javascript>
+        <script>
             var j = 1,i;
             var l = 1; // permet d'afficher 2 taches atomiques au minimum pour un projet
             var numeroDeTache = 1;
             var barres;
             var bloc_tache;
             function change() {
-                if (j==1) {
+                if (j===1) {
                     document.getElementById("projet").style.display="";
                     document.getElementById("projetName").disabled=false;
                     document.getElementById("boutonAjoutTache").style.display="";
                     document.getElementsByClassName("titre")[0].placeholder="Titre de la première tâche";
-                    barres = document.getElementsByClassName("hr")
+                    barres = document.getElementsByClassName("hr");
                     for (i=0; i<barres.length; i++) {
                         barres[i].style.display="";
                     }
@@ -38,7 +38,7 @@
                     for (i=1; i<bloc_tache.length; i++){
                         bloc_tache[i].style.display="";
                     }
-                    if (l==1) {
+                    if (l===1) {
                         ajoutTache();
                     }
                     l=0;
@@ -48,13 +48,13 @@
                     document.getElementById("projetName").disabled=true;
                     document.getElementById("boutonAjoutTache").style.display='none';
                     document.getElementsByClassName("titre")[0].placeholder="Titre de la tâche";
-                    barres = document.getElementsByClassName("hr")
+                    barres = document.getElementsByClassName("hr");
                     for (i=0; i<barres.length; i++) {
                         barres[i].style.display="";
                     }
                     bloc_tache = document.getElementsByClassName("tache");
                     for (i=1; i<bloc_tache.length; i++){
-                        bloc_tache[i].style.display="none"
+                        bloc_tache[i].style.display="none";
                     }
                     j=1;
                 }
@@ -68,11 +68,18 @@
                 b.appendChild(document.createTextNode("Supprimer cette tâche"));
                 b.setAttribute("type","button");
                 b.setAttribute("onclick","this.parentElement.remove();correction()");
+                clonedElement.childNodes[1].value="";
+                clonedElement.childNodes[2].value="";
+                clonedElement.childNodes[3].value="";
+                clonedElement.childNodes[4].value="";
+                clonedElement.childNodes[5].value="";
+                clonedElement.childNodes[6].value="";
+                clonedElement.childNodes[7].value="";
+                clonedElement.childNodes[11].value="";
                 clonedElement.appendChild(b);
                 clonedElement.insertBefore(document.createElement("hr"),clonedElement.childNodes[0]);
                 document.getElementById("Taches").appendChild(clonedElement);
                 document.getElementsByClassName("titre")[numeroDeTache-1].setAttribute("placeholder", "Titre de la " + numeroDeTache +"ème tâche");
-                
             }
             Element.prototype.remove = function() {
                 this.parentElement.removeChild(this);
