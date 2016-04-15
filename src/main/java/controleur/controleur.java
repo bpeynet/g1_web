@@ -44,8 +44,10 @@ public class controleur extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
+        if (action==null || !action.equals("Facture")) {
+            PrintWriter out = response.getWriter();
+        }
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO(ds);
         CompetenceDAO competenceDAO = new CompetenceDAO(ds);
         TacheDAO tacheDAO = new TacheDAO(ds);
@@ -172,6 +174,9 @@ public class controleur extends HttpServlet {
                 }
                 case "Evaluer" : {
                     //TODO : rentrer l'évaluation dans la BD
+                }
+                case "Facture": {
+                    actionGenerationFacture(request, response, utilisateurDAO, tacheAtomDAO);
                     break;
                 }
                 default: {
@@ -545,6 +550,26 @@ public class controleur extends HttpServlet {
             request.setAttribute("tache", tacheAtomDAO.getTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom"))));
             request.setAttribute("executant",utilisateurDAO.getUtilisateur(request.getParameter("idCandidat")));
             getServletContext().getRequestDispatcher("/WEB-INF/evaluations.jsp").forward(request, response);
+        }
+    }
+    
+    private void actionGenerationFacture(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws IOException, DAOException {
+        String idTacheAtom = request.getParameter("idTacheAtom");
+        Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        if (idTacheAtom != null && utilisateur != null) {
+            try {
+                if (utilisateurDAO.executesThisAtomTask(utilisateur.getEmail(), Integer.valueOf(idTacheAtom)) && tacheAtomDAO.isOver(Integer.valueOf(idTacheAtom)))
+                try {
+                    utilisateurDAO.genereFacture(Integer.valueOf(idTacheAtom), response.getOutputStream());
+                    response.setContentType("application/pdf");
+                } catch (NumberFormatException e) {
+                    response.sendRedirect("./controleur");
+                }
+            } catch (NumberFormatException e) {
+                response.sendRedirect("./controleur");
+            }
+        } else {
+            response.sendRedirect("./controleur");
         }
     }
 }

@@ -26,6 +26,25 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         super(ds);
     }
     
+    public boolean isOver(int idTacheAtom) throws DAOException {
+        Connection conn = null;
+        boolean fini = false;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT indicateurFin FROM TachesAtom WHERE idTacheAtom=" + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            if (rs.next()) {
+                if (rs.getInt("indicateurFin")==1) fini = true;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'isOver'" + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return fini;
+    }
+    
     public void ajouterCompetence(int id, String emailC, String emailEx, String competence) throws DAOException {
         ResultSet rs = null;
         String requeteSQL;

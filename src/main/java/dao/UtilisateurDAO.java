@@ -8,6 +8,18 @@ package dao;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -523,5 +535,93 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
         return listeTachesAtom;
+    }
+    
+    public void genereFacture(int idTacheAtom, OutputStream out) throws DAOException, IOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT * FROM TachesAtom WHERE idTacheAtom=" + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            if (rs.next()) {
+                Document document = new Document();
+                ArrayList<String> listStrings = new ArrayList<>();
+                listStrings.add("Titre de la tâche");
+                listStrings.add("Description fournie par le commanditaire");
+                listStrings.add("Récompense");
+                listStrings.add(rs.getString("titreTacheAtom"));
+                listStrings.add(rs.getString("descriptionTache"));
+                listStrings.add(Float.toString(rs.getFloat("prixTache")) + "€");
+                try {
+                    PdfWriter writer = PdfWriter.getInstance(document, out);
+                    Rectangle size = new Rectangle(595,842);
+                    document.setPageSize(size);
+                    document.setMargins(20, 20, 20, 20);
+                    document.open();
+                    document.addTitle("Facture - CrowdHelping");
+                    document.addAuthor("Crowdhelping");
+                    Paragraph titre = new Paragraph("Facture", new Font(BaseFont.createFont(), 32));
+                    titre.setIndentationLeft(40);
+                    document.add(titre);
+                    Paragraph nomSite = new Paragraph("CrowdHelping", new Font(BaseFont.createFont(), 25, Font.ITALIC));
+                    nomSite.setAlignment(Element.ALIGN_RIGHT);
+                    nomSite.setIndentationRight(40);
+                    document.add(nomSite);
+                    PdfPTable parties = new PdfPTable(1);
+                    parties.setWidthPercentage(40);
+                    parties.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    PdfPCell encadre = new PdfPCell();
+                    encadre.addElement(new Paragraph("Exécutant: " + rs.getString("idExecutant")));
+                    parties.addCell(encadre);
+                    encadre = new PdfPCell();
+                    encadre.addElement(new Paragraph("Commanditaire: " + rs.getString("idCommanditaire")));
+                    parties.addCell(encadre);
+                    parties.setSpacingAfter(30f);
+                    document.add(parties);
+                    int nbCol = 3;
+                    int nblign = 2;
+                    PdfPTable table = new PdfPTable(nbCol);
+                    table.setExtendLastRow(true);
+                    table.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    float[] widths = {20, 35, 15};
+                    table.setTotalWidth(widths);
+                    table.setWidthPercentage(100);
+                    PdfPCell cell;
+                    for (int i=0; i<nbCol*nblign; i++) {
+                        cell = new PdfPCell();
+                        cell.addElement(new Paragraph(listStrings.get(i)));
+                        table.addCell(cell);
+                    }
+                    document.add(table);
+                    document.close();
+                } catch (DocumentException e) {
+                    throw new DAOException("Erreur Génération de PDF", e);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'genereFacture' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+
+    public boolean executesThisAtomTask(String email, int idTacheAtom) throws DAOException {
+        Connection conn = null;
+        boolean execute = false;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT idExecutant FROM TachesAtom WHERE idTacheAtom=" + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            if (rs.next()) {
+                if (rs.getString("idExecutant").equals(email)) execute = true;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'executesThisAtomTask' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return execute;
     }
 }
