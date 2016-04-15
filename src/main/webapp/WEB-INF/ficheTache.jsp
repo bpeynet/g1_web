@@ -14,6 +14,7 @@
 <%@page import="modeles.Tache"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% Tache t = request.getAttribute("tache") != null ? (Tache) request.getAttribute("tache") : null; %>
+<% Utilisateurs utilisateur = request.getSession(false).getAttribute("utilisateur") != null ? (Utilisateurs) request.getSession(false).getAttribute("utilisateur") : null; %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,15 +33,15 @@
     <body>
         <jsp:include page="banniere.jsp" />
         <section id="banner">
-            <% if (t != null) {
+            <% if (t != null && utilisateur != null) {
                     out.println("<h2>" + t.getTitreTache() + "</h2>");
                     out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + t.getEmailCommanditaire() + "</i></span>");
-                    out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
+                    if (t.getEmailCommanditaire().equals(utilisateur)) out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
                 }
             %>
         </section>
         <section class="container">
-            <% if (t != null) {
+            <% if (t != null && utilisateur != null) {
                     out.println("<table id='ficheTacheTableau'>");
                     out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                     out.println("Titre</td>\n<td>");
@@ -49,7 +50,7 @@
                     out.println("Réalisation au plus tard le</td>\n<td>");
                     out.println("Récompense</td>\n<td>");
                     out.println("Compétences nécessaires</td>\n<td>");
-                    if (t.getEmailCommanditaire().equals(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail())) {
+                    if (t.getEmailCommanditaire().equals(utilisateur.getEmail())) {
                         out.println("Exécutant");
                     }
                     out.println("</td>\n</tr>");
@@ -67,7 +68,7 @@
                         } else {
                             out.println("Pas de compétence particulière attendue</td>");
                         }
-                        if (ta.getEmailCommanditaire().equals(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail())) {
+                        if (ta.getEmailCommanditaire().equals(utilisateur.getEmail())) {
                             if (ta.getEmailExecutant() == null) {
                                 HashMap<Integer, Integer> candidatures = (HashMap<Integer, Integer>) request.getAttribute("candidatures");
                                 out.println(candidatures != null ?
