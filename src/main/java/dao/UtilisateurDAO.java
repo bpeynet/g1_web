@@ -537,6 +537,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return listeTachesAtom;
     }
     
+    /**
+     * Génère la facture (en pdf)
+     * @param idTacheAtom
+     * @param out
+     * @throws DAOException
+     * @throws IOException 
+     */
     public void genereFacture(int idTacheAtom, OutputStream out) throws DAOException, IOException {
         Connection conn = null;
         try {

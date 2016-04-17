@@ -16,23 +16,23 @@
     <jsp:include page="banniere.jsp"/>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
-    
+    <section id="banner">
     <% out.print(request.getAttribute("erreurMessage") == null ? ""
                 : "<p>" + request.getAttribute("erreurMessage") + "</p>"); %>
     <%-- TODO : un message d'erreur quand on évalue sans note --%>
-          
-    <section id="banner"></section>
-    <section>    
+         
         <form method="post" accept-charset="utf-8" action="./controleur">
-        <div class="container">
+        <div class="container 50%">
+            <p> Evaluation sur 10</p>
             <% Integer i;
                 for(i = 0; i<11; i++) {
-                    out.println("<input type='radio' id='note' name='genre' value='" + i.toString() +"'>");
+                    out.println("<input type=\"radio\" id=\"note" + i.toString() +"\" name=\"note\" value=\"" + i.toString() +"\" required><label for=\"note" + i.toString() +"\">"+ i.toString() +"</label>");
                 }
             %>
-            <input name="mdp" id="mdp" value="commentaire" placeholder="Commentaire" type="text"><br>
+            <input id="commentaire" name="commentaire" value="" placeholder="Commentaire" type="text"><br>
             <a class ='button' href='./controleur?action=Evaluer&idTacheAtom=${tache.idTacheAtom}&idCommanditaire=${commanditaire.email}&idExecutant=${executant.email}'>Validation</a>
         </div>
         </form>
     </section>
+</body>
 </html>
