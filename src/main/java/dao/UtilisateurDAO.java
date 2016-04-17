@@ -435,6 +435,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     + "AND t.idcommanditaire=c.idcommanditaire AND t.idCommanditaire !='" 
                     + email + "' AND t.indicateurfin = 0 AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
                     + "WHERE idutilisateur='" + email + "') AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')" ;
+                    // TODO : ajouter contrainte sur la distance entre la tâche et l'utilisateur
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {
                 liste = new HashMap<>();
