@@ -2,6 +2,7 @@ package controleur;
 
 import dao.CompetenceDAO;
 import dao.DAOException;
+import dao.EvaluationDAO;
 import dao.TacheAtomDAO;
 import dao.TacheDAO;
 import dao.UtilisateurDAO;
@@ -52,6 +53,7 @@ public class controleur extends HttpServlet {
         CompetenceDAO competenceDAO = new CompetenceDAO(ds);
         TacheDAO tacheDAO = new TacheDAO(ds);
         TacheAtomDAO tacheAtomDAO = new TacheAtomDAO(ds);
+        EvaluationDAO evaluationDAO = new EvaluationDAO(ds);
         
         try {
             if (action == null) {
@@ -173,7 +175,9 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "Evaluer" : {
-                    //TODO : rentrer l'évaluation dans la BD
+                    actionEvaluer(request, response, evaluationDAO);
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                    break;
                 }
                 case "Facture": {
                     actionGenerationFacture(request, response, utilisateurDAO, tacheAtomDAO);
@@ -572,4 +576,15 @@ public class controleur extends HttpServlet {
             response.sendRedirect("./controleur");
         }
     }
+
+    /**
+     * Lors de la validation de l'évaluation
+     * @param request
+     * @param response
+     * @param utilisateurDAO 
+     */
+    private void actionEvaluer(HttpServletRequest request, HttpServletResponse response, EvaluationDAO evaluationDAO) throws DAOException, ServletException, IOException {
+        evaluationDAO.ajouterEvaluation(Integer.valueOf(request.getParameter("note")), (Integer) request.getSession(false).getAttribute("idTacheAtom"), request.getParameter("commentaire")); 
+    }
+    
 }

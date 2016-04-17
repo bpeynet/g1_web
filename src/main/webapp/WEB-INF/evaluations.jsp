@@ -30,7 +30,14 @@
                 }
             %>
             <input id="commentaire" name="commentaire" value="" placeholder="Commentaire" type="text"><br>
-            <a class ='button' href='./controleur?action=Evaluer&idTacheAtom=${tache.idTacheAtom}&idCommanditaire=${commanditaire.email}&idExecutant=${executant.email}'>Validation</a>
+            
+            <c:set scope="session" var="idTacheAtom" value="${tache.idTacheAtom}" />
+            
+            
+            <ul class="actions">
+                        <li><input value="Evaluer" class="special" type="submit" name="action"></li>
+                        <li><input value="Facture" class="special" type="submit" name="action"></li>
+                    </ul>
         </div>
         </form>
     </section>

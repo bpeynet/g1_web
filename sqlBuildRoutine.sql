@@ -131,24 +131,17 @@ CREATE TABLE Candidatures (
 );
 
 CREATE TABLE Evaluations (
-    idEvaluation integer NOT NULL PRIMARY KEY,
+    idTache integer NOT NULL PRIMARY KEY,
     evaluation integer NOT NULL,
     dateEval date NOT NULL,
-    idTache integer NOT NULL,
     idEvaluateur varchar(100) NOT NULL,
     idEvalue varchar(100) NOT NULL,
-    constraint FK_Ev foreign key (idTache,idEvaluateur,idEvalue)
-        references Candidatures(idTacheAtom,idCommanditaire,idCandidat) ON DELETE SET NULL,
+    --constraint FK_Ev foreign key (idTache,idEvaluateur,idEvalue)
+        --references Candidatures(idTacheAtom,idCommanditaire,idCandidat) ON DELETE SET NULL,
     --Cette contrainte d'intégrité est vitale afin de vérifier que l'évaluation
     --est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
     commentaire varchar(300),
-    CHECK (evaluation >= 0 AND evaluation <= 5),
+    CHECK (evaluation >= 0 AND evaluation <= 10),
     CHECK (idEvalue != idEvaluateur)
 );
-
-CREATE SEQUENCE Evaluations_Sequence
-    INCREMENT BY 1
-    START WITH 1
-    NOMAXVALUE
-    NOCYCLE;
