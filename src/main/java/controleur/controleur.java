@@ -562,7 +562,9 @@ public class controleur extends HttpServlet {
         Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
         if (idTacheAtom != null && utilisateur != null) {
             try {
-                if (utilisateurDAO.executesThisAtomTask(utilisateur.getEmail(), Integer.valueOf(idTacheAtom)) && tacheAtomDAO.isOver(Integer.valueOf(idTacheAtom)))
+                if ((utilisateurDAO.executesThisAtomTask(utilisateur.getEmail(), Integer.valueOf(idTacheAtom))
+                        || utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), utilisateur))
+                        && tacheAtomDAO.isOver(Integer.valueOf(idTacheAtom)))
                 try {
                     utilisateurDAO.genereFacture(Integer.valueOf(idTacheAtom), response.getOutputStream());
                     response.setContentType("application/pdf");
