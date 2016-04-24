@@ -252,7 +252,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Récupère la dernière tâche ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
+     * Récupère l'id de la dernière tâche ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
      * @param email l'identifiant du commanditaire
      * @return  idTache l'id de la dernière tâche ajoutée
      * @throws dao.DAOException
@@ -278,6 +278,32 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return idTache;
     }
 
+    /**
+     * Récupère l'id de la dernière tâche atomique ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
+     * @param email l'identifiant du commanditaire
+     * @return  idTache l'id de la dernière tâche ajoutée
+     * @throws dao.DAOException
+     */
+    public int getIdLastTacheAtom(String email) throws DAOException {
+        ResultSet rs;
+        String requeteSQL;
+        Connection conn = null;
+        int idTache = -1;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT Max(idTacheAtom) as max FROM TachesAtom where idCommanditaire ='" + email + "'";
+            rs = st.executeQuery(requeteSQL);
+            if(rs.next()) {
+                idTache = rs.getInt("max");
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return idTache;
+    }
     
     /**
      * Retourne liste des idTacheAtom des tâches où il a candidaté

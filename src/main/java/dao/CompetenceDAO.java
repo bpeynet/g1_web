@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import modeles.outils.Competences;
 
@@ -49,7 +50,8 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "SELECT competence FROM CompetencesTaches WHERE idTacheAtom=" + idTacheAtom;
+            String requeteSQL = "SELECT competence FROM CompetencesTaches"
+                    + " WHERE idTacheAtom=" + idTacheAtom;
             ResultSet rs = st.executeQuery(requeteSQL);
             while (rs.next()) {
                 listCompetences.add(new Competences(rs.getString("competence")));
@@ -62,4 +64,24 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
         return listCompetences;
     }
     
+    public ArrayList<Competences> whichCompetences(HttpServletRequest request) throws DAOException {
+        ArrayList<Competences> listCompetences = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT competence FROM Competences";
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                if (request.getParameter(rs.getString("competence")) != null)
+                    listCompetences.add(new Competences(rs.getString("competence")));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'whichCompetences' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return listCompetences;
+    }
+
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 import modeles.TacheAtom;
 import modeles.Utilisateurs;
+import modeles.outils.Competences;
 import modeles.outils.Coordonnees;
 
 /**
@@ -45,14 +46,14 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return fini;
     }
     
-    public void ajouterCompetence(int id, String emailC, String emailEx, String competence) throws DAOException {
+    public void ajouterCompetence(int id, String emailC, String competence) throws DAOException {
         ResultSet rs = null;
         String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "INSERT INTO CompetencesTaches VALUES (" + id + ", \'"+ emailC + ", \'" + competence + "\')";
+            requeteSQL = "INSERT INTO CompetencesTaches VALUES (" + id + ", \'"+ emailC + "\', \'" + competence + "\')";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -86,7 +87,8 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     
     public void ajouterTacheAtom(String titre, String description, double prix, 
-        String datetot, String datetard, String idCommanditaire, int idMere ) throws DAOException {
+        String datetot, String datetard, String idCommanditaire, int idMere,
+        ArrayList<Competences> listCompetences, UtilisateurDAO utilisateurDAO) throws DAOException {
         Connection conn = null ;
         ResultSet rs;
         String requestSQL;
@@ -102,6 +104,10 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                 + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
                 + idMere + ", '" + idCommanditaire + "', null, 0)" ;
             st.executeUpdate(requestSQL);
+            int lastIdTacheAtom = utilisateurDAO.getIdLastTacheAtom(idCommanditaire);
+            for (Competences c : listCompetences) {
+                ajouterCompetence(lastIdTacheAtom, idCommanditaire, c.getNomCompetence());
+            }
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         } finally {

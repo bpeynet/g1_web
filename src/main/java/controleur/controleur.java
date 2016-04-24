@@ -98,7 +98,8 @@ public class controleur extends HttpServlet {
                 }
                 case "ValidationAjoutTache": {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionValidationAjoutTache(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                        actionValidationAjoutTache(request, response, utilisateurDAO,
+                                tacheDAO, tacheAtomDAO, competenceDAO);
                         request.setAttribute("succesMessage", "Tâche créée");
                         allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                     } else {
@@ -325,7 +326,8 @@ public class controleur extends HttpServlet {
     }
 
     private void actionValidationAjoutTache(HttpServletRequest request, HttpServletResponse response, 
-            UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) 
+            UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO,
+            CompetenceDAO competenceDAO) 
             throws DAOException, ServletException, IOException {
         
         String typeTache = request.getParameter("typeTache");
@@ -337,8 +339,9 @@ public class controleur extends HttpServlet {
         double prix;
         String datetot, datetard; 
         int idMere;
+        ArrayList<Competences> listCompetences;
         
-        if(typeTache.equals("TUnique")) {  
+        if(typeTache.equals("TUnique")) {
             tacheDAO.ajouterTache(request.getParameter("titre1"), email);
         }
         else {
@@ -352,11 +355,16 @@ public class controleur extends HttpServlet {
             datetot = request.getParameter("SoonestDate"+k);
             datetard = request.getParameter("LatestDate"+k);
             idMere = utilisateurDAO.getIdLastTache(email);
-            tacheAtomDAO.ajouterTacheAtom(titre, description, prix, datetot, datetard, email, idMere);
+            listCompetences = competenceDAO.whichCompetences(request);
+            tacheAtomDAO.ajouterTacheAtom(titre, description, prix,
+                    datetot,datetard, email, idMere, listCompetences, utilisateurDAO);
             k++;
         }
-        
-        request.setAttribute("succesMessage", "Tâche créée");
+        if(typeTache.equals("TUnique")) {
+            request.setAttribute("succesMessage", "Tâche créée");
+        } else {
+            request.setAttribute("succesMessage", "Projet créé");
+        }
         allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
     }
   
