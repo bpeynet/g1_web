@@ -72,6 +72,12 @@
                                                         + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
                                                     : "<td></td>")
                                             : "<td></td>");
+                                if(ta.getEmailExecutant() != null && ta.getIndicateurFin()== 0) {
+                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                }
+                                if(ta.getIndicateurFin()==1) {
+                                    out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
+                                }
                             }
                         }
                         out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
