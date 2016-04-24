@@ -98,8 +98,9 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             requestSQL = "SELECT * FROM Utilisateurs WHERE email='" + idCommanditaire + "'";
             rs = st.executeQuery(requestSQL);
             rs.next();
-            requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '" + titre + "', '"
-                + description + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
+            requestSQL = "INSERT INTO TachesAtom VALUES (tachesatom_sequence.nextval, '"
+                + titre.replaceAll("'", "''") + "', '"
+                + description.replaceAll("'", "''") + "', " + prix + ", " + rs.getFloat("latitude") + ", " 
                 + rs.getFloat("longitude") + ", " + "TO_date('"+ datetot + "','yyyy/mm/dd')"
                 + ", TO_date('"+ datetard + "','yyyy/mm/dd'), "
                 + idMere + ", '" + idCommanditaire + "', null, 0)" ;
