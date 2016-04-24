@@ -196,16 +196,16 @@ public class controleur extends HttpServlet {
         }
     }
 
-    public void actionLogin(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+    private void actionLogin(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/login_accueil.jsp").forward(request, response);
     }
 
-    public void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
+    private void actionInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws DAOException, ServletException, IOException {
         request.setAttribute("competences",competenceDAO.getListCompetences());
         getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
     }
 
-    public void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+    private void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
         Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
         if(usr == null) {
@@ -223,7 +223,7 @@ public class controleur extends HttpServlet {
         }
     }
 
-    public void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
         String mdpConfirm = request.getParameter("mdpconfirm");
