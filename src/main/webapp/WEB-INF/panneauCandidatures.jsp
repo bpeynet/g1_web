@@ -37,12 +37,14 @@
     <section class="container">
             <h2>Mes services rendus</h2>
         <c:if test="${services.size() > 0}">
-            <td><table id='tableauMesCandidatures'>   
-            <c:forEach items="services" var="element">
-                <tr><td> ${element.titreTacheAtom} de ${element.emailCommanditaire} </td>
-                    <td><a class ='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
-                </c:forEach>
-                </table></td>
+            <td><table id='tableauMesTachesFinies'>   
+            <c:forEach items="${services}" var="element">
+                <tr>
+                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <i>${element.emailCommanditaire}</i> </td>
+                    <td><a class='button' href='./controleur?action=Facture&idTacheAtom=${element.idTacheAtom}' target='_blank'>Voir la facture</a></td>
+                </tr>
+            </c:forEach>
+            </table>
         </c:if>
         <c:if test="${services.size() == 0}">
             <p>Aucun service rendu.<p>
