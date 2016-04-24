@@ -124,7 +124,7 @@
                             <input type="number" placeholder="Récompense" class="prix" name="prix1" min="0" step="0.01" required><span style="color:white">&euro;</span>
                             <input type="text" placeholder="Description" class="description" name="description1" class="description" required>
                             <br>
-                            <label style="color:whitesmoke">Compétences requises pour cette tâche : </label>
+                            <span style="color:whitesmoke">Compétences requises pour cette tâche : </span><br>
                     
                             <% int a = 0; %>
                             <c:forEach items ="${competences}" var = "element">
