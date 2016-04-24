@@ -60,7 +60,8 @@ public class TacheDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requestSQL = "INSERT INTO Taches VALUES (taches_sequence.nextval, '" + titre + "', '" + idCommanditaire + "')";
+            String requestSQL = "INSERT INTO Taches VALUES (taches_sequence.nextval, '"
+                    + titre.replaceAll("'", "''") + "', '" + idCommanditaire + "')";
             st.executeUpdate(requestSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -100,24 +101,6 @@ public class TacheDAO extends AbstractDataBaseDAO {
         }
         return liste;
     }
-    
-    /*public int getDernierId()  throws DAOException {
-        Connection conn = null ;
-        int dernierId;
-                
-        try {
-            conn = getConnection();
-            Statement st = conn.createStatement();
-            String requeteSQL = "SELECT taches_sequence.currval FROM Taches";
-            dernierId = st.executeUpdate(requeteSQL);
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        } finally {
-            closeConnection(conn);
-        }
-        
-        return dernierId;
-    }*/
 
     public void supprimerTache(Integer idTache) throws DAOException {
         Connection conn = null;

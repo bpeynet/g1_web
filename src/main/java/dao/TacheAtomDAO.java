@@ -154,7 +154,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             Statement st = conn.createStatement();
             String requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
                     + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
-            //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas.
+            //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas. Sauf par URL...
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur SQL 'postuler'",e);

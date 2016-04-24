@@ -164,7 +164,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email + "\',\'" + nom + "\',\'" + prenom + "\',\'" + mdp + "\'," + genre + ",TO_date(\'" + date + "\','yyyy-mm-dd')," + results[0].geometry.location.lat + "," + results[0].geometry.location.lng + ",\'" + adresse + "\',-1)";
+            String requeteSQL = "INSERT INTO Utilisateurs VALUES (\'"+ email.replaceAll("'", "''")
+                    + "\',\'" + nom.replaceAll("'", "''") + "\',\'" + prenom.replaceAll("'", "''")
+                    + "\',\'" + mdp.replaceAll("'", "''") + "\'," + genre
+                    + ",TO_date(\'" + date + "\','yyyy-mm-dd'),"
+                    + results[0].geometry.location.lat + "," + results[0].geometry.location.lng
+                    + ",\'" + adresse.replaceAll("'", "''") + "\',-1)";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -198,11 +203,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "UPDATE Utilisateurs SET nom='" + nom + "', prenom='" + prenom
-                    + "', hash_de_motdepasse='" + mdp + "', genre=" + genre
-                    + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude=" + coordonnees.getLatitude()
-                    + ", longitude=" + coordonnees.getLongitude() + ", adresse='" + adresse
-                    + "' WHERE email='"+ email + "'";
+            String requeteSQL = "UPDATE Utilisateurs SET nom='" + nom.replaceAll("'", "''")
+                    + "', prenom='" + prenom.replaceAll("'", "''")
+                    + "', hash_de_motdepasse='" + mdp.replaceAll("'", "''") + "', genre=" + genre
+                    + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude="
+                    + coordonnees.getLatitude() + ", longitude=" + coordonnees.getLongitude()
+                    + ", adresse='" + adresse.replaceAll("'", "''")
+                    + "' WHERE email='"+ email.replaceAll("'", "''") + "'";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);

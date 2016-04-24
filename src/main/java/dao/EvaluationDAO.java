@@ -31,9 +31,10 @@ public class EvaluationDAO extends AbstractDataBaseDAO {
             requestSQL = "SELECT * FROM TachesAtom WHERE idTacheAtom=" + idTacheAtom.toString();
             rs = st.executeQuery(requestSQL);
             rs.next();
-            requestSQL = "INSERT INTO Evaluations VALUES (" + idTacheAtom.toString() + ","+ evaluation.toString() + ", current_date , '" 
+            requestSQL = "INSERT INTO Evaluations VALUES (" + idTacheAtom.toString()
+                + "," + evaluation.toString() + ", current_date , '" 
                 + rs.getString("idCommanditaire") + "', '" 
-                + rs.getString("idExecutant") + "','" + commentaire + "')";
+                + rs.getString("idExecutant") + "','" + commentaire.replaceAll("'", "''") + "')";
             st.executeUpdate(requestSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
