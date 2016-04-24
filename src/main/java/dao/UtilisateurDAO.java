@@ -670,4 +670,21 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         }
         return execute;
     }
+
+    public void miseAJourMoyenneUtilisateur(Utilisateurs utilisateur) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "UPDATE Utilisateurs SET evaluation="
+                    + " (SELECT AVG(evaluation) FROM Evaluations WHERE idEvalue='"
+                    + utilisateur.getEmail() + "') WHERE email='"
+                    + utilisateur.getEmail() + "'";
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'miseAJourMoyenneUtilisateur' ", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 }

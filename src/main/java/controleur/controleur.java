@@ -176,7 +176,7 @@ public class controleur extends HttpServlet {
                     break;
                 }
                 case "Evaluer" : {
-                    actionEvaluer(request, response, evaluationDAO);
+                    actionEvaluer(request, response, evaluationDAO, utilisateurDAO);
                     allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                     break;
                 }
@@ -599,8 +599,15 @@ public class controleur extends HttpServlet {
      * @param response
      * @param utilisateurDAO 
      */
-    private void actionEvaluer(HttpServletRequest request, HttpServletResponse response, EvaluationDAO evaluationDAO) throws DAOException, ServletException, IOException {
-        evaluationDAO.ajouterEvaluation(Integer.valueOf(request.getParameter("note")), (Integer) request.getSession(false).getAttribute("idTacheAtom"), request.getParameter("commentaire")); 
+    private void actionEvaluer(HttpServletRequest request, HttpServletResponse response, EvaluationDAO evaluationDAO, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
+        try {
+            evaluationDAO.ajouterEvaluation(Integer.valueOf(request.getParameter("note")),
+                    (Integer) request.getSession(false).getAttribute("idTacheAtom"),
+                    request.getParameter("commentaire"));
+            utilisateurDAO.miseAJourMoyenneUtilisateur((Utilisateurs) request.getSession(false).getAttribute("utilisateur"));
+        } catch (NumberFormatException e) {
+            response.sendRedirect("./controleur");
+        }
     }
     
 }
