@@ -20,6 +20,9 @@
         <%-- TODO : ajouter required pour chaque champ --%>
         <script>
             var j = 1,i;
+            var tableCompetences = [];
+            <c:forEach items="${competences}" var ="element">tableCompetences.push("${element.nomCompetence}");</c:forEach>
+            var nbCompetences = tableCompetences.length;
             var l = 1; // permet d'afficher 2 taches atomiques au minimum pour un projet
             var numeroDeTache = 1;
             var barres;
@@ -64,10 +67,6 @@
                 numeroDeTache++;
                 var x = document.getElementsByClassName("tache")[0];
                 var clonedElement = x.cloneNode(true);
-                var b = document.createElement("button");
-                b.appendChild(document.createTextNode("Supprimer cette tâche"));
-                b.setAttribute("type","button");
-                b.setAttribute("onclick","this.parentElement.remove();correction()");
                 clonedElement.childNodes[1].value="";
                 clonedElement.childNodes[2].value="";
                 clonedElement.childNodes[3].value="";
@@ -76,10 +75,21 @@
                 clonedElement.childNodes[6].value="";
                 clonedElement.childNodes[7].value="";
                 clonedElement.childNodes[11].value="";
-                clonedElement.appendChild(b);
+                if (numeroDeTache>2) {
+                    var b = document.createElement("button");
+                    b.appendChild(document.createTextNode("Supprimer cette tâche"));
+                    b.setAttribute("type","button");
+                    b.setAttribute("onclick","this.parentElement.remove();numeroDeTache--;correction();");
+                    clonedElement.appendChild(b);
+                }
                 clonedElement.insertBefore(document.createElement("hr"),clonedElement.childNodes[0]);
                 document.getElementById("Taches").appendChild(clonedElement);
                 document.getElementsByClassName("titre")[numeroDeTache-1].setAttribute("placeholder", "Titre de la " + numeroDeTache +"ème tâche");
+                for(var n = 0; n<nbCompetences; n++) {
+                    document.getElementsByClassName("competence")[(numeroDeTache-1)*nbCompetences+n].setAttribute("id", "id"+n+"-"+numeroDeTache);
+                    document.getElementsByClassName("competence")[(numeroDeTache-1)*nbCompetences+n].setAttribute("name", tableCompetences[n]+"-"+numeroDeTache);
+                    document.getElementsByClassName("labelCompetence")[(numeroDeTache-1)*nbCompetences+n].setAttribute("for", "id"+n+"-"+numeroDeTache);
+                }
             }
             Element.prototype.remove = function() {
                 this.parentElement.removeChild(this);
@@ -102,6 +112,11 @@
                     document.getElementsByClassName("LatestDate")[i].setAttribute("name", "LatestDate" + j);
                     document.getElementsByClassName("prix")[i].setAttribute("name", "prix" + j);
                     document.getElementsByClassName("description")[i].setAttribute("name", "description" + j);
+                    for (var c=0; c<nbCompetences; c++) {
+                        document.getElementsByClassName("competence")[i*nbCompetences+c].setAttribute("name", tableCompetences[c]+"-"+j);
+                        document.getElementsByClassName("competence")[i*nbCompetences+c].setAttribute("id", "id"+c+"-"+j);
+                        document.getElementsByClassName("labelCompetence")[i*nbCompetences+c].setAttribute("for", "id"+c+"-"+j);
+                    }
                 }
             }
         </script>
@@ -124,14 +139,10 @@
                             <input type="number" placeholder="Récompense" class="prix" name="prix1" min="0" step="0.01" required><span style="color:white">&euro;</span>
                             <input type="text" placeholder="Description" class="description" name="description1" class="description" required>
                             <br>
-                            <span style="color:whitesmoke">Compétences requises pour cette tâche : </span><br>
-                    
-                            <% int a = 0; %>
-                            <c:forEach items ="${competences}" var = "element">
-                                <input id="id<%=a%>" name="${element.nomCompetence}" type="checkbox" > <label for="id<%=a%>">${element.nomCompetence}</label>
-                                <% a = a + 1 ;%>
-                            </c:forEach>
-                                
+                            <span style="color:whitesmoke">Compétences requises pour cette tâche : </span>
+                            <br><% int a = 0; %><c:forEach items ="${competences}" var = "element">
+                            <input id="id<%=a%>-1" name="${element.nomCompetence}-1" class="competence" type="checkbox" >
+                            <label for="id<%=a%>-1" class="labelCompetence">${element.nomCompetence}</label><% a = a + 1 ;%></c:forEach>
                             <br>
                         </div>
                     </div>
