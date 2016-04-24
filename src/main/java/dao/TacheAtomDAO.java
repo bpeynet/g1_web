@@ -110,7 +110,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
     }
         
         
-    public ArrayList<TacheAtom> getTaches(int idTacheMere) throws DAOException {
+    public ArrayList<TacheAtom> getTaches(int idTacheMere, CompetenceDAO competenceDAO) throws DAOException {
         Connection conn=null;
         ResultSet rs;
         ArrayList<TacheAtom> listTachesAtomiques = null;
@@ -125,7 +125,9 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                         rs.getString("titreTacheAtom"),rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
                         rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
-                        rs.getString("idExecutant"), null,rs.getInt("indicateurFin")));
+                        rs.getString("idExecutant"),
+                        competenceDAO.getListCompetences(rs.getInt("idTacheAtom")),
+                        rs.getInt("indicateurFin")));
             }
         } catch (SQLException ex) {
             throw new DAOException("Erreur SQL", ex);

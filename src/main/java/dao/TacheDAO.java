@@ -31,7 +31,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
      * @return la tâche trouvée ou null
      * @throws dao.DAOException
      */
-    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO) throws DAOException {
+    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO) throws DAOException {
         Tache  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -45,7 +45,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                 tache = new Tache(rs.getInt("idTache"),
                     rs.getString("idCommanditaire"),
                     rs.getString("titreTache"),
-                    tacheAtomDAO.getTaches(rs.getInt("idTache")));
+                    tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -76,7 +76,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
      * @return
      * @throws DAOException 
      */
-    public ArrayList<Tache> getTaches(Utilisateurs utilisateur, TacheAtomDAO tacheAtomDAO) throws DAOException {
+    public ArrayList<Tache> getTaches(Utilisateurs utilisateur, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO) throws DAOException {
         ArrayList<Tache> liste = null;
         ResultSet rs;
         String requeteSQL;
@@ -90,7 +90,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                 liste = new ArrayList<>();
                 while (rs.next()) {
                     liste.add(new Tache(rs.getInt("idTache"), rs.getString("idCommanditaire"),
-                        rs.getString("titreTache"), tacheAtomDAO.getTaches(rs.getInt("idTache"))));
+                        rs.getString("titreTache"), tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO)));
                 }
             }
         } catch (SQLException ex) {

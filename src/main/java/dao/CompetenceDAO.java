@@ -24,7 +24,7 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
     }
     
     public ArrayList<Competences> getListCompetences()throws DAOException {
-        ArrayList<Competences> result = new ArrayList<Competences>();
+        ArrayList<Competences> result = new ArrayList<>();
         Connection conn = null;
         try {
             conn = getConnection();
@@ -41,6 +41,25 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
         return result;
+    }
+    
+    public ArrayList<Competences> getListCompetences(int idTacheAtom) throws DAOException {
+        ArrayList<Competences> listCompetences = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String requeteSQL = "SELECT competence FROM CompetencesTaches WHERE idTacheAtom=" + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            while (rs.next()) {
+                listCompetences.add(new Competences(rs.getString("competence")));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'getListCompetences' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return listCompetences;
     }
     
 }
