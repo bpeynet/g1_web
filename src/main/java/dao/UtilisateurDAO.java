@@ -431,10 +431,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT DISTINCT * FROM TachesAtom t, CompetencesTaches c WHERE t.idtacheatom=c.idtacheatom "
-                    + "AND t.idcommanditaire=c.idcommanditaire AND t.idCommanditaire !='" 
-                    + email + "' AND t.indicateurfin = 0 AND c.competence IN (SELECT competence FROM CompetencesUtilisateurs "
-                    + "WHERE idutilisateur='" + email + "') AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')" ;
+            requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
+                    + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
+                    + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
+                    + "AND ("
+                        + "c.competence IN (SELECT competence FROM CompetencesUtilisateurs WHERE idutilisateur='" + email + "')"
+                        + " OR"
+                        + " c.competence is null)"
+                    + " AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')"
+                    + " AND t.idExecutant is null";
                     // TODO : ajouter contrainte sur la distance entre la tâche et l'utilisateur
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {

@@ -91,7 +91,7 @@
                         if (largeur == 0) {
                             out.println("<tr>");
                         }
-                        out.println("<td><a href='./controleur?action=voirTache&idTache=" + t.getIdTacheAtom() + "'>");
+                        out.println("<td><a href='./controleur?action=voirTache&idTache=" + t.getIdTacheMere() + "'>");
                         out.print("<span class='titreTache'>" + t.getTitreTacheAtom()+"</span><br>");
                         out.print("proposé par <i>" + t.getEmailCommanditaire() + "</i>");
                         out.println("<br>" + t.getPrix() + "&euro;<br>");
