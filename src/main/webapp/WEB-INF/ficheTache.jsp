@@ -36,12 +36,13 @@
             <% if (t != null && utilisateur != null) {
                     out.println("<h2>" + t.getTitreTache() + "</h2>");
                     out.println("<span id='ficheTacheCommanditaire'>proposé par <i>" + t.getEmailCommanditaire() + "</i></span>");
-                    if (t.getEmailCommanditaire().equals(utilisateur)) out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
+                    if (t.getEmailCommanditaire().equals(utilisateur.getEmail())) out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
                 }
             %>
         </section>
         <section class="container">
             <% if (t != null && utilisateur != null) {
+                    boolean tUnique = false;
                     out.println("<table id='ficheTacheTableau'>");
                     out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                     out.println("Titre</td>\n<td>");
@@ -54,6 +55,7 @@
                         out.println("Exécutant");
                     }
                     out.println("</td>\n</tr>");
+                    if (t.getTaches().size()==1) tUnique=true;
                     for (TacheAtom ta : t.getTaches()) {
                         out.println("<tr>\n<td>");
                         out.println(ta.getTitreTacheAtom() + "</td>\n<td>");
@@ -81,7 +83,7 @@
                             } else {
                                 out.println("<td>" + ta.getEmailExecutant() + "</td>");
                             }
-                            out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
+                            if (!tUnique) out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                             if (ta.getEmailExecutant() == null) {
