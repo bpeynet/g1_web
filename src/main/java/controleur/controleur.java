@@ -355,7 +355,7 @@ public class controleur extends HttpServlet {
             datetot = request.getParameter("SoonestDate"+k);
             datetard = request.getParameter("LatestDate"+k);
             idMere = utilisateurDAO.getIdLastTache(email);
-            listCompetences = competenceDAO.whichCompetences(request);
+            listCompetences = competenceDAO.whichCompetences(request,k);
             tacheAtomDAO.ajouterTacheAtom(titre, description, prix,
                     datetot,datetard, email, idMere, listCompetences, utilisateurDAO);
             k++;

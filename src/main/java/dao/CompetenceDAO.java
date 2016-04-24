@@ -64,7 +64,7 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
         return listCompetences;
     }
     
-    public ArrayList<Competences> whichCompetences(HttpServletRequest request) throws DAOException {
+    public ArrayList<Competences> whichCompetences(HttpServletRequest request, int indice) throws DAOException {
         ArrayList<Competences> listCompetences = new ArrayList<>();
         Connection conn = null;
         try {
@@ -73,7 +73,7 @@ public class CompetenceDAO extends AbstractDataBaseDAO {
             String requeteSQL = "SELECT competence FROM Competences";
             ResultSet rs = st.executeQuery(requeteSQL);
             while (rs.next()) {
-                if (request.getParameter(rs.getString("competence")) != null)
+                if (request.getParameter(rs.getString("competence")+"-"+indice) != null)
                     listCompetences.add(new Competences(rs.getString("competence")));
             }
         } catch (SQLException e) {
