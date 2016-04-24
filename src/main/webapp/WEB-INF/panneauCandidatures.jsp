@@ -24,10 +24,12 @@
         <c:if test="${candidature.size() != 0}">
             <td><table id='tableauMesCandidatures'>   
             <c:forEach items="${candidatures}" var="element">
-                <tr><td> ${element.titreTacheAtom} de ${element.emailCommanditaire} </td>
-                    <td><a class ='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
+                <tr>
+                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <i>${element.emailCommanditaire}</i></td>
+                    <td><a class='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
+                </tr>
                 </c:forEach>
-            </table></td>
+            </table>
         </c:if>
         <c:if test="${candidatures.size() == 0}">
             <p>Aucune candidature soumise.<p>
