@@ -504,7 +504,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }       
 
     /**
-     * Récupère les tâches (atomiques) pour lequel un utilisateur est exécutant
+     * Récupère les tâches (atomiques) pour lequel un utilisateur est exécutant et qui ne sont pas finies
      * @param email utilisateur dont on veut trouver les tâches qu'il exécute
      * @return une liste des tâches atomiques
      * @throws DAOException 
@@ -515,7 +515,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "'";
+            String requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "' AND indicateurFin=0";
             ResultSet rs = st.executeQuery(requeteSQL);
             if (rs.next()) {
                 listeTachesAtom = new ArrayList<>();
