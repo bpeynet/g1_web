@@ -23,6 +23,7 @@
     </header>
     <section id="banner">
         <h2>CrowdHelping</h2>
+        <% out.print(request.getAttribute("erreur")==null ? "" : "<p>" + request.getAttribute("erreur") +"</p>");%>
         <jsp:include page="form.jsp"/> 
     </section>
 </body>

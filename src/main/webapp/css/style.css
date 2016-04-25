@@ -1036,6 +1036,23 @@ input[type="button"]:disabled,
     text-align: right;
     width: 140px;
 }
+
+/* Profil */
+.profil p {
+  margin: auto;
+  width: 40%;
+  text-align: center;
+  font-weight: 900;
+  font-size: x-large;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.profil table {
+    margin : auto;
+    width: 40%;
+}
+
 /* Header */
 
 #skel-layers-wrapper {

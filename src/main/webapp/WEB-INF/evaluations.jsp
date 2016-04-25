@@ -36,7 +36,7 @@
             
             <ul class="actions">
                         <li><input value="Evaluer" class="special" type="submit" name="action"></li>
-                        <li><input value="Facture" class="special" type="submit" name="action"></li>
+                        <li><a class='button' href='./controleur?action=Facture&idTacheAtom=${tache.idTacheAtom}' target='_blank'>Facture </a></li>
                     </ul>
         </div>
         </form>

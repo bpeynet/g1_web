@@ -12,7 +12,7 @@ CREATE TABLE Utilisateurs (
     rayon integer,
     CHECK (email like '%@%.%'),
     CHECK (genre = 1 OR genre = 2),
-    CHECK (evaluation >= -1 AND evaluation <= 5)/*,
+    CHECK (evaluation >= -1 AND evaluation <= 10)/*,
     CHECK (latitude >= 0 AND latitude <= 90),
     CHECK (longitude >= 0 AND longitude <= 360)*/
     CHECK (rayon > 0 OR rayon = -1) /*dans le cas ou la distance est "n'importe"*/
