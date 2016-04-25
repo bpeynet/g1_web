@@ -611,7 +611,7 @@ public class controleur extends HttpServlet {
             evaluationDAO.ajouterEvaluation(Integer.valueOf(request.getParameter("note")),
                     (Integer) request.getSession(false).getAttribute("idTacheAtom"),
                     request.getParameter("commentaire"));
-            utilisateurDAO.miseAJourMoyenneUtilisateur((Utilisateurs) request.getSession(false).getAttribute("utilisateur"));
+            utilisateurDAO.miseAJourMoyenneUtilisateur((Integer) request.getSession(false).getAttribute("idTacheAtom"));
         } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }

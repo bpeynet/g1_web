@@ -671,15 +671,16 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return execute;
     }
 
-    public void miseAJourMoyenneUtilisateur(Utilisateurs utilisateur) throws DAOException {
+    public void miseAJourMoyenneUtilisateur(Integer idTacheAtom) throws DAOException {
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
             String requeteSQL = "UPDATE Utilisateurs SET evaluation="
-                    + " (SELECT AVG(evaluation) FROM Evaluations WHERE idEvalue='"
-                    + utilisateur.getEmail() + "') WHERE email='"
-                    + utilisateur.getEmail() + "'";
+                    + " (SELECT AVG(evaluation) FROM Evaluations WHERE idEvalue="
+                    + "(SELECT idExecutant FROM TachesAtom WHERE idTacheAtom="
+                    + idTacheAtom + ") ) WHERE email= (SELECT idExecutant FROM TachesAtom WHERE idTacheAtom="
+                    + idTacheAtom + ")";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur SQL 'miseAJourMoyenneUtilisateur' ", e);
