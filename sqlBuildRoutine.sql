@@ -11,7 +11,7 @@ CREATE TABLE Utilisateurs (
     evaluation float,
     CHECK (email like '%@%.%'),
     CHECK (genre = 1 OR genre = 2),
-    CHECK (evaluation >= -1 AND evaluation <= 5)/*,
+    CHECK (evaluation >= -1 AND evaluation <= 10)/*,
     CHECK (latitude >= 0 AND latitude <= 90),
     CHECK (longitude >= 0 AND longitude <= 360)*/
 );
