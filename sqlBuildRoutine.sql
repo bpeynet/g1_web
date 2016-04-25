@@ -12,16 +12,16 @@ CREATE TABLE Utilisateurs (
     rayon integer,
     CHECK (email like '%@%.%'),
     CHECK (genre = 1 OR genre = 2),
-    CHECK (evaluation >= -1 AND evaluation <= 10)/*,
+    CHECK (evaluation >= -1 AND evaluation <= 10),/*,
     CHECK (latitude >= 0 AND latitude <= 90),
     CHECK (longitude >= 0 AND longitude <= 360)*/
     CHECK (rayon > 0 OR rayon = -1) /*dans le cas ou la distance est "n'importe"*/
 );
 
-INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
-INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
-INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Paris', -1);
-INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Balthazar', 'ddd', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Donaldville', -1);
+INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1, null);
+INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1, null);
+INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Paris', -1, null);
+INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Balthazar', 'ddd', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Donaldville', -1, null);
 
 CREATE TABLE Taches (
     idTache integer NOT NULL,
