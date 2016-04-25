@@ -232,6 +232,13 @@ public class controleur extends HttpServlet {
         String adresse = request.getParameter("adresse");
         int genre = Integer.valueOf(request.getParameter("genre"));
         String date = request.getParameter("date");
+        
+        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
+        if(usr !=  null) {
+            request.setAttribute("erreur","Email déjà utilisé");
+            actionInscription(request, response, utilisateurDAO, competenceDAO);
+            return;
+        }
         if (date.matches("../../....") || date.matches("..-..-....")){
             date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
         } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
