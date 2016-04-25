@@ -123,6 +123,14 @@ public class controleur extends HttpServlet {
                     }
                     break;
                 }
+                case "ModifProfil": {
+                    if (request.getSession(false).getAttribute("utilisateur") != null) {
+                        actionModifierProfil(request, response, utilisateurDAO, competenceDAO);
+                    } else {
+                        response.sendRedirect("./controleur");
+                    }
+                    break;
+                }
                 case "Postuler": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
                         actionPostuler(request, response, tacheAtomDAO, tacheDAO, utilisateurDAO, competenceDAO);
@@ -287,7 +295,7 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/ajouter.jsp").forward(request, response);
     }
     
-    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws ServletException, IOException, DAOException {
+    private void actionModifierProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws ServletException, IOException, DAOException {
         Utilisateurs user = (Utilisateurs) request.getSession().getAttribute("utilisateur");
         request.setAttribute("nom", user.getNom());
         request.setAttribute("prenom", user.getPrenom());
@@ -297,7 +305,7 @@ public class controleur extends HttpServlet {
         request.setAttribute("genre", user.getGenre());
         request.setAttribute("competences",utilisateurDAO.getUncheckedCompetences(user.getEmail()));
         request.setAttribute("usrCompetences",utilisateurDAO.getCompetences(user.getEmail()));
-        getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/modifProfil.jsp").forward(request, response);
     }
     
     private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
@@ -614,6 +622,22 @@ public class controleur extends HttpServlet {
             utilisateurDAO.miseAJourMoyenneUtilisateur((Integer) request.getSession(false).getAttribute("idTacheAtom"));
         } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
+        }
+    }
+
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws IOException, ServletException, DAOException {
+        Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        if (request.getParameter("utilisateurConsulte") == null || request.getParameter("utilisateurConsulte").equals(utilisateur.getEmail())) {
+            request.setAttribute("utilisateurConsulte", utilisateur);
+            getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
+        } else {
+            Utilisateurs utilisateurConsulte = utilisateurDAO.getUtilisateur(request.getParameter("utilisateurConsulte"));
+            if (utilisateurConsulte==null) {
+                response.sendRedirect("./controleur");
+            } else {
+                request.setAttribute("utilisateurConsulte", utilisateurConsulte);
+                getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
+            }
         }
     }
     

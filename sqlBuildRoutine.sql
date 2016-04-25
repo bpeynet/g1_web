@@ -20,8 +20,8 @@ CREATE TABLE Utilisateurs (
 
 INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', 'rrr', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
 INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', 'bbb', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
-INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
-INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Balthazar', 'ddd', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, null, -1);
+INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', 'aaa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Paris', -1);
+INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Balthazar', 'ddd', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Donaldville', -1);
 
 CREATE TABLE Taches (
     idTache integer NOT NULL,

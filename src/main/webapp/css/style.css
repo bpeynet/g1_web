@@ -1053,6 +1053,13 @@ input[type="button"]:disabled,
     width: 40%;
 }
 
+.profil a {
+    display: block;
+    width: 40%;
+    margin: auto;
+    text-align: center;
+}
+
 /* Header */
 
 #skel-layers-wrapper {
