@@ -71,7 +71,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         rs.getString("adresse"),
                         new Coordonnees(rs.getFloat("latitude"),rs.getFloat("longitude")),
                         getCompetences(email),
-                        rs.getFloat("evaluation"));
+                        rs.getFloat("evaluation"),
+                        rs.getInt("rayon"));
                 System.err.println(utilisateur);
             }
         } catch (SQLException e) {
@@ -458,16 +459,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         ArrayList<Competences> comp = null;
         String email = utilisateur.getEmail();
         TacheAtom tache;
-        ResultSet rs, rsUser;
+        ResultSet rs;
         String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM Utilisateurs WHERE email='" + email + "'";
-            rsUser = st.executeQuery(requeteSQL);
-            rsUser.next();
-            if(rsUser.getInt("rayon") == -1){
+            if(utilisateur.getRayon() == -1 || true){
                 requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
                         + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
                         + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
@@ -479,7 +477,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         + " AND t.idExecutant is null";
             }
             else {
-               // TODO : ajouter contrainte sur la distance entre la tâche et l'utilisateur
+                // TODO : ajouter contrainte sur la distance entre la tâche et l'utilisateur
+                // ATTENTION il y a un 1 dans la condition du if !! A retirer quand ce sera le moment.
             }
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {

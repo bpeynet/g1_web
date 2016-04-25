@@ -26,8 +26,11 @@ public class Utilisateurs {
     private String adresse;
     private ArrayList<Competences> competences;
     private float evaluation;
+    private int rayon;
     
-    public Utilisateurs(String email, String mdp, String nom, String prenom, int genre, Date date, String adresse, Coordonnees coordonnees, ArrayList<Competences> competences, float evaluation) {
+    public Utilisateurs(String email, String mdp, String nom, String prenom,
+            int genre, Date date, String adresse, Coordonnees coordonnees,
+            ArrayList<Competences> competences, float evaluation, int rayon) {
         this.email = email;
         this.mdp = mdp;
         this.nom = nom;
@@ -36,9 +39,10 @@ public class Utilisateurs {
         this.date = date;
         this.adresse = adresse;
         this.localisation = coordonnees;
-        this.competences = new ArrayList<Competences>();
+        this.competences = new ArrayList<>();
         this.competences.addAll(competences);
         this.evaluation = evaluation;
+        this.rayon = rayon;
     }
     
     public String getEmail() {
@@ -83,6 +87,10 @@ public class Utilisateurs {
     
     public float getEvaluation() {
         return evaluation;
+    }
+    
+    public int getRayon() {
+        return rayon;
     }
     
 }
