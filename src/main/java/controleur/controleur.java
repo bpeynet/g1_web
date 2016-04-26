@@ -214,13 +214,13 @@ public class controleur extends HttpServlet {
 
     private void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
-        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
-        if(usr == null) {
+        Utilisateurs usr = utilisateurDAO.getUtilisateur(new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8"));
+        if (usr == null) {
             request.setAttribute("erreur","Identifiant inconnu");
             actionLogin(request, response, utilisateurDAO);
             return;
         }
-        if( usr.getMdp().equals(request.getParameter("mdp"))) {
+        if (usr.getMdp().equals(new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8"))) {
             session.setAttribute("utilisateur", usr);
             allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
         }
@@ -231,61 +231,77 @@ public class controleur extends HttpServlet {
     }
 
     private void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
-        String email = request.getParameter("email");
-        String mdp = request.getParameter("mdp");
-        String mdpConfirm = request.getParameter("mdpconfirm");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String adresse = request.getParameter("adresse");
-        int genre = Integer.valueOf(request.getParameter("genre"));
-        String date = request.getParameter("date");
-        
-        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
-        if(usr !=  null) {
-            request.setAttribute("erreur","Email déjà utilisé");
-            actionInscription(request, response, utilisateurDAO, competenceDAO);
-            return;
-        }
-        if (date.matches("../../....") || date.matches("..-..-....")){
-            date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
-        } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
-            request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("adresse", adresse);
-            request.setAttribute("genre", genre);
-            request.setAttribute("email", email);
-            actionInscription(request, response, utilisateurDAO, competenceDAO);
-        }
-        if (mdp.equals(mdpConfirm)) {
-            try {
-                utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
-                for(Competences c : competenceDAO.getListCompetences()) {
-                    if(request.getParameter(c.getNomCompetence()) != null) {
-                        utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
-                    }
-                }
-                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-                allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
-            } catch (DAOException e) {
-                request.setAttribute("erreurMessage", e);
+        if (request.getParameter("email") != null
+                && request.getParameter("mdp") != null
+                && request.getParameter("mdpconfirm") != null
+                && request.getParameter("nom") != null
+                && request.getParameter("prenom") != null
+                && request.getParameter("adresse") != null
+                && request.getParameter("genre") != null
+                && request.getParameter("date") != null) {
+            String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
+            String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
+            String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
+            String nom = new String(request.getParameter("nom").getBytes("iso-8859-1"), "UTF-8");
+            String prenom = new String(request.getParameter("prenom").getBytes("iso-8859-1"), "UTF-8");
+            String adresse = new String(request.getParameter("adresse").getBytes("iso-8859-1"), "UTF-8");
+            int genre = Integer.valueOf(request.getParameter("genre"));
+            String date = new String(request.getParameter("date").getBytes("iso-8859-1"), "UTF-8");
+            
+            Utilisateurs usr = utilisateurDAO.getUtilisateur(email);
+            if(usr !=  null) {
+                request.setAttribute("erreur","Email déjà utilisé");
                 request.setAttribute("nom", nom);
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
+                actionInscription(request, response, utilisateurDAO, competenceDAO);
+                return;
+            }
+            if (date.matches("../../....") || date.matches("..-..-....")){
+                date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
+            } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
+                request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("adresse", adresse);
+                request.setAttribute("genre", genre);
                 request.setAttribute("email", email);
                 actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
+            if (mdp.equals(mdpConfirm)) {
+                try {
+                    utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                    for(Competences c : competenceDAO.getListCompetences()) {
+                        if(request.getParameter(c.getNomCompetence()) != null) {
+                            utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
+                        }
+                    }
+                    request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                } catch (DAOException e) {
+                    request.setAttribute("erreurMessage", e);
+                    request.setAttribute("nom", nom);
+                    request.setAttribute("prenom", prenom);
+                    request.setAttribute("date", date);
+                    request.setAttribute("adresse", adresse);
+                    request.setAttribute("genre", genre);
+                    request.setAttribute("email", email);
+                    actionInscription(request, response, utilisateurDAO, competenceDAO);
+                }
+            } else {
+                request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+                request.setAttribute("email", email);
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("date", date);
+                request.setAttribute("adresse", adresse);
+                request.setAttribute("genre", genre);
+                actionInscription(request, response, utilisateurDAO,competenceDAO);
+            }
         } else {
-            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
-            request.setAttribute("email", email);
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("date", date);
-            request.setAttribute("adresse", adresse);
-            request.setAttribute("genre", genre);
-            actionInscription(request, response, utilisateurDAO,competenceDAO);
+            actionInscription(request, response, utilisateurDAO, competenceDAO);
         }
     }
 
@@ -308,29 +324,50 @@ public class controleur extends HttpServlet {
     }
     
     private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
-        String email = request.getParameter("email");
-        String mdp = request.getParameter("mdp");
-        String mdpConfirm = request.getParameter("mdpconfirm");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String date = request.getParameter("date");
-        String adresse = request.getParameter("adresse");
-        int rayon = Integer.valueOf(request.getParameter("rayon"));
-        int genre = Integer.valueOf(request.getParameter("genre"));
-        if (mdp.equals(mdpConfirm)) {
-            if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
-                utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
-                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
-                allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+        if (request.getParameter("email") != null
+                && request.getParameter("mdp") != null
+                && request.getParameter("mdpconfirm") != null
+                && request.getParameter("nom") != null
+                && request.getParameter("prenom") != null
+                && request.getParameter("adresse") != null
+                && request.getParameter("genre") != null
+                && request.getParameter("date") != null
+                && request.getParameter("rayon") != null) {
+            String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
+            String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
+            String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
+            String nom = new String(request.getParameter("nom").getBytes("iso-8859-1"), "UTF-8");
+            String prenom = new String(request.getParameter("prenom").getBytes("iso-8859-1"), "UTF-8");
+            String date = new String(request.getParameter("date").getBytes("iso-8859-1"), "UTF-8");
+            String adresse = new String(request.getParameter("adresse").getBytes("iso-8859-1"), "UTF-8");
+            try {
+                int rayon = Integer.valueOf(request.getParameter("rayon"));
+                int genre = Integer.valueOf(request.getParameter("genre"));
+                if (mdp.equals(mdpConfirm)) {
+                    if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
+                        utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
+                        request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
+                        allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                    }
+                } else {
+                    request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+                    request.setAttribute("email", email);
+                    request.setAttribute("nom", nom);
+                    request.setAttribute("prenom", prenom);
+                    request.setAttribute("date", date);
+                    request.setAttribute("adresse", adresse);
+                    request.setAttribute("genre", genre);
+                    actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("erreurMessage", "Entiers invalides");
+                request.setAttribute("email", email);
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("date", date);
+                request.setAttribute("adresse", adresse);
+                actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
             }
-        } else {
-            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
-            request.setAttribute("email", email);
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("date", date);
-            request.setAttribute("adresse", adresse);
-            actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
         }
     }
 
