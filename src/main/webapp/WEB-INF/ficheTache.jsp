@@ -82,7 +82,7 @@
                                         : "<td>0 candidature</td>")
                                         : "<td>0 candidature</td>");
                             } else {
-                                out.println("<td>" + ta.getEmailExecutant() + "</td>");
+                                out.println("<td><a href='./controleur?action=Profil&utilisateurConsulte=" + ta.getEmailExecutant() + "'>" + ta.getEmailExecutant() + "</a></td>");
                             }
                             if (!tUnique) out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
                         } else {
