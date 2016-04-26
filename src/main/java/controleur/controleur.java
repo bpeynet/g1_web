@@ -244,7 +244,8 @@ public class controleur extends HttpServlet {
                 && request.getParameter("prenom") != null
                 && request.getParameter("adresse") != null
                 && request.getParameter("genre") != null
-                && request.getParameter("date") != null) {
+                && request.getParameter("date") != null
+                && request.getParameter("rayon") != null) {
             String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
             String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
             String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
@@ -253,6 +254,7 @@ public class controleur extends HttpServlet {
             String adresse = new String(request.getParameter("adresse").getBytes("iso-8859-1"), "UTF-8");
             int genre = Integer.valueOf(request.getParameter("genre"));
             String date = new String(request.getParameter("date").getBytes("iso-8859-1"), "UTF-8");
+            int rayon = Integer.valueOf(request.getParameter("rayon"));
             
             Utilisateurs usr = utilisateurDAO.getUtilisateur(email);
             if(usr !=  null) {
@@ -262,6 +264,7 @@ public class controleur extends HttpServlet {
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
+                request.setAttribute("rayon", rayon);
                 actionInscription(request, response, utilisateurDAO, competenceDAO);
                 return;
             }
@@ -274,12 +277,13 @@ public class controleur extends HttpServlet {
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
                 request.setAttribute("email", email);
+                request.setAttribute("rayon", rayon);
                 actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
             if (mdp.equals(mdpConfirm)) {
                 try {
                     mdp = DigestUtils.md5Hex(mdp);
-                    utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                    utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
                     for(Competences c : competenceDAO.getListCompetences()) {
                         if(request.getParameter(c.getNomCompetence()) != null) {
                             utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
@@ -295,6 +299,7 @@ public class controleur extends HttpServlet {
                     request.setAttribute("adresse", adresse);
                     request.setAttribute("genre", genre);
                     request.setAttribute("email", email);
+                    request.setAttribute("rayon", rayon);
                     actionInscription(request, response, utilisateurDAO, competenceDAO);
                 }
             } else {
@@ -305,6 +310,7 @@ public class controleur extends HttpServlet {
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
+                request.setAttribute("rayon", rayon);
                 actionInscription(request, response, utilisateurDAO,competenceDAO);
             }
         } else {
@@ -325,6 +331,7 @@ public class controleur extends HttpServlet {
         request.setAttribute("date", user.getDate());
         request.setAttribute("email", user.getEmail());
         request.setAttribute("genre", user.getGenre());
+        request.setAttribute("rayon", user.getRayon());
         request.setAttribute("competences",utilisateurDAO.getUncheckedCompetences(user.getEmail()));
         request.setAttribute("usrCompetences",utilisateurDAO.getCompetences(user.getEmail()));
         getServletContext().getRequestDispatcher("/WEB-INF/modifProfil.jsp").forward(request, response);

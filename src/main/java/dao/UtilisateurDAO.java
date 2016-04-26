@@ -155,7 +155,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     
-    public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
+    public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse, int rayon) throws DAOException {
         Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
         GeocodingResult[] results = null;
@@ -174,7 +174,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     + "\',\'" + mdp.replaceAll("'", "''") + "\'," + genre
                     + ",TO_date(\'" + date + "\','yyyy-mm-dd'),"
                     + results[0].geometry.location.lat + "," + results[0].geometry.location.lng
-                    + ",\'" + adresse.replaceAll("'", "''") + "\',-1)";
+                    + ",\'" + adresse.replaceAll("'", "''") + "\',-1," + rayon +")";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
