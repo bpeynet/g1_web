@@ -356,18 +356,17 @@ public class controleur extends HttpServlet {
         ArrayList<Competences> listCompetences;
         
         if(typeTache.equals("TUnique")) {
-            tacheDAO.ajouterTache(request.getParameter("titre1"), email);
-        }
-        else {
-            tacheDAO.ajouterTache(request.getParameter("projetName"), email);
+            tacheDAO.ajouterTache(new String(request.getParameter("titre1").getBytes("iso-8859-1"), "UTF-8"), email);
+        } else {
+            tacheDAO.ajouterTache(new String(request.getParameter("projetName").getBytes("iso-8859-1"), "UTF-8"), email);
         }        
         int k = 1;
         while(request.getParameter("titre"+k) != null){
-            titre = request.getParameter("titre"+k);
-            description = request.getParameter("description"+k);
-            prix = Double.valueOf(request.getParameter("prix"+k));
-            datetot = request.getParameter("SoonestDate"+k);
-            datetard = request.getParameter("LatestDate"+k);
+            titre = new String(request.getParameter("titre"+k).getBytes("iso-8859-1"), "UTF-8");
+            description = new String(request.getParameter("description"+k).getBytes("iso-8859-1"), "UTF-8");
+            prix = Double.valueOf(new String(request.getParameter("prix"+k).getBytes("iso-8859-1"), "UTF-8"));
+            datetot = new String(request.getParameter("SoonestDate"+k).getBytes("iso-8859-1"), "UTF-8");
+            datetard = new String(request.getParameter("LatestDate"+k).getBytes("iso-8859-1"), "UTF-8");
             idMere = utilisateurDAO.getIdLastTache(email);
             listCompetences = competenceDAO.whichCompetences(request,k);
             tacheAtomDAO.ajouterTacheAtom(titre, description, prix,
