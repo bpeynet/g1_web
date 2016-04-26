@@ -75,8 +75,12 @@ public class controleur extends HttpServlet {
                 }
                 case "Validation": {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
-                        actionValidationInscription(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
-                    else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
+                        actionValidationInscription(request, response,
+                                utilisateurDAO, competenceDAO, tacheDAO,
+                                tacheAtomDAO);
+                    else actionValidationUpdateProfil(request, response,
+                            utilisateurDAO, competenceDAO, tacheDAO,
+                            tacheAtomDAO, evaluationDAO);
                     break;
                 }
                 case "MesTaches" : {
@@ -323,7 +327,13 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/modifProfil.jsp").forward(request, response);
     }
     
-    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
+    private void actionValidationUpdateProfil(HttpServletRequest request,
+            HttpServletResponse response,
+            UtilisateurDAO utilisateurDAO,
+            CompetenceDAO competenceDAO,
+            TacheDAO tacheDAO,
+            TacheAtomDAO tacheAtomDAO,
+            EvaluationDAO evaluationDAO) throws DAOException, ServletException, IOException {
         if (request.getParameter("email") != null
                 && request.getParameter("mdp") != null
                 && request.getParameter("mdpconfirm") != null
