@@ -17,7 +17,13 @@
                            value="<% out.print( request.getAttribute("adresse")==null ? "" : request.getAttribute("adresse"));%>" placeholder="Adresse postale" type="text" required>
                     <input name="date" id="date"
                            value="<% out.print( request.getAttribute("date")==null ? "" : request.getAttribute("date"));%>" placeholder="Date de naissance" type="date" required>
-                     
+                    <label style="color:whitesmoke"> La distance maximale des offres qui me sont proposées : </label>
+                    <select name ="rayon" style="background-color:grey;" >
+                        <option value="10">  10 km </option>
+                        <option value="100"> 100 km </option>
+                        <option value="1000"> 1000 km </option>
+                        <option value="-1" selected> non spécifiée </option>
+                    </select>
                     <label style="color:whitesmoke"> Quelles sont vos compétences ? </label>
                      
                     <% int a = 0; %>
