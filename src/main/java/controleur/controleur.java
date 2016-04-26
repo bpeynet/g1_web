@@ -481,8 +481,7 @@ public class controleur extends HttpServlet {
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
         request.setAttribute("tachesCommanditaire", utilisateurDAO.getTachesCommanditaire(utilisateur.getEmail()));
         request.setAttribute("tachesEnCours", utilisateurDAO.getTachesEnCours(utilisateur.getEmail()));
-        //request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
-        request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles((Utilisateurs)request.getSession(false).getAttribute("utilisateur")));
+        request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles(utilisateur));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
@@ -575,7 +574,7 @@ public class controleur extends HttpServlet {
 
         
     private void actionVoirMesCandidatures(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, IOException, ServletException {
-        ArrayList<TacheAtom> candidatures = new ArrayList<TacheAtom>();
+        ArrayList<TacheAtom> candidatures = new ArrayList<>();
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
         HashSet<Integer> list = utilisateurDAO.getCandidaturesExecutant(utilisateur);
         for(Integer i : list) {
