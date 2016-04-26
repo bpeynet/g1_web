@@ -5,9 +5,13 @@
  */
 package dao;
 
+import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.DistanceMatrixElement;
 import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -454,18 +458,18 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @return
      * @throws DAOException 
      */
-    public HashMap<Integer,TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException {
+    public HashMap<Integer,TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException{
         HashMap<Integer,TacheAtom> liste = null;
         ArrayList<Competences> comp = null;
         String email = utilisateur.getEmail();
         TacheAtom tache;
-        ResultSet rs;
+        ResultSet rs, rsDist;
         String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            if(utilisateur.getRayon() == -1 || true){
+            if(utilisateur.getRayon() == -1){
                 requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
                         + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
                         + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
@@ -475,27 +479,65 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             + " c.competence is null)"
                         + " AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')"
                         + " AND t.idExecutant is null";
+                
+                rs = st.executeQuery(requeteSQL);
+                if (rs.getFetchSize()>0) {
+                    liste = new HashMap<>();
+                    while (rs.next()) {
+                        int idTacheAtom = rs.getInt("idTacheAtom");
+                        if (liste.containsKey(idTacheAtom)) {
+                            liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
+                        }
+                        else {
+                            comp = new ArrayList<Competences>();
+                            comp.add(new Competences(rs.getString("competence")));
+                            liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
+                                rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
+                                rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
+                                comp));
+                        }
+                    }
+                }
             }
             else {
-                // TODO : ajouter contrainte sur la distance entre la tâche et l'utilisateur
-                // ATTENTION il y a un 1 dans la condition du if !! A retirer quand ce sera le moment.
-            }
-            rs = st.executeQuery(requeteSQL);
-            if (rs.getFetchSize()>0) {
-                liste = new HashMap<>();
-                while (rs.next()) {
-                    int idTacheAtom = rs.getInt("idTacheAtom");
-                    if (liste.containsKey(idTacheAtom)) {
-                        liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
+                int rayon = utilisateur.getRayon();
+                GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
+                DistanceMatrixApiRequest distReq = new DistanceMatrixApiRequest(context);
+                distReq.origins(new LatLng(utilisateur.getLocalisation().getLatitude(), utilisateur.getLocalisation().getLongitude()));
+                try { 
+                    requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
+                        + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
+                        + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
+                        + "AND ("
+                            + "c.competence IN (SELECT competence FROM CompetencesUtilisateurs WHERE idutilisateur='" + email + "')"
+                            + " OR"
+                            + " c.competence is null)"
+                        + " AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')"
+                        + " AND t.idExecutant is null";
+                    rs = st.executeQuery(requeteSQL);
+                    if (rs.getFetchSize()>0) {
+                        liste = new HashMap<>();
+                        while(rs.next()) {
+                            int idTacheAtom = rs.getInt("idTacheAtom");
+                            distReq.destinations(new LatLng(rs.getDouble("latitude"), rs.getDouble("longitude")));
+                            DistanceMatrix dist = distReq.await();
+                            if(dist.rows[0].elements[0].distance.inMeters <= rayon) {
+                                if (liste.containsKey(idTacheAtom)) {
+                                    liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
+                                }
+                                else {
+                                    comp = new ArrayList<Competences>();
+                                    comp.add(new Competences(rs.getString("competence")));
+                                    liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
+                                        rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
+                                        rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
+                                        comp));
+                                }
+                            }
+                        }
                     }
-                    else {
-                        comp = new ArrayList<Competences>();
-                        comp.add(new Competences(rs.getString("competence")));
-                        liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
-                            rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
-                            rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
-                            comp));
-                    }
+                }catch (Exception ex) { 
+                    throw new DAOException("Erreur Geocoding " + ex.getMessage(), ex);
                 }
             }
         } catch (SQLException ex) {
