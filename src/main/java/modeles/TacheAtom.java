@@ -16,18 +16,18 @@ import modeles.outils.Coordonnees;
  * @date 31/03/2016
  */
 public class TacheAtom {
-    private Integer idTacheAtom;
-    private Integer idTache;
-    private String titreTacheAtom;
-    private String descriptionTache;
-    private Float prixTache;
-    private Coordonnees localisation;
-    private Date datePlusTot;
-    private Date datePlusTard;
-    private String emailCommanditaire;
-    private String emailExecutant;
-    private ArrayList<Competences> competences;
-    private Integer indicateurFin;
+    private Integer idTacheAtom=null;
+    private Integer idTache=null;
+    private String titreTacheAtom=null;
+    private String descriptionTache=null;
+    private Float prixTache=null;
+    private Coordonnees localisation=null;
+    private Date datePlusTot=null;
+    private Date datePlusTard=null;
+    private String emailCommanditaire=null;
+    private String emailExecutant=null;
+    private ArrayList<Competences> competences=null;
+    private Integer indicateurFin=null;
     
     public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
             Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, String emailCommanditaire,

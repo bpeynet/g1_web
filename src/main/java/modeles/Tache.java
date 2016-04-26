@@ -48,4 +48,11 @@ public class Tache {
         }
         return true;
     }
+    
+    public boolean estEntamee() {
+        for (TacheAtom ta : taches) {
+            if (ta.getEmailExecutant() != null) return true;
+        }
+        return false;
+    }
 }

@@ -36,7 +36,8 @@
             <% if (t != null && utilisateur != null) {
                     out.println("<h2>" + t.getTitreTache() + "</h2>");
                     out.println("<span id='ficheTacheCommanditaire'>proposée par <i>" + t.getEmailCommanditaire() + "</i></span>");
-                    if (t.getEmailCommanditaire().equals(utilisateur.getEmail())) out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
+                    if (t.getEmailCommanditaire().equals(utilisateur.getEmail())
+                            && !t.estEntamee()) out.println("<a href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a>");
                 }
             %>
         </section>
