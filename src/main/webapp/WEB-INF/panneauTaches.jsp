@@ -79,18 +79,24 @@
                                                     : "<td></td>")
                                             : "<td></td>");
                                     if(t.getTaches().get(0).getEmailExecutant() != null) {
-                                        out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "&idCandidat=" + t.getTaches().get(0).getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                        out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom="
+                                                + t.getTaches().get(0).getIdTacheAtom() + "&idCandidat="
+                                                + t.getTaches().get(0).getEmailExecutant()
+                                                + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
                                     } else {
-                                        out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                                        out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom="
+                                                + t.getTaches().get(0).getIdTacheAtom()
+                                                + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
                                     }
                                 }
                                 out.println("</tr></table></td>");
                             }
                         }
-                        if (!t.isOver()) {
-                            out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
-                        } else {
+                        if (t.isOver() || t.estEntamee()) {
                             out.println("<td></td>");
+                        } else {
+                            out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache="
+                                    + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
                         }
                         out.println("</tr>");
                     }

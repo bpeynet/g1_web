@@ -983,6 +983,15 @@ input[type="button"]:disabled,
     color: white;
 }
 
+#ficheTacheCommanditaire a {
+    text-decoration: none;
+    color: white;
+}
+
+#ficheTacheCommanditaire a:hover {
+    text-decoration: underline;
+}
+
 #ficheTacheTableau td{
     text-align: center;
     vertical-align: middle;
