@@ -190,7 +190,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @param adresse
      * @throws dao.DAOException
      */
-    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse) throws DAOException {
+    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse, int rayon) throws DAOException {
         Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
         GeocodingResult[] results = null;
@@ -210,6 +210,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude="
                     + coordonnees.getLatitude() + ", longitude=" + coordonnees.getLongitude()
                     + ", adresse='" + adresse.replaceAll("'", "''")
+                    + ", rayon=" + rayon
                     + "' WHERE email='"+ email.replaceAll("'", "''") + "'";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {

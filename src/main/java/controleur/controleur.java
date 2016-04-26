@@ -8,7 +8,6 @@ import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.annotation.Resource;
@@ -316,10 +315,11 @@ public class controleur extends HttpServlet {
         String prenom = request.getParameter("prenom");
         String date = request.getParameter("date");
         String adresse = request.getParameter("adresse");
+        int rayon = Integer.valueOf(request.getParameter("rayon"));
         int genre = Integer.valueOf(request.getParameter("genre"));
         if (mdp.equals(mdpConfirm)) {
             if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
-                utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
                 request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
                 allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
             }
@@ -348,7 +348,6 @@ public class controleur extends HttpServlet {
         String typeTache = request.getParameter("typeTache");
         Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
         String email = ut.getEmail();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         
         String titre, description;
         double prix;
