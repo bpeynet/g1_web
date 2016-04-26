@@ -222,11 +222,11 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Récupère les tâches d'un utilisateur (en tant que commanditaire) dans la base de données
-     * @param email l'identifiant de la tâche recherchée
+     * @param email l'identifiant de l'utilisateur dont on recherche les tâches
      * @return la liste des tâches trouvées ou null
      * @throws dao.DAOException
      */
-    public ArrayList<Tache> getTache(String email) throws DAOException {
+    public ArrayList<Tache> getTachesCommanditaire(String email) throws DAOException {
         ArrayList<Tache>  listeTaches = new ArrayList<>() ;
         ResultSet rs, rsAtomiques;
         String requeteSQL;
@@ -255,6 +255,46 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                 if (!t.isOver()) {
                     listeTaches.add(t);
                 }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+        return listeTaches;
+    }
+    
+    /**
+     * Récupère les tâches d'un utilisateur (en tant que commanditaire) dans la base de données même les finies
+     * @param email l'identifiant de l'utilisateur dont on recherche les tâches
+     * @return la liste des tâches trouvées ou null
+     * @throws dao.DAOException
+     */
+    public ArrayList<Tache> getToutesTachesCommanditaire(String email) throws DAOException {
+        ArrayList<Tache>  listeTaches = new ArrayList<>() ;
+        ResultSet rs, rsAtomiques;
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
+            rs = st.executeQuery(requeteSQL);
+            while(rs.next()) {
+                int idTache = rs.getInt("idTache");
+                String titre = rs.getString("titreTache");
+                requeteSQL = "SELECT * FROM TachesAtom where idTacheMere=" + idTache;
+                Statement st1 = conn.createStatement();
+                rsAtomiques = st1.executeQuery(requeteSQL);
+                ArrayList<TacheAtom> listTachesAtomiques = new ArrayList<>();
+                while (rsAtomiques.next()) {
+                    listTachesAtomiques.add(new TacheAtom(rsAtomiques.getInt("idTacheAtom"), rsAtomiques.getInt("idTacheMere"),
+                            rsAtomiques.getString("titreTacheAtom"),rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
+                            new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
+                            rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
+                            rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin")));
+                }
+                listeTaches.add(new Tache(idTache, email, titre, listTachesAtomiques));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);

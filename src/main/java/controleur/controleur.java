@@ -81,7 +81,7 @@ public class controleur extends HttpServlet {
                 }
                 case "MesTaches" : {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+                        actionVoirMesTaches(request, response, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -334,9 +334,20 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
-        request.setAttribute("taches", utilisateurDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
-        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
+    /**
+     * Action pour afficher les tâches que je propose, les tâches que j'exécute
+     * et les tâches auxquelles je pourrais postuler
+     * @param request
+     * @param response
+     * @param utilisateurDAO DAO du modèle Utilisateurs
+     * @throws ServletException
+     * @throws IOException
+     * @throws DAOException
+     */
+    private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
+        Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        request.setAttribute("taches", utilisateurDAO.getToutesTachesCommanditaire(utilisateur.getEmail()));
+        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
@@ -421,7 +432,7 @@ public class controleur extends HttpServlet {
 
     private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
-        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTache(utilisateur.getEmail()));
+        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTachesCommanditaire(utilisateur.getEmail()));
         request.setAttribute("tachesEnCours", utilisateurDAO.getTachesEnCours(utilisateur.getEmail()));
         //request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
         request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles((Utilisateurs)request.getSession(false).getAttribute("utilisateur")));
@@ -485,7 +496,7 @@ public class controleur extends HttpServlet {
     private void actionSupprimerTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws DAOException, IOException, ServletException {
         if (utilisateurDAO.proposedThisTask(Integer.valueOf(request.getParameter("idTache")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheDAO.supprimerTache(Integer.valueOf(request.getParameter("idTache")));
-            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+            actionVoirMesTaches(request, response, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }
@@ -509,7 +520,7 @@ public class controleur extends HttpServlet {
         if (request.getParameter("idTacheAtom") != null && 
                 utilisateurDAO.proposedThisAtomTask(Integer.valueOf(request.getParameter("idTacheAtom")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
-            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+            actionVoirMesTaches(request, response, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }
@@ -557,7 +568,7 @@ public class controleur extends HttpServlet {
             String idCandidat = request.getParameter("idCandidat");
             if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
                 tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom);
-                actionVoirMesTaches(request, response, null, utilisateurDAO);
+                actionVoirMesTaches(request, response, utilisateurDAO);
             } else {
                 response.sendRedirect("./controleur");
             }
