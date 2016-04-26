@@ -1012,6 +1012,10 @@ input[type="button"]:disabled,
     vertical-align: middle;
 }
 
+#tableauMesTaches td:nth-of-type(3) {
+    width: 180px;
+}
+
 #tableauMesTachesAtom {
     margin: 0;
     border: none;
@@ -1027,14 +1031,14 @@ input[type="button"]:disabled,
     padding: 0 0.75em;
 }
 
-#tableauMesTachesAtom td:nth-of-type(3), td:last-of-type {
-    text-align: right;
-    width: 100px;
-}
-
 #tableauMesTachesAtom td:nth-of-type(2) {
     text-align: right;
     width: 140px;
+}
+
+#tableauMesTachesAtom td:nth-of-type(3) {
+    text-align: right;
+    width: 100px;
 }
 
 /* Profil */

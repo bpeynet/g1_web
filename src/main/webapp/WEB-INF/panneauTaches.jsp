@@ -49,38 +49,49 @@
                                 out.print("<td><table id='tableauMesTachesAtom'>");
                                 for (TacheAtom ta : t.getTaches()) {
                                     out.println("<tr><td>" + ta.getTitreTacheAtom() + "</td>");
-                                    out.println(candidatures != null ?
+                                    if (ta.getIndicateurFin()==1) {
+                                        out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
+                                    } else {
+                                        out.println(candidatures != null ?
                                                 (candidatures.get(ta.getIdTacheAtom())!= null ?
                                                     "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
                                                             + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</a></td>"
                                                         : "<td></td>")
                                                 : "<td></td>");
-                                    out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
-                                    if(ta.getEmailExecutant() != null && ta.getIndicateurFin()== 0) {
-                                        out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
-                                    }
-                                    if(ta.getIndicateurFin()==1) {
-                                        out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
+                                        if(ta.getEmailExecutant() != null) {
+                                            out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                        } else {
+                                            out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                                        }
                                     }
                                 }
                                 out.println("</table></td>");
                             } else {
-                                TacheAtom ta = t.getTaches().get(0);
-                                out.println(candidatures != null ?
-                                            (candidatures.get(ta.getIdTacheAtom())!= null ?
-                                                "<td>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
-                                                        + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</td>"
+                                out.println("<td><table id='tableauMesTachesAtom'><tr>");
+                                out.println("<td></td>");
+                                if (t.isOver()) {
+                                    out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
+                                } else {
+                                    out.println(candidatures != null ?
+                                            (candidatures.get(t.getTaches().get(0).getIdTacheAtom())!= null ?
+                                                "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "'>" + candidatures.get(t.getTaches().get(0).getIdTacheAtom()) + " candidature"
+                                                        + (candidatures.get(t.getTaches().get(0).getIdTacheAtom())>1 ? "s" : "") + "</a></td>"
                                                     : "<td></td>")
                                             : "<td></td>");
-                                if(ta.getEmailExecutant() != null && ta.getIndicateurFin()== 0) {
-                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                    if(t.getTaches().get(0).getEmailExecutant() != null) {
+                                        out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "&idCandidat=" + t.getTaches().get(0).getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                    } else {
+                                        out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + t.getTaches().get(0).getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                                    }
                                 }
-                                if(ta.getIndicateurFin()==1) {
-                                    out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
-                                }
+                                out.println("</tr></table></td>");
                             }
                         }
-                        out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                        if (!t.isOver()) {
+                            out.println("<td><a class ='button' href='./controleur?action=SupprimerTache&idTache=" + t.getIdTache() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
+                        } else {
+                            out.println("<td></td>");
+                        }
                         out.println("</tr>");
                     }
                     out.println("</table>");
