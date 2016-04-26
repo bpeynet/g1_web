@@ -22,6 +22,7 @@ import modeles.Tache;
 import modeles.TacheAtom;
 import modeles.Utilisateurs;
 import modeles.outils.Competences;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -224,7 +225,8 @@ public class controleur extends HttpServlet {
             actionLogin(request, response, utilisateurDAO);
             return;
         }
-        if (usr.getMdp().equals(new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8"))) {
+        String hashMDP = DigestUtils.md5Hex(new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8"));
+        if (usr.getMdp().equals(hashMDP)) {
             session.setAttribute("utilisateur", usr);
             allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
         }
@@ -276,6 +278,7 @@ public class controleur extends HttpServlet {
             }
             if (mdp.equals(mdpConfirm)) {
                 try {
+                    mdp = DigestUtils.md5Hex(mdp);
                     utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
                     for(Competences c : competenceDAO.getListCompetences()) {
                         if(request.getParameter(c.getNomCompetence()) != null) {
