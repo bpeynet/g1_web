@@ -232,6 +232,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         String requeteSQL;
         Connection conn = null;
         try {
+            Tache t;
             conn = getConnection();
             Statement st = conn.createStatement();
             requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
@@ -250,7 +251,10 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
                             rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin")));
                 }
-                listeTaches.add(new Tache(idTache, email, titre, listTachesAtomiques));
+                t = new Tache(idTache, email, titre, listTachesAtomiques);
+                if (!t.isOver()) {
+                    listeTaches.add(t);
+                }
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
