@@ -8,7 +8,6 @@ import dao.TacheDAO;
 import dao.UtilisateurDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.annotation.Resource;
@@ -23,6 +22,7 @@ import modeles.Tache;
 import modeles.TacheAtom;
 import modeles.Utilisateurs;
 import modeles.outils.Competences;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -76,13 +76,17 @@ public class controleur extends HttpServlet {
                 }
                 case "Validation": {
                     if (request.getSession(false).getAttribute("utilisateur") == null) 
-                        actionValidationInscription(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
-                    else actionValidationUpdateProfil(request, response, utilisateurDAO, competenceDAO, tacheDAO, tacheAtomDAO);
+                        actionValidationInscription(request, response,
+                                utilisateurDAO, competenceDAO, tacheDAO,
+                                tacheAtomDAO);
+                    else actionValidationUpdateProfil(request, response,
+                            utilisateurDAO, competenceDAO, tacheDAO,
+                            tacheAtomDAO, evaluationDAO);
                     break;
                 }
                 case "MesTaches" : {
                     if (request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+                        actionVoirMesTaches(request, response, utilisateurDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -117,7 +121,7 @@ public class controleur extends HttpServlet {
                 }
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                        actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -215,13 +219,14 @@ public class controleur extends HttpServlet {
 
     private void actionConnexion(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
         HttpSession session = request.getSession(true);
-        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
-        if(usr == null) {
+        Utilisateurs usr = utilisateurDAO.getUtilisateur(new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8"));
+        if (usr == null) {
             request.setAttribute("erreur","Identifiant inconnu");
             actionLogin(request, response, utilisateurDAO);
             return;
         }
-        if( usr.getMdp().equals(request.getParameter("mdp"))) {
+        String hashMDP = DigestUtils.md5Hex(new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8"));
+        if (usr.getMdp().equals(hashMDP)) {
             session.setAttribute("utilisateur", usr);
             allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
         }
@@ -232,61 +237,78 @@ public class controleur extends HttpServlet {
     }
 
     private void actionValidationInscription(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
-        String email = request.getParameter("email");
-        String mdp = request.getParameter("mdp");
-        String mdpConfirm = request.getParameter("mdpconfirm");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String adresse = request.getParameter("adresse");
-        int genre = Integer.valueOf(request.getParameter("genre"));
-        String date = request.getParameter("date");
-        
-        Utilisateurs usr = utilisateurDAO.getUtilisateur(request.getParameter("email"));
-        if(usr !=  null) {
-            request.setAttribute("erreur","Email déjà utilisé");
-            actionInscription(request, response, utilisateurDAO, competenceDAO);
-            return;
-        }
-        if (date.matches("../../....") || date.matches("..-..-....")){
-            date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
-        } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
-            request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("adresse", adresse);
-            request.setAttribute("genre", genre);
-            request.setAttribute("email", email);
-            actionInscription(request, response, utilisateurDAO, competenceDAO);
-        }
-        if (mdp.equals(mdpConfirm)) {
-            try {
-                utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
-                for(Competences c : competenceDAO.getListCompetences()) {
-                    if(request.getParameter(c.getNomCompetence()) != null) {
-                        utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
-                    }
-                }
-                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
-                allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
-            } catch (DAOException e) {
-                request.setAttribute("erreurMessage", e);
+        if (request.getParameter("email") != null
+                && request.getParameter("mdp") != null
+                && request.getParameter("mdpconfirm") != null
+                && request.getParameter("nom") != null
+                && request.getParameter("prenom") != null
+                && request.getParameter("adresse") != null
+                && request.getParameter("genre") != null
+                && request.getParameter("date") != null) {
+            String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
+            String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
+            String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
+            String nom = new String(request.getParameter("nom").getBytes("iso-8859-1"), "UTF-8");
+            String prenom = new String(request.getParameter("prenom").getBytes("iso-8859-1"), "UTF-8");
+            String adresse = new String(request.getParameter("adresse").getBytes("iso-8859-1"), "UTF-8");
+            int genre = Integer.valueOf(request.getParameter("genre"));
+            String date = new String(request.getParameter("date").getBytes("iso-8859-1"), "UTF-8");
+            
+            Utilisateurs usr = utilisateurDAO.getUtilisateur(email);
+            if(usr !=  null) {
+                request.setAttribute("erreur","Email déjà utilisé");
                 request.setAttribute("nom", nom);
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
                 request.setAttribute("genre", genre);
+                actionInscription(request, response, utilisateurDAO, competenceDAO);
+                return;
+            }
+            if (date.matches("../../....") || date.matches("..-..-....")){
+                date=date.substring(6, 10) + "/" + date.substring(3, 5) + "/" + date.substring(0,2);
+            } else if (!date.matches("..../../..") && !date.matches("....-..-..")) {
+                request.setAttribute("erreurMessage", "Rentrer une VRAIE date.");
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("adresse", adresse);
+                request.setAttribute("genre", genre);
                 request.setAttribute("email", email);
                 actionInscription(request, response, utilisateurDAO, competenceDAO);
             }
+            if (mdp.equals(mdpConfirm)) {
+                try {
+                    mdp = DigestUtils.md5Hex(mdp);
+                    utilisateurDAO.ajouterUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
+                    for(Competences c : competenceDAO.getListCompetences()) {
+                        if(request.getParameter(c.getNomCompetence()) != null) {
+                            utilisateurDAO.ajouterCompetences(email, c.getNomCompetence());
+                        }
+                    }
+                    request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(request.getParameter("email")));
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                } catch (DAOException e) {
+                    request.setAttribute("erreurMessage", e);
+                    request.setAttribute("nom", nom);
+                    request.setAttribute("prenom", prenom);
+                    request.setAttribute("date", date);
+                    request.setAttribute("adresse", adresse);
+                    request.setAttribute("genre", genre);
+                    request.setAttribute("email", email);
+                    actionInscription(request, response, utilisateurDAO, competenceDAO);
+                }
+            } else {
+                request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+                request.setAttribute("email", email);
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("date", date);
+                request.setAttribute("adresse", adresse);
+                request.setAttribute("genre", genre);
+                actionInscription(request, response, utilisateurDAO,competenceDAO);
+            }
         } else {
-            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
-            request.setAttribute("email", email);
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("date", date);
-            request.setAttribute("adresse", adresse);
-            request.setAttribute("genre", genre);
-            actionInscription(request, response, utilisateurDAO,competenceDAO);
+            actionInscription(request, response, utilisateurDAO, competenceDAO);
         }
     }
 
@@ -308,35 +330,74 @@ public class controleur extends HttpServlet {
         getServletContext().getRequestDispatcher("/WEB-INF/modifProfil.jsp").forward(request, response);
     }
     
-    private void actionValidationUpdateProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, ServletException, IOException {
-        String email = request.getParameter("email");
-        String mdp = request.getParameter("mdp");
-        String mdpConfirm = request.getParameter("mdpconfirm");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String date = request.getParameter("date");
-        String adresse = request.getParameter("adresse");
-        int genre = Integer.valueOf(request.getParameter("genre"));
-        if (mdp.equals(mdpConfirm)) {
-            if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
-                utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse);
-                request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
-                allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+    private void actionValidationUpdateProfil(HttpServletRequest request,
+            HttpServletResponse response,
+            UtilisateurDAO utilisateurDAO,
+            CompetenceDAO competenceDAO,
+            TacheDAO tacheDAO,
+            TacheAtomDAO tacheAtomDAO,
+            EvaluationDAO evaluationDAO) throws DAOException, ServletException, IOException {
+        if (request.getParameter("email") != null
+                && request.getParameter("mdp") != null
+                && request.getParameter("mdpconfirm") != null
+                && request.getParameter("nom") != null
+                && request.getParameter("prenom") != null
+                && request.getParameter("adresse") != null
+                && request.getParameter("genre") != null
+                && request.getParameter("date") != null
+                && request.getParameter("rayon") != null) {
+            String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
+            String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
+            String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
+            String nom = new String(request.getParameter("nom").getBytes("iso-8859-1"), "UTF-8");
+            String prenom = new String(request.getParameter("prenom").getBytes("iso-8859-1"), "UTF-8");
+            String date = new String(request.getParameter("date").getBytes("iso-8859-1"), "UTF-8");
+            String adresse = new String(request.getParameter("adresse").getBytes("iso-8859-1"), "UTF-8");
+            try {
+                int rayon = Integer.valueOf(request.getParameter("rayon"));
+                int genre = Integer.valueOf(request.getParameter("genre"));
+                if (mdp.equals(mdpConfirm)) {
+                    if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
+                        utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
+                        request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
+                        allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                    }
+                } else {
+                    request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
+                    request.setAttribute("email", email);
+                    request.setAttribute("nom", nom);
+                    request.setAttribute("prenom", prenom);
+                    request.setAttribute("date", date);
+                    request.setAttribute("adresse", adresse);
+                    request.setAttribute("genre", genre);
+                    actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("erreurMessage", "Entiers invalides");
+                request.setAttribute("email", email);
+                request.setAttribute("nom", nom);
+                request.setAttribute("prenom", prenom);
+                request.setAttribute("date", date);
+                request.setAttribute("adresse", adresse);
+                actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
             }
-        } else {
-            request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
-            request.setAttribute("email", email);
-            request.setAttribute("nom", nom);
-            request.setAttribute("prenom", prenom);
-            request.setAttribute("date", date);
-            request.setAttribute("adresse", adresse);
-            actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
         }
     }
 
-    private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
-        request.setAttribute("taches", utilisateurDAO.getTache(((Utilisateurs) request.getSession(false).getAttribute("utilisateur")).getEmail()));
-        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire((Utilisateurs) request.getSession(false).getAttribute("utilisateur")));
+    /**
+     * Action pour afficher les tâches que je propose, les tâches que j'exécute
+     * et les tâches auxquelles je pourrais postuler
+     * @param request
+     * @param response
+     * @param utilisateurDAO DAO du modèle Utilisateurs
+     * @throws ServletException
+     * @throws IOException
+     * @throws DAOException
+     */
+    private void actionVoirMesTaches(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
+        Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+        request.setAttribute("taches", utilisateurDAO.getToutesTachesCommanditaire(utilisateur.getEmail()));
+        request.setAttribute("candidatures", utilisateurDAO.getNbCandidaturesCommanditaire(utilisateur));
         getServletContext().getRequestDispatcher("/WEB-INF/panneauTaches.jsp").forward(request, response);
     }
 
@@ -348,7 +409,6 @@ public class controleur extends HttpServlet {
         String typeTache = request.getParameter("typeTache");
         Utilisateurs ut = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
         String email = ut.getEmail();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         
         String titre, description;
         double prix;
@@ -357,18 +417,17 @@ public class controleur extends HttpServlet {
         ArrayList<Competences> listCompetences;
         
         if(typeTache.equals("TUnique")) {
-            tacheDAO.ajouterTache(request.getParameter("titre1"), email);
-        }
-        else {
-            tacheDAO.ajouterTache(request.getParameter("projetName"), email);
+            tacheDAO.ajouterTache(new String(request.getParameter("titre1").getBytes("iso-8859-1"), "UTF-8"), email);
+        } else {
+            tacheDAO.ajouterTache(new String(request.getParameter("projetName").getBytes("iso-8859-1"), "UTF-8"), email);
         }        
         int k = 1;
         while(request.getParameter("titre"+k) != null){
-            titre = request.getParameter("titre"+k);
-            description = request.getParameter("description"+k);
-            prix = Double.valueOf(request.getParameter("prix"+k));
-            datetot = request.getParameter("SoonestDate"+k);
-            datetard = request.getParameter("LatestDate"+k);
+            titre = new String(request.getParameter("titre"+k).getBytes("iso-8859-1"), "UTF-8");
+            description = new String(request.getParameter("description"+k).getBytes("iso-8859-1"), "UTF-8");
+            prix = Double.valueOf(new String(request.getParameter("prix"+k).getBytes("iso-8859-1"), "UTF-8"));
+            datetot = new String(request.getParameter("SoonestDate"+k).getBytes("iso-8859-1"), "UTF-8");
+            datetard = new String(request.getParameter("LatestDate"+k).getBytes("iso-8859-1"), "UTF-8");
             idMere = utilisateurDAO.getIdLastTache(email);
             listCompetences = competenceDAO.whichCompetences(request,k);
             tacheAtomDAO.ajouterTacheAtom(titre, description, prix,
@@ -423,10 +482,9 @@ public class controleur extends HttpServlet {
 
     private void allerPageAccueilConnecté(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheDAO tacheDAO, TacheAtomDAO tacheAtomDAO) throws ServletException, IOException, DAOException {
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
-        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTache(utilisateur.getEmail()));
+        request.setAttribute("tachesCommanditaire", utilisateurDAO.getTachesCommanditaire(utilisateur.getEmail()));
         request.setAttribute("tachesEnCours", utilisateurDAO.getTachesEnCours(utilisateur.getEmail()));
-        //request.setAttribute("taches", tacheDAO.getTaches((Utilisateurs)request.getSession(false).getAttribute("utilisateur"),tacheAtomDAO));
-        request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles((Utilisateurs)request.getSession(false).getAttribute("utilisateur")));
+        request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentielles(utilisateur));
         getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
     }
 
@@ -487,7 +545,7 @@ public class controleur extends HttpServlet {
     private void actionSupprimerTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO) throws DAOException, IOException, ServletException {
         if (utilisateurDAO.proposedThisTask(Integer.valueOf(request.getParameter("idTache")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheDAO.supprimerTache(Integer.valueOf(request.getParameter("idTache")));
-            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+            actionVoirMesTaches(request, response, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }
@@ -511,7 +569,7 @@ public class controleur extends HttpServlet {
         if (request.getParameter("idTacheAtom") != null && 
                 utilisateurDAO.proposedThisAtomTask(Integer.valueOf(request.getParameter("idTacheAtom")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))){
             tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
-            actionVoirMesTaches(request, response, tacheDAO, utilisateurDAO);
+            actionVoirMesTaches(request, response, utilisateurDAO);
         } else {
             response.sendRedirect("./controleur");
         }
@@ -519,7 +577,7 @@ public class controleur extends HttpServlet {
 
         
     private void actionVoirMesCandidatures(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO) throws DAOException, IOException, ServletException {
-        ArrayList<TacheAtom> candidatures = new ArrayList<TacheAtom>();
+        ArrayList<TacheAtom> candidatures = new ArrayList<>();
         Utilisateurs utilisateur = (Utilisateurs)request.getSession(false).getAttribute("utilisateur");
         HashSet<Integer> list = utilisateurDAO.getCandidaturesExecutant(utilisateur);
         for(Integer i : list) {
@@ -559,7 +617,7 @@ public class controleur extends HttpServlet {
             String idCandidat = request.getParameter("idCandidat");
             if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
                 tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom);
-                actionVoirMesTaches(request, response, null, utilisateurDAO);
+                actionVoirMesTaches(request, response, utilisateurDAO);
             } else {
                 response.sendRedirect("./controleur");
             }
@@ -576,13 +634,16 @@ public class controleur extends HttpServlet {
      * @param utilisateurDAO 
      */
     private void actionFinDeTache(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO) throws DAOException, ServletException, IOException {
-        if (request.getSession(false).getAttribute("utilisateur") != null && request.getParameter("idTacheAtom") != null
+        if (request.getSession(false).getAttribute("utilisateur") != null
+                && request.getParameter("idTacheAtom") != null
                 && request.getParameter("idCandidat") != null) {
             tacheAtomDAO.finir(Integer.valueOf(request.getParameter("idTacheAtom")));
             request.setAttribute("commanditaire", (Utilisateurs)request.getSession(false).getAttribute("utilisateur"));
             request.setAttribute("tache", tacheAtomDAO.getTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom"))));
             request.setAttribute("executant",utilisateurDAO.getUtilisateur(request.getParameter("idCandidat")));
             getServletContext().getRequestDispatcher("/WEB-INF/evaluations.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("./controleur");
         }
     }
     
@@ -618,23 +679,26 @@ public class controleur extends HttpServlet {
         try {
             evaluationDAO.ajouterEvaluation(Integer.valueOf(request.getParameter("note")),
                     (Integer) request.getSession(false).getAttribute("idTacheAtom"),
-                    request.getParameter("commentaire"));
+                    new String(request.getParameter("commentaire").getBytes("iso-8859-1"), "UTF-8"));
             utilisateurDAO.miseAJourMoyenneUtilisateur((Integer) request.getSession(false).getAttribute("idTacheAtom"));
         } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
     }
 
-    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws IOException, ServletException, DAOException {
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, EvaluationDAO evaluationDAO) throws IOException, ServletException, DAOException {
         Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
-        if (request.getParameter("utilisateurConsulte") == null || request.getParameter("utilisateurConsulte").equals(utilisateur.getEmail())) {
+        if (request.getParameter("utilisateurConsulte") == null
+                || request.getParameter("utilisateurConsulte").equals(utilisateur.getEmail())) {
             request.setAttribute("utilisateurConsulte", utilisateur);
+            request.setAttribute("commentaires", evaluationDAO.commentairesEvaluation(utilisateur.getEmail()));
             getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
         } else {
             Utilisateurs utilisateurConsulte = utilisateurDAO.getUtilisateur(request.getParameter("utilisateurConsulte"));
             if (utilisateurConsulte==null) {
                 response.sendRedirect("./controleur");
             } else {
+                request.setAttribute("commentaires", evaluationDAO.commentairesEvaluation(utilisateurConsulte.getEmail()));
                 request.setAttribute("utilisateurConsulte", utilisateurConsulte);
                 getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
             }

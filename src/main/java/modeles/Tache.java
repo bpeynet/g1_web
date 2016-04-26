@@ -41,4 +41,18 @@ public class Tache {
         //retourner erreur si taches est null
         return taches;
     }
+
+    public boolean isOver() {
+        for (TacheAtom ta : taches) {
+            if (ta.getIndicateurFin()==0) return false;
+        }
+        return true;
+    }
+    
+    public boolean estEntamee() {
+        for (TacheAtom ta : taches) {
+            if (ta.getEmailExecutant() != null) return true;
+        }
+        return false;
+    }
 }
