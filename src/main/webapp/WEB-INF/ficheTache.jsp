@@ -28,6 +28,13 @@
                     return false;
                 }
             }
+            function confirmFinTache(){
+                if(confirm("Marquer la tâche comme finie ?")===true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         </script>   
     </head>
     <body>
@@ -84,10 +91,13 @@
                                         + (candidatures.get(ta.getIdTacheAtom()) > 1 ? "s" : "") + "</a></td>"
                                         : "<td>0 candidature</td>")
                                         : "<td>0 candidature</td>");
+                                if (!tUnique) out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
                             } else {
-                                out.println("<td><a href='./controleur?action=Profil&utilisateurConsulte=" + ta.getEmailExecutant() + "'>" + ta.getEmailExecutant() + "</a></td>");
+                                out.println("<td><a href='./controleur?action=Profil&utilisateurConsulte="
+                                        + ta.getEmailExecutant() + "'>" + ta.getEmailExecutant() + "</a></td>");
+                                out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom="
+                                        + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td></tr>");
                             }
-                            if (!tUnique) out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td></tr>");
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                             if (ta.getEmailExecutant() == null) {
