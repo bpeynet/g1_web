@@ -37,7 +37,7 @@
                     <input name="mdp" id="mdp" value="" placeholder="Mot de passe" type="password" required>
                     <input name="mdpconfirm" id="mdpconfirm" value="" placeholder="Confirmer le mot de passe" type="password" required>
                     <input id="conditions" name="conditions" type="checkbox" required>
-                    <label for="conditions">J'ai lu et j'accepte les conditions générales d'utilisation du service CrowdHelping.</label>
+                    <label for="conditions">J'ai lu et j'accepte les <a href="./CU.html" target="_blank">conditions générales d'utilisation</a> du service CrowdHelping.</label>
                     <ul class="actions">
                         <li><input value="Validation" class="special" type="submit" name="action"></li>
                     </ul>
