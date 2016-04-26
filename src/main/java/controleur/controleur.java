@@ -116,7 +116,7 @@ public class controleur extends HttpServlet {
                 }
                 case "Profil": {
                     if(request.getSession(false).getAttribute("utilisateur") != null) {
-                        actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                        actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
                     } else {
                         response.sendRedirect("./controleur");
                     }
@@ -357,7 +357,7 @@ public class controleur extends HttpServlet {
                     request.setAttribute("date", date);
                     request.setAttribute("adresse", adresse);
                     request.setAttribute("genre", genre);
-                    actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                    actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
                 }
             } catch (NumberFormatException e) {
                 request.setAttribute("erreurMessage", "Entiers invalides");
@@ -366,7 +366,7 @@ public class controleur extends HttpServlet {
                 request.setAttribute("prenom", prenom);
                 request.setAttribute("date", date);
                 request.setAttribute("adresse", adresse);
-                actionConsulterProfil(request, response, utilisateurDAO, competenceDAO);
+                actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
             }
         }
     }
@@ -671,16 +671,19 @@ public class controleur extends HttpServlet {
         }
     }
 
-    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO) throws IOException, ServletException, DAOException {
+    private void actionConsulterProfil(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO, CompetenceDAO competenceDAO, EvaluationDAO evaluationDAO) throws IOException, ServletException, DAOException {
         Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
-        if (request.getParameter("utilisateurConsulte") == null || request.getParameter("utilisateurConsulte").equals(utilisateur.getEmail())) {
+        if (request.getParameter("utilisateurConsulte") == null
+                || request.getParameter("utilisateurConsulte").equals(utilisateur.getEmail())) {
             request.setAttribute("utilisateurConsulte", utilisateur);
+            request.setAttribute("commentaires", evaluationDAO.commentairesEvaluation(utilisateur.getEmail()));
             getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
         } else {
             Utilisateurs utilisateurConsulte = utilisateurDAO.getUtilisateur(request.getParameter("utilisateurConsulte"));
             if (utilisateurConsulte==null) {
                 response.sendRedirect("./controleur");
             } else {
+                request.setAttribute("commentaires", evaluationDAO.commentairesEvaluation(utilisateurConsulte.getEmail()));
                 request.setAttribute("utilisateurConsulte", utilisateurConsulte);
                 getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
             }

@@ -4,6 +4,8 @@
     Author     : ben
 --%>
 
+<%@page import="modeles.Evaluation"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Date"%>
 <%@page import="modeles.Utilisateurs"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -41,5 +43,28 @@
             </table><br>
             <% if (utilisateur == utilisateurConnecte) out.println("<a href='./controleur?action=ModifProfil'>Modifier votre profil</a>"); %>
         </section>
+        <% if (request.getAttribute("commentaires") != null) {
+            ArrayList<Evaluation> listCommentaire = (ArrayList<Evaluation>) request.getAttribute("commentaires");
+            if (listCommentaire.size()>0) {
+                out.println("<section class='commentairesProfil'>");
+                out.println("<table>");
+                out.println("<tr>");
+                out.println("<td>Date</td>");
+                out.println("<td>Commentaire</td>");
+                out.println("<td>Note</td>");
+                out.println("</tr>");
+
+                for (Evaluation e : listCommentaire) {
+                    out.println("<tr>");
+                    out.println("<td>" + e.getDate() + "</td>");
+                    out.println("<td>" + (e.getCommentaire()==null ? "-" : e.getCommentaire()) + "</td>");
+                    out.println("<td>" + e.getEvaluation() + "/10</td>");
+                    out.println("</tr>");
+                }
+                out.println("</table>");
+                out.println("</section> ");
+            }
+        }
+        %>
     </body>
 </html>

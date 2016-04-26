@@ -1066,11 +1066,36 @@ input[type="button"]:disabled,
     width: 40%;
 }
 
+.profil td:first-of-type {
+    font-weight: bold;
+}
+
 .profil a {
     display: block;
     width: 40%;
     margin: auto;
     text-align: center;
+}
+
+/* Commentaires Profil */
+
+.commentairesProfil table {
+    width: 60%;
+    text-align: center;
+    margin: auto;
+    margin-top: 3em;
+}
+
+.commentairesProfil tr:first-of-type {
+    font-weight: bold;
+}
+
+.commentairesProfil td:first-of-type {
+    width: 120px;
+}
+
+.commentairesProfil td:last-of-type {
+    width: 100px;
 }
 
 /* Header */
