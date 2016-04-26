@@ -502,8 +502,6 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             else {
                 int rayon = utilisateur.getRayon();
                 GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
-                DistanceMatrixApiRequest distReq = new DistanceMatrixApiRequest(context);
-                distReq.origins(new LatLng(utilisateur.getLocalisation().getLatitude(), utilisateur.getLocalisation().getLongitude()));
                 try { 
                     requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
                         + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
@@ -519,6 +517,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         liste = new HashMap<>();
                         while(rs.next()) {
                             int idTacheAtom = rs.getInt("idTacheAtom");
+                            
+                            DistanceMatrixApiRequest distReq = new DistanceMatrixApiRequest(context);
+                            distReq.origins(new LatLng(utilisateur.getLocalisation().getLatitude(), utilisateur.getLocalisation().getLongitude()));
                             distReq.destinations(new LatLng(rs.getDouble("latitude"), rs.getDouble("longitude")));
                             DistanceMatrix dist = distReq.await();
                             if(dist.rows[0].elements[0].distance.inMeters <= rayon) {
