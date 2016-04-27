@@ -110,6 +110,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             conn = getConnection();
             Statement st = conn.createStatement();
             if (cochee) {
+                requeteSQL = "DELETE From CompetencesUtilisateurs WHERE idUtilisateur='"
+                        + email + "' AND competence='" + nomCompetence +"'";
+                st.executeUpdate(requeteSQL);
                 requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"
                         + email + "\',\'" + nomCompetence + "\')";
             } else {
