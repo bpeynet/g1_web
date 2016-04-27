@@ -364,6 +364,7 @@ public class controleur extends HttpServlet {
                 int rayon = Integer.valueOf(request.getParameter("rayon"));
                 int genre = Integer.valueOf(request.getParameter("genre"));
                 if (mdp.equals(mdpConfirm)) {
+                    mdp = DigestUtils.md5Hex(mdp);
                     if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
                         utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
                         request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
