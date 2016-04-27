@@ -443,6 +443,18 @@ public class controleur extends HttpServlet {
             prix = Double.valueOf(new String(request.getParameter("prix"+k).getBytes("iso-8859-1"), "UTF-8"));
             datetot = new String(request.getParameter("SoonestDate"+k).getBytes("iso-8859-1"), "UTF-8");
             datetard = new String(request.getParameter("LatestDate"+k).getBytes("iso-8859-1"), "UTF-8");
+            if (datetot.matches("../../....") || datetot.matches("..-..-....")){
+                datetot=datetot.substring(6, 10) + "/" + datetot.substring(3, 5) + "/" + datetot.substring(0,2);
+            } else if (!datetot.matches("..../../..") && !datetot.matches("....-..-..")) {
+                request.setAttribute("erreurMessage", "Rentrer une VRAIE date pour la date d'exécution au plus tôt.");
+                actionAjoutTache(request, response, utilisateurDAO, competenceDAO);
+            }
+            if (datetard.matches("../../....") || datetard.matches("..-..-....")){
+                datetard=datetard.substring(6, 10) + "/" + datetard.substring(3, 5) + "/" + datetard.substring(0,2);
+            } else if (!datetard.matches("..../../..") && !datetard.matches("....-..-..")) {
+                request.setAttribute("erreurMessage", "Rentrer une VRAIE date pour la date d'exécution au plus tard.");
+                actionAjoutTache(request, response, utilisateurDAO, competenceDAO);
+            }
             idMere = utilisateurDAO.getIdLastTache(email);
             listCompetences = competenceDAO.whichCompetences(request,k);
             tacheAtomDAO.ajouterTacheAtom(titre, description, prix,
