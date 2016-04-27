@@ -39,9 +39,20 @@
                     out.println("<tr>"
                             + "<td>Evaluation</td>"
                             + "<td>" + utilisateur.getEvaluation() + "/10 </td>"
-                            + "</tr>"); } %>
+                            + "</tr>"); }
+                if (utilisateur == utilisateurConnecte) {
+                    String rayon = Integer.toString(utilisateur.getRayon());
+                    rayon = rayon.equals("-1") ?
+                            "Aucune" : rayon.substring(0, rayon.length()-3) + " km";
+                    out.println("<tr>"
+                            + "<td>Distance max des tâches proposées</td>"
+                            + "<td>"
+                            + rayon
+                            + "</td>"
+                            + "</tr>");
+                } %>
             </table><br>
-            <% if (utilisateur == utilisateurConnecte) out.println("<a href='./controleur?action=ModifProfil'>Modifier votre profil</a>"); %>
+            <% if (utilisateur == utilisateurConnecte) out.println("<a href='./controleur?action=ModifProfil'>Modifier votre profil et vos préférences</a>"); %>
         </section>
         <% if (request.getAttribute("commentaires") != null) {
             ArrayList<Evaluation> listCommentaire = (ArrayList<Evaluation>) request.getAttribute("commentaires");
