@@ -25,7 +25,7 @@
             <td><table id='tableauMesCandidatures'>   
             <c:forEach items="${candidatures}" var="element">
                 <tr>
-                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <span class="PanneauCand"><i><a href="./action?action=Profil&utilisateurConsulte=${element.emailCommanditaire}">${element.emailCommanditaire}</a></i></span></td>
+                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <span class="PanneauCand"><i><a href="./controleur?action=Profil&utilisateurConsulte=${element.emailCommanditaire}">${element.emailCommanditaire}</a></i></span></td>
                     <td><a class='button' href='./controleur?action=Depostuler&idTacheAtom=${element.idTacheAtom}'>Retirer sa candidature</a></td>
                 </tr>
                 </c:forEach>
@@ -42,7 +42,7 @@
             <td><table id='tableauMesTachesFinies'>   
             <c:forEach items="${services}" var="element">
                 <tr>
-                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <i>${element.emailCommanditaire}</i> </td>
+                    <td><a href='./controleur?action=voirTache&idTache=${element.idTacheMere}'>${element.titreTacheAtom}</a> de <span class="PanneauCand"><i><a href="./controleur?action=Profil&utilisateurConsulte=${element.emailCommanditaire}">${element.emailCommanditaire}</a></i></span></td>
                     <td><a class='button' href='./controleur?action=Facture&idTacheAtom=${element.idTacheAtom}' target='_blank'>Voir la facture</a></td>
                 </tr>
             </c:forEach>

@@ -1061,6 +1061,14 @@ input[type="button"]:disabled,
     width: 100px;
 }
 
+#tableauMesCandidatures td:last-of-type {
+    text-align: right;
+}
+
+#tableauMesTachesFinies td:last-of-type {
+    text-align: right;
+}
+
 /* Profil */
 .profil p {
   margin: auto;
