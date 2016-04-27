@@ -28,7 +28,7 @@
                      
                     <% int a = 0; %>
                     <c:forEach items ="${usrCompetences}" var = "element">
-                        <input id="id<%=a%>" name="${element.nomCompetence}" type="checkbox" checked="checked"> <label for="id<%=a%>">${element.nomCompetence}</label>
+                        <input id="idc<%=a%>" name="${element.nomCompetence}" type="checkbox" checked="checked"> <label for="idc<%=a%>">${element.nomCompetence}</label>
                         <% a = a + 1 ;%>
                     </c:forEach>
                     
