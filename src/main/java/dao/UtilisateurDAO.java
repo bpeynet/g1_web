@@ -214,8 +214,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                     + ", datedenaissance=TO_date('" + date + "','yyyy/mm/dd'), latitude="
                     + coordonnees.getLatitude() + ", longitude=" + coordonnees.getLongitude()
                     + ", adresse='" + adresse.replaceAll("'", "''")
-                    + ", rayon=" + rayon
-                    + "' WHERE email='"+ email.replaceAll("'", "''") + "'";
+                    + "', rayon=" + rayon
+                    + " WHERE email='"+ email.replaceAll("'", "''") + "'";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
