@@ -344,8 +344,7 @@ public class controleur extends HttpServlet {
             TacheDAO tacheDAO,
             TacheAtomDAO tacheAtomDAO,
             EvaluationDAO evaluationDAO) throws DAOException, ServletException, IOException {
-        if (request.getParameter("email") != null
-                && request.getParameter("mdp") != null
+        if (request.getParameter("mdp") != null
                 && request.getParameter("mdpconfirm") != null
                 && request.getParameter("nom") != null
                 && request.getParameter("prenom") != null
@@ -353,7 +352,8 @@ public class controleur extends HttpServlet {
                 && request.getParameter("genre") != null
                 && request.getParameter("date") != null
                 && request.getParameter("rayon") != null) {
-            String email = new String(request.getParameter("email").getBytes("iso-8859-1"), "UTF-8");
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            String email = utilisateur.getEmail();
             String mdp = new String(request.getParameter("mdp").getBytes("iso-8859-1"), "UTF-8");
             String mdpConfirm = new String(request.getParameter("mdpconfirm").getBytes("iso-8859-1"), "UTF-8");
             String nom = new String(request.getParameter("nom").getBytes("iso-8859-1"), "UTF-8");
@@ -365,11 +365,16 @@ public class controleur extends HttpServlet {
                 int genre = Integer.valueOf(request.getParameter("genre"));
                 if (mdp.equals(mdpConfirm)) {
                     mdp = DigestUtils.md5Hex(mdp);
-                    if (((Utilisateurs)request.getSession(false).getAttribute("utilisateur")).getEmail().equals(email)) {
-                        utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
-                        request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
-                        allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                    utilisateurDAO.mettreAJourUtilisateur(email, mdp, nom, prenom, genre, date, adresse, rayon);
+                    boolean cochee;
+                    for(Competences c : competenceDAO.getListCompetences()) {
+                        if(request.getParameter(c.getNomCompetence()) != null)
+                            cochee = true;
+                        else cochee = false;
+                        utilisateurDAO.mettreAJourCompetences(email, c.getNomCompetence(), cochee);
                     }
+                    request.getSession(true).setAttribute("utilisateur", utilisateurDAO.getUtilisateur(email));
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                 } else {
                     request.setAttribute("erreurMessage", "Mot de passe mal confirmé");
                     request.setAttribute("email", email);
@@ -389,6 +394,8 @@ public class controleur extends HttpServlet {
                 request.setAttribute("adresse", adresse);
                 actionConsulterProfil(request, response, utilisateurDAO, competenceDAO, evaluationDAO);
             }
+        } else {
+            actionModifierProfil(request, response, utilisateurDAO, competenceDAO);
         }
     }
 

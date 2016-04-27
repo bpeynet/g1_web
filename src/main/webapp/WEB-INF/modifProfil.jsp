@@ -19,9 +19,12 @@
                     return false;
                 }
             }
+            function block(){
+                document.getElementById("email").setAttribute("disabled","true");
+            }
         </script>
     </head>
-    <body>
+    <body onload="block();">
         <jsp:include page="banniere.jsp"/>
         <section id="banner">
             <h2>Profil de <% out.println(((Utilisateurs) request.getSession().getAttribute("utilisateur")).getNomPrenom());%></h2>

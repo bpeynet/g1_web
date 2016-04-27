@@ -992,22 +992,33 @@ input[type="button"]:disabled,
     text-decoration: underline;
 }
 
-#ficheTacheTableau td{
+#ficheTacheTableau td {
     text-align: center;
     vertical-align: middle;
+    padding: 0.4em 0.4em;
 }
 
 #ficheTacheTableau td:nth-of-type(3) {
-    width: 11%;
-}
-#ficheTacheTableau td:nth-of-type(4) {
-    width: 12%;
+    width: 110px;
 }
 
-#ficheTacheTableauHaut {
+#ficheTacheTableau td:nth-of-type(4) {
+    width: 110px;
+}
+
+#ficheTacheTableau td:last-of-type {
+    width: 90px;
+}
+
+#ficheTacheTableau tr:first-of-type {
     color: black;
     font-weight: bold;
     font-size: medium;
+}
+
+/* Panneau candidatures */
+.PanneauCand a{
+    color: rgb(102, 102, 102);
 }
 
 /* Tableau MesTâches */

@@ -122,6 +122,7 @@
         </script>
         <section id="banner">
             <h2>Ajouter ..?</h2>
+            <% out.print(request.getAttribute("erreurMessage")==null ? "" : "<p>" + request.getAttribute("erreurMessage") +"</p>");%>
             <div class="container 50%">
                 <form id="formAjoutTache" action="controleur" method="post" accept-charset="UTF-8">
                     <div id="Taches">

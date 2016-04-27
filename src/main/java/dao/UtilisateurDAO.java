@@ -88,13 +88,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     public void ajouterCompetences(String email, String competence) throws DAOException {
-        ResultSet rs = null;
-        String requeteSQL = "";
+        String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"+ email + "\',\'" + competence + "\')";
+            requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"
+                    + email + "\',\'" + competence + "\')";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -102,7 +102,27 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             closeConnection(conn);
         }
     }
-    
+
+    public void mettreAJourCompetences(String email, String nomCompetence, boolean cochee) throws DAOException {
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            if (cochee) {
+                requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"
+                        + email + "\',\'" + nomCompetence + "\')";
+            } else {
+                requeteSQL = "DELETE From CompetencesUtilisateurs WHERE idUtilisateur='"
+                        + email + "' AND competence='" + nomCompetence +"'";
+            }
+            st.executeUpdate(requeteSQL);
+        } catch (SQLException e) {
+            throw new DAOException("Erreur SQL 'mettreAJourCompetences' " + e.getMessage(), e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
     
     public ArrayList<Competences> getCompetences(String email) throws DAOException {
         ArrayList<Competences> competencesUtilisateur = new ArrayList<Competences>();
