@@ -51,7 +51,7 @@
                 }
             %>
         </section>
-        <section class="container">
+        <section class="container 125%">
             <% if (t != null && utilisateur != null) {
                     boolean tUnique = false;
                     out.println("<table id='ficheTacheTableau'>");

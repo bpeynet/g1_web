@@ -52,7 +52,7 @@
                             + "</tr>");
                 } %>
             </table><br>
-            <% if (utilisateur == utilisateurConnecte) out.println("<a href='./controleur?action=ModifProfil'>Modifier votre profil et vos préférences</a>"); %>
+            <% if (utilisateur == utilisateurConnecte) out.println("<a href='./controleur?action=ModifProfil'>Modifier mon profil et mes préférences</a>"); %>
         </section>
         <% if (request.getAttribute("commentaires") != null) {
             ArrayList<Evaluation> listCommentaire = (ArrayList<Evaluation>) request.getAttribute("commentaires");
