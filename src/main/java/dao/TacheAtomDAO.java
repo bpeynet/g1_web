@@ -72,19 +72,26 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             Statement st = conn.createStatement();
             requeteSQL = "SELECT * FROM TachesAtom where idTacheAtom=" + idTacheAtom;
             rs = st.executeQuery(requeteSQL);
-            rs.next();
-            tache = new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),rs.getString("titreTacheAtom"),
-                        rs.getString("descriptionTache"), rs.getFloat("prixTache"),
-                        new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
-                        null);
+            if (rs.next()) {
+                tache = new TacheAtom(rs.getInt("idTacheAtom"),
+                            rs.getInt("idTacheMere"),
+                            rs.getString("titreTacheAtom"),
+                            rs.getString("descriptionTache"),
+                            rs.getFloat("prixTache"),
+                            new Coordonnees(rs.getFloat("latitude"),
+                                    rs.getFloat("longitude")),
+                            rs.getDate("datePlusTot"),
+                            rs.getDate("datePlusTard"),
+                            rs.getString("idCommanditaire"),
+                            null);
+            }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
         } finally {
             closeConnection(conn);
         }
         return tache;
-        }
+    }
     
     public void ajouterTacheAtom(String titre, String description, double prix, 
         String datetot, String datetard, String idCommanditaire, int idMere,
@@ -147,21 +154,25 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
     public int postuler(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
         Connection conn = null;
         TacheAtom ta = getTacheAtom(idTacheAtom);
-        int idTacheARetourner = ta.getIdTacheMere();
-        String emailCommanditaire = ta.getEmailCommanditaire();
-        try {
-            conn = getConnection();
-            Statement st = conn.createStatement();
-            String requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
-                    + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
-            //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas. Sauf par URL...
-            st.executeUpdate(requeteSQL);
-        } catch (SQLException e) {
-            throw new DAOException("Erreur SQL 'postuler'",e);
-        } finally {
-            closeConnection(conn);
+        if (ta != null) {
+            int idTacheARetourner = ta.getIdTacheMere();
+            String emailCommanditaire = ta.getEmailCommanditaire();
+            try {
+                conn = getConnection();
+                Statement st = conn.createStatement();
+                String requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
+                        + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
+                //Double candidature ? S'en prévenir ? Même si cela n'arrivera pas. Sauf par URL...
+                st.executeUpdate(requeteSQL);
+            } catch (SQLException e) {
+                throw new DAOException("Erreur SQL 'postuler'",e);
+            } finally {
+                closeConnection(conn);
+            }
+            return idTacheARetourner;
+        } else {
+            return -1;
         }
-        return idTacheARetourner;
     }
 
     public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom) throws DAOException {

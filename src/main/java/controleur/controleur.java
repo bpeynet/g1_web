@@ -548,9 +548,14 @@ public class controleur extends HttpServlet {
         try {
             if (utilisateur!= null && !utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), utilisateur)) {
                 int idTacheRetour = tacheAtomDAO.postuler(((Utilisateurs) request.getSession().getAttribute("utilisateur")), Integer.valueOf(idTacheAtom));
-                request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO, competenceDAO));
-                request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
-                getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+                if (idTacheRetour != -1) {
+                    request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO, competenceDAO));
+                    request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+                    getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("succesMessage", "Cette tâche n'existe pas ou plus.");
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                }
             } else {
                 response.sendRedirect("./controleur");
             }
