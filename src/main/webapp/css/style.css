@@ -998,11 +998,11 @@ input[type="button"]:disabled,
     padding: 0.4em 0.4em;
 }
 
-#ficheTacheTableau td:nth-of-type(3) {
+#ficheTacheTableau td:nth-of-type(4) {
     width: 110px;
 }
 
-#ficheTacheTableau td:nth-of-type(4) {
+#ficheTacheTableau td:nth-of-type(5) {
     width: 110px;
 }
 

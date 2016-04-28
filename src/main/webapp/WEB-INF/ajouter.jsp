@@ -17,7 +17,6 @@
         <script src="js/init.js"></script>
     </head>
     <body class="landing">
-        <%-- TODO : ajouter required pour chaque champ --%>
         <script>
             var j = 1,i;
             var tableCompetences = [];
@@ -131,7 +130,7 @@
                         <input type="radio" name="typeTache" value="TComplexe" id="TComplexe" onchange="change()">
                         <label for="TComplexe"><h3 style="color:whitesmoke">un projet</h3></label>
                         <div id="projet" style="display:none">
-                            <input type="text" id="projetName" name="projetName" placeholder="Nom du projet" disabled/><br>
+                            <input type="text" id="projetName" name="projetName" placeholder="Nom du projet" required disabled/><br>
                         </div>
                         <div class="tache">
                             <input type="text" class="titre" name="titre1" placeholder="Titre de la tâche" required>

@@ -176,19 +176,24 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
 
     public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom, UtilisateurDAO ut) throws DAOException {
         Connection conn = null;
-        int idTacheARetourner = getTacheAtom(idTacheAtom, ut).getIdTacheMere();
-        try {
-            conn = getConnection();
-            Statement st = conn.createStatement();
-            String requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom +
-                    "AND idCandidat='" + utilisateur.getEmail() + "'";
-            st.executeUpdate(requeteSQL);
-        } catch (SQLException e) {
-            throw new DAOException("Erreur SQL 'depostuler'",e);
-        } finally {
-            closeConnection(conn);
+        TacheAtom ta = getTacheAtom(idTacheAtom, ut);
+        if (ta != null) {
+            int idTacheARetourner = ta.getIdTacheMere();
+            try {
+                conn = getConnection();
+                Statement st = conn.createStatement();
+                String requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom +
+                        "AND idCandidat='" + utilisateur.getEmail() + "'";
+                st.executeUpdate(requeteSQL);
+            } catch (SQLException e) {
+                throw new DAOException("Erreur SQL 'depostuler'",e);
+            } finally {
+                closeConnection(conn);
+            }
+            return idTacheARetourner;
+        } else {
+            return -1;
         }
-        return idTacheARetourner;
     }
     
     public void supprimerTacheAtom(Integer idTacheAtom) throws DAOException {
