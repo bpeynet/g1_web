@@ -531,7 +531,8 @@ public class controleur extends HttpServlet {
                     }
                     getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect("./controleur");
+                    request.setAttribute("succesMessage", "Cette tâche n'existe plus.");
+                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
                 }
             } catch (NumberFormatException nEx) {
                 response.sendRedirect("./controleur");
