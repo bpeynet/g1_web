@@ -484,6 +484,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return false;
     }
     
+    /**
+     * Indique si la tache atomique d'id idTacheAtom a été proposée par l'utilisateur utilisateur
+     * @param idTacheAtom
+     * @param utilisateur
+     * @return true si l'utilisateur a bien proposé cette tâche
+     * @throws DAOException 
+     */
     public boolean proposedThisAtomTask(int idTacheAtom, Utilisateurs utilisateur) throws DAOException {
         Connection conn = null;
         try {
