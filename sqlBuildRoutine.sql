@@ -19,7 +19,7 @@ CREATE TABLE Utilisateurs (
 );
 
 INSERT INTO Utilisateurs VALUES ('james.bond@mi6.gov.co.uk', 'Bond', 'James', '44f437ced647ec3f40fa0841041871cd', 1, TO_date('04/05/1985','dd/mm/yyyy'), 45.879865, 42.365165, null, -1, -1);
-INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', '08f8e0260c64418510cefb2b06eee5cd', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, null, -1, -1);
+INSERT INTO Utilisateurs VALUES ('m@mi6.gov.co.uk', '*', 'M', '08f8e0260c64418510cefb2b06eee5cd', 2, TO_date('11/12/1948','dd/mm/yyyy'), 45.879865, 42.365165, 'Londres', -1, -1);
 INSERT INTO Utilisateurs VALUES ('bpeynet@free.fr', 'PEYNET', 'Benoît', '47bce5c74f589f4867dbd57e9ca9f808', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Paris', -1, -1);
 INSERT INTO Utilisateurs VALUES ('picsou@disney.com', 'Picsou', 'Balthazar', '77963b7a931377ad4ab5ad6a9cd718aa', 1, TO_date('11/06/1994','dd/mm/yyyy'), 45.879865, 42.365165, 'Donaldville', -1, -1);
 

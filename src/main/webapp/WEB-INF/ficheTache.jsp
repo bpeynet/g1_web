@@ -58,6 +58,7 @@
                     out.println("<tr id='ficheTacheTableauHaut'>\n<td>");
                     out.println("Titre</td>\n<td>");
                     out.println("Description</td>\n<td>");
+                    out.println("Lieu</td>\n<td>");
                     out.println("Réalisation au plus tôt le</td>\n<td>");
                     out.println("Réalisation au plus tard le</td>\n<td>");
                     out.println("Récompense</td>\n<td>");
@@ -71,6 +72,7 @@
                         out.println("<tr>\n<td>");
                         out.println(ta.getTitreTacheAtom() + "</td>\n<td>");
                         out.println(ta.getDescription() + "</td>\n<td>");
+                        out.println(ta.getAdresse() + "</td>\n<td>");
                         out.println(ta.getDateTot() + "</td>\n<td>");
                         out.println(ta.getDatetard() + "</td>\n<td>");
                         out.println(ta.getPrix() + "&euro;</td>\n<td>");

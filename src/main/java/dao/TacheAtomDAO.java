@@ -62,7 +62,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
     
-    public TacheAtom getTacheAtom(int idTacheAtom) throws DAOException {
+    public TacheAtom getTacheAtom(int idTacheAtom, UtilisateurDAO ut) throws DAOException {
         TacheAtom  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -73,17 +73,12 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             requeteSQL = "SELECT * FROM TachesAtom where idTacheAtom=" + idTacheAtom;
             rs = st.executeQuery(requeteSQL);
             if (rs.next()) {
-                tache = new TacheAtom(rs.getInt("idTacheAtom"),
-                            rs.getInt("idTacheMere"),
-                            rs.getString("titreTacheAtom"),
-                            rs.getString("descriptionTache"),
-                            rs.getFloat("prixTache"),
-                            new Coordonnees(rs.getFloat("latitude"),
-                                    rs.getFloat("longitude")),
-                            rs.getDate("datePlusTot"),
-                            rs.getDate("datePlusTard"),
-                            rs.getString("idCommanditaire"),
-                            null);
+                String email = rs.getString("idCommanditaire");
+                tache = new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),rs.getString("titreTacheAtom"),
+                            rs.getString("descriptionTache"), rs.getFloat("prixTache"),
+                            new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
+                            rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
+                            null,ut.getAdresse(email));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -124,7 +119,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
     }
         
         
-    public ArrayList<TacheAtom> getTaches(int idTacheMere, CompetenceDAO competenceDAO) throws DAOException {
+    public ArrayList<TacheAtom> getTaches(int idTacheMere, CompetenceDAO competenceDAO, UtilisateurDAO ut) throws DAOException {
         Connection conn=null;
         ResultSet rs;
         ArrayList<TacheAtom> listTachesAtomiques = null;
@@ -141,7 +136,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                         rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
                         rs.getString("idExecutant"),
                         competenceDAO.getListCompetences(rs.getInt("idTacheAtom")),
-                        rs.getInt("indicateurFin")));
+                        rs.getInt("indicateurFin"), ut.getAdresse(rs.getString("idCommanditaire"))));
             }
         } catch (SQLException ex) {
             throw new DAOException("Erreur SQL", ex);
@@ -151,9 +146,9 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return listTachesAtomiques;
     }
 
-    public int postuler(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
+    public int postuler(Utilisateurs utilisateur, int idTacheAtom, UtilisateurDAO ut) throws DAOException {
         Connection conn = null;
-        TacheAtom ta = getTacheAtom(idTacheAtom);
+        TacheAtom ta = getTacheAtom(idTacheAtom,ut);
         if (ta != null) {
             int idTacheARetourner = ta.getIdTacheMere();
             String emailCommanditaire = ta.getEmailCommanditaire();
@@ -175,9 +170,9 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
 
-    public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom) throws DAOException {
+    public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom, UtilisateurDAO ut) throws DAOException {
         Connection conn = null;
-        int idTacheARetourner = getTacheAtom(idTacheAtom).getIdTacheMere();
+        int idTacheARetourner = getTacheAtom(idTacheAtom, ut).getIdTacheMere();
         try {
             conn = getConnection();
             Statement st = conn.createStatement();

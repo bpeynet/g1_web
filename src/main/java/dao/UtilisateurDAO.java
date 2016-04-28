@@ -87,6 +87,29 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         return utilisateur;
     }
     
+    public String getAdresse(String email) throws DAOException{
+        String adresse = null;
+        String requeteSQL;
+        Connection conn =  null;
+        ResultSet rs = null;
+        try{
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            requeteSQL = "SELECT DISTINCT adresse FROM Utilisateurs WHERE email='"
+                    + email +"'";
+            rs = st.executeQuery(requeteSQL);
+            if(rs.next()){
+                adresse = rs.getString("adresse");
+            }
+        }
+        catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        } finally{
+            closeConnection(conn);
+        }
+        return adresse;
+    }
+    
     public void ajouterCompetences(String email, String competence) throws DAOException {
         String requeteSQL;
         Connection conn = null;
@@ -276,7 +299,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             rsAtomiques.getString("titreTacheAtom"),rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
                             new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
                             rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
-                            rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin")));
+                            rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin"),
+                            getAdresse(email)));
                 }
                 t = new Tache(idTache, email, titre, listTachesAtomiques);
                 if (!t.isOver()) {
@@ -319,7 +343,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             rsAtomiques.getString("titreTacheAtom"),rsAtomiques.getString("descriptionTache"), rsAtomiques.getFloat("prixTache"),
                             new Coordonnees(rsAtomiques.getFloat("latitude"), rsAtomiques.getFloat("longitude")),
                             rsAtomiques.getDate("datePlusTot"), rsAtomiques.getDate("datePlusTard"),
-                            rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin")));
+                            rsAtomiques.getString("idCommanditaire"), rsAtomiques.getString("idExecutant"),null,rsAtomiques.getInt("indicateurFin"),
+                            getAdresse(email)));
                 }
                 listeTaches.add(new Tache(idTache, email, titre, listTachesAtomiques));
             }
@@ -537,6 +562,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         HashMap<Integer,TacheAtom> liste = null;
         ArrayList<Competences> comp = null;
         String email = utilisateur.getEmail();
+        String emailCommanditaire = null;
         TacheAtom tache;
         ResultSet rs, rsDist;
         String requeteSQL;
@@ -564,12 +590,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
                         }
                         else {
+                            emailCommanditaire =rs.getString("idcommanditaire");
                             comp = new ArrayList<Competences>();
                             comp.add(new Competences(rs.getString("competence")));
                             liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
                                 rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
                                 rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
-                                comp));
+                                comp, getAdresse(emailCommanditaire)));
                         }
                     }
                 }
@@ -607,7 +634,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                                     liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
                                         rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
                                         rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
-                                        comp));
+                                        comp, getAdresse(rs.getString("idCommanditaire"))));
                                 }
                             }
                         }
@@ -652,7 +679,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                                 rs.getDate("datePlusTot"),
                                 rs.getDate("datePlusTard"),
                                 rs.getString("idCommanditaire"),
-                                null);
+                                null, getAdresse(rs.getString("idCommanditaire")));
                 System.err.println(tache);
                 liste.add(tache);
             }
@@ -684,12 +711,14 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                 listeTachesAtom.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"), rs.getString("titreTacheAtom"),
                         rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null));
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null,
+                        getAdresse(rs.getString("idCommanditaire"))));
                 while (rs.next()) {
                     listeTachesAtom.add(new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"), rs.getString("titreTacheAtom"),
                         rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                         new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null));
+                        rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"), null,
+                        getAdresse(rs.getString("idCommanditaire"))));
                 }
             }
         } catch (SQLException e) {
