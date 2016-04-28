@@ -649,7 +649,9 @@ public class controleur extends HttpServlet {
             int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
             String idCandidat = request.getParameter("idCandidat");
             if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
-                tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom);
+                if (tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom) == -1) {
+                    request.setAttribute("Message", "Impossible d'accepter la candidature car elle a été retirée.");
+                }
                 actionVoirMesTaches(request, response, utilisateurDAO);
             } else {
                 response.sendRedirect("./controleur");

@@ -201,21 +201,30 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
 
-    public void accepterCandidature(String idCandidat, int idTacheAtom) throws DAOException {
+    public int accepterCandidature(String idCandidat, int idTacheAtom) throws DAOException {
         Connection conn = null;
+        boolean erreur = false;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            String requeteSQL = "UPDATE TachesAtom SET idExecutant='" + idCandidat + "' WHERE idTacheAtom=" + idTacheAtom;
-            st.executeUpdate(requeteSQL);
-            requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom;
-            st.executeUpdate(requeteSQL);
+            String requeteSQL = "SELECT * FROM Candidatures WHERE idCandidat='"
+                    + idCandidat +"' AND idTacheAtom=" + idTacheAtom;
+            ResultSet rs = st.executeQuery(requeteSQL);
+            if (rs.next()) {
+                requeteSQL = "UPDATE TachesAtom SET idExecutant='" + idCandidat + "' WHERE idTacheAtom=" + idTacheAtom;
+                st.executeUpdate(requeteSQL);
+                requeteSQL = "DELETE FROM Candidatures WHERE idTacheAtom=" + idTacheAtom;
+                st.executeUpdate(requeteSQL);
+            } else {
+                erreur = true;
+            }
         } catch (SQLException e) {
             throw new DAOException("Erreur SQL 'accepterCandidature", e);
         } finally {
             closeConnection(conn);
         }
-    }   
+        return erreur ? -1 : 0;
+    }
 
     /**
      * Indique une tâche comme finie
