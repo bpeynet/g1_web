@@ -56,8 +56,16 @@ public class controleur extends HttpServlet {
         EvaluationDAO evaluationDAO = new EvaluationDAO(ds);
         
         try {
+            Utilisateurs utilisateur = null;
+            if (request.getSession(false) != null) {
+                utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+                if (utilisateur != null) {
+                    utilisateur = utilisateurDAO.getUtilisateur(utilisateur.getEmail());
+                    request.getSession(false).setAttribute("utilisateur", utilisateur);
+                }
+            }
             if (action == null) {
-                if (request.getSession(false) == null || request.getSession(false).getAttribute("utilisateur") == null) {
+                if (request.getSession(false) == null || utilisateur == null) {
                     actionLogin(request, response, utilisateurDAO);
                 } else {
                     allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);

@@ -53,18 +53,19 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Récupère l'utilisateur à partir de son email dans la base de données
+     * @param email email de l'utilisateur recherché
+     * @return Objet Utilisateur ayant email pour email. null sinon.
+     * @throws dao.DAOException
      */
     public Utilisateurs getUtilisateur(String email) throws DAOException {
         Utilisateurs  utilisateur = null ;
-        ResultSet rs = null;
-        String requeteSQL = "";
+        if (email == null) return utilisateur;
         Connection conn = null;
-        String mail = "'" + email + "'";
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select * from Utilisateurs where email ='" + email + "'";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "select * from Utilisateurs where email ='" + email + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
                 utilisateur = new Utilisateurs(rs.getString("email"), 
                         rs.getString("hash_de_motdepasse"), 
