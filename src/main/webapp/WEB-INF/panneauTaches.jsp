@@ -34,6 +34,8 @@
     <jsp:include page="banniere.jsp"/>
     <section id="banner" class="wrapper" style=" color: rgb(202, 202, 202);">
         <h2>Mes tâches</h2>
+        <% out.print(request.getAttribute("Message") == null ? ""
+                : "<p>" + request.getAttribute("Message") + "</p>"); %>
     </section>
     <section class="container">
         <% ArrayList<Tache> listeTaches = (ArrayList<Tache>) request.getAttribute("taches");

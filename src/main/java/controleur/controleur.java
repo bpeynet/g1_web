@@ -547,14 +547,19 @@ public class controleur extends HttpServlet {
         String idTacheAtom = request.getParameter("idTacheAtom");
         try {
             if (utilisateur!= null && !utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), utilisateur)) {
-                int idTacheRetour = tacheAtomDAO.postuler(((Utilisateurs) request.getSession().getAttribute("utilisateur")), Integer.valueOf(idTacheAtom), utilisateurDAO);
-                if (idTacheRetour != -1) {
-                    request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO, competenceDAO, utilisateurDAO));
-                    request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
-                    getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
-                } else {
-                    request.setAttribute("succesMessage", "Cette tâche n'existe pas ou plus.");
-                    allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                int idTacheRetour = tacheAtomDAO.postuler(utilisateur, Integer.valueOf(idTacheAtom), utilisateurDAO);
+                switch (idTacheRetour) {
+                    case -1 : {
+                        request.setAttribute("succesMessage", "Cette tâche n'existe pas ou plus.");
+                        allerPageAccueilConnecté(request, response, utilisateurDAO, tacheDAO, tacheAtomDAO);
+                        break;
+                    }
+                    default : {
+                        request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO, competenceDAO, utilisateurDAO));
+                        request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
+                        getServletContext().getRequestDispatcher("/WEB-INF/ficheTache.jsp").forward(request, response);
+                        break;
+                    }
                 }
             } else {
                 response.sendRedirect("./controleur");
