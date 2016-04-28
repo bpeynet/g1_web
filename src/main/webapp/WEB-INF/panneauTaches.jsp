@@ -54,15 +54,15 @@
                                     if (ta.getIndicateurFin()==1) {
                                         out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
                                     } else {
-                                        out.println(candidatures != null ?
-                                                (candidatures.get(ta.getIdTacheAtom())!= null ?
-                                                    "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
-                                                            + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</a></td>"
-                                                        : "<td></td>")
-                                                : "<td></td>");
                                         if(ta.getEmailExecutant() != null) {
-                                            out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td>");
+                                            out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom=" + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie ?</a></td><td></td>");
                                         } else {
+                                            out.println(candidatures != null ?
+                                                    (candidatures.get(ta.getIdTacheAtom())!= null ?
+                                                        "<td><a href='./controleur?action=voirCandidaturesTache&idTacheAtom=" + ta.getIdTacheAtom() + "'>" + candidatures.get(ta.getIdTacheAtom()) + " candidature"
+                                                                + (candidatures.get(ta.getIdTacheAtom())>1 ? "s" : "") + "</a></td>"
+                                                            : "<td></td>")
+                                                    : "<td></td>");
                                             out.println("<td><a href='./controleur?action=SupprimerTacheAtom&idTacheAtom=" + ta.getIdTacheAtom() + "' onclick='return confirmSupp(this);'>Supprimer</a></td>");
                                         }
                                     }

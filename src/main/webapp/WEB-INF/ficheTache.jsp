@@ -97,8 +97,12 @@
                             } else {
                                 out.println("<td><a href='./controleur?action=Profil&utilisateurConsulte="
                                         + ta.getEmailExecutant() + "'>" + ta.getEmailExecutant() + "</a></td>");
-                                out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom="
-                                        + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie</a></td></tr>");
+                                if (ta.getIndicateurFin()==1) {
+                                    out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
+                                } else {
+                                    out.println("<td><a href='./controleur?action=FinDeTache&idTacheAtom="
+                                        + ta.getIdTacheAtom() + "&idCandidat=" + ta.getEmailExecutant() + "' onclick='return confirmFinTache(this);'>Tâche finie ?</a></td></tr>");
+                                }
                             }
                         } else {
                             HashSet candidatures = (HashSet) request.getAttribute("candidatures");
@@ -111,6 +115,8 @@
                                     out.println("Postuler&idTacheAtom="
                                             + ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
                                 }
+                            } else if (ta.getIndicateurFin()==1) {
+                                out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
                             } else {
                                 out.println("</tr>");
                             }
