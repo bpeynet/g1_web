@@ -130,7 +130,7 @@ CREATE TABLE Candidatures (
     --mais on ne peut pas séparer idTacheAtom des deux autres propriétés.
     constraint FK_Cand_TAtom foreign key (idTacheAtom,idCommanditaire)
         references TachesAtom(idTacheAtom,idCommanditaire) ON DELETE CASCADE,
-    idCandidat varchar(100) NOT NULL references Utilisateurs(email),
+    idCandidat varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,
     PRIMARY KEY (idTacheAtom,idCommanditaire,idCandidat)
 );
 
