@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.sql.Connection;
@@ -13,10 +8,7 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 import modeles.Evaluation;
 
-/**
- *
- * @author ralambom
- */
+
 public class EvaluationDAO extends AbstractDataBaseDAO {
     
     public EvaluationDAO(DataSource ds) {

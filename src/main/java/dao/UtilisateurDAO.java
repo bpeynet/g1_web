@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.DistanceMatrix;
-import com.google.maps.model.DistanceMatrixElement;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.itextpdf.text.Document;
@@ -39,12 +33,6 @@ import modeles.outils.Competences;
 import modeles.outils.Coordonnees;
 
 
-//TODO
-
-/**
- *
- * @author ralambom
- */
 public class UtilisateurDAO extends AbstractDataBaseDAO {
 
     public UtilisateurDAO(DataSource ds) {
