@@ -78,15 +78,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     public String getAdresse(String email) throws DAOException{
         String adresse = null;
-        String requeteSQL;
         Connection conn =  null;
-        ResultSet rs = null;
         try{
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT DISTINCT adresse FROM Utilisateurs WHERE email='"
+            String requeteSQL = "SELECT DISTINCT adresse FROM Utilisateurs WHERE email='"
                     + email +"'";
-            rs = st.executeQuery(requeteSQL);
+            ResultSet rs = st.executeQuery(requeteSQL);
             if(rs.next()){
                 adresse = rs.getString("adresse");
             }
@@ -100,12 +98,11 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     public void ajouterCompetences(String email, String competence) throws DAOException {
-        String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"
+            String requeteSQL = "INSERT INTO CompetencesUtilisateurs VALUES (\'"
                     + email + "\',\'" + competence + "\')";
             st.executeUpdate(requeteSQL);
         } catch (SQLException e) {
@@ -140,15 +137,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     public ArrayList<Competences> getCompetences(String email) throws DAOException {
-        ArrayList<Competences> competencesUtilisateur = new ArrayList<Competences>();
-        ResultSet rs = null;
-        String requeteSQL = "";
+        ArrayList<Competences> competencesUtilisateur = new ArrayList<>();
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\'";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\'";
+            ResultSet rs = st.executeQuery(requeteSQL);
 
             while (rs.next()) {
                 Competences competence = new Competences(rs.getString("competence"));
@@ -165,15 +160,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     }
     
     public ArrayList<Competences> getUncheckedCompetences(String email) throws DAOException {
-        ArrayList<Competences> uncheckedCompetences = new ArrayList<Competences>();
-        ResultSet rs = null;
-        String requeteSQL = "";
+        ArrayList<Competences> uncheckedCompetences = new ArrayList<>();
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "(select competence from Competences) MINUS (select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\')";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "(select competence from Competences) MINUS (select competence from CompetencesUtilisateurs where idUtilisateur = \'" + email + "\')";
+            ResultSet rs = st.executeQuery(requeteSQL);
 
             while (rs.next()) {
                 Competences competence = new Competences(rs.getString("competence"));
@@ -185,13 +178,11 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         } finally {
             closeConnection(conn);
         }
-        
         return uncheckedCompetences;
     }
     
     
     public void ajouterUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse, int rayon) throws DAOException {
-        Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
         GeocodingResult[] results = null;
         try {
@@ -199,7 +190,6 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         } catch (Exception ex) {
             throw new DAOException("Erreur Geocoding " + ex.getMessage(), ex);
         }
-        coordonnees = new Coordonnees(results[0].geometry.location.lat, results[0].geometry.location.lng);
         Connection conn = null ;
         try {
             conn = getConnection();
@@ -227,9 +217,17 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @param genre
      * @param date
      * @param adresse
+     * @param rayon
      * @throws dao.DAOException
      */
-    public void mettreAJourUtilisateur(String email, String mdp, String nom, String prenom, int genre, String date, String adresse, int rayon) throws DAOException {
+    public void mettreAJourUtilisateur(String email,
+                                        String mdp,
+                                        String nom,
+                                        String prenom,
+                                        int genre,
+                                        String date,
+                                        String adresse,
+                                        int rayon) throws DAOException {
         Coordonnees coordonnees;
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
         GeocodingResult[] results = null;
@@ -268,13 +266,12 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     public ArrayList<Tache> getTachesCommanditaire(String email) throws DAOException {
         ArrayList<Tache>  listeTaches = new ArrayList<>() ;
         ResultSet rs, rsAtomiques;
-        String requeteSQL;
         Connection conn = null;
         try {
             Tache t;
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
+            String requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
             rs = st.executeQuery(requeteSQL);
             while(rs.next()) {
                 int idTache = rs.getInt("idTache");
@@ -313,12 +310,11 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     public ArrayList<Tache> getToutesTachesCommanditaire(String email) throws DAOException {
         ArrayList<Tache>  listeTaches = new ArrayList<>() ;
         ResultSet rs, rsAtomiques;
-        String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
+            String requeteSQL = "SELECT * FROM Taches where idCommanditaire ='" + email + "'";
             rs = st.executeQuery(requeteSQL);
             while(rs.next()) {
                 int idTache = rs.getInt("idTache");
@@ -352,15 +348,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @throws dao.DAOException
      */
     public int getIdLastTache(String email) throws DAOException {
-        ResultSet rs;
-        String requeteSQL;
         Connection conn = null;
         int idTache = -1;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT Max(idTache) as max FROM Taches where idCommanditaire ='" + email + "'";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "SELECT Max(idTache) as max FROM Taches where idCommanditaire ='" + email + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
                 idTache = rs.getInt("max");
             }
@@ -379,15 +373,13 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @throws dao.DAOException
      */
     public int getIdLastTacheAtom(String email) throws DAOException {
-        ResultSet rs;
-        String requeteSQL;
         Connection conn = null;
         int idTache = -1;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT Max(idTacheAtom) as max FROM TachesAtom where idCommanditaire ='" + email + "'";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "SELECT Max(idTacheAtom) as max FROM TachesAtom where idCommanditaire ='" + email + "'";
+            ResultSet rs = st.executeQuery(requeteSQL);
             if(rs.next()) {
                 idTache = rs.getInt("max");
             }
@@ -549,16 +541,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      */
     public HashMap<Integer,TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException{
         HashMap<Integer,TacheAtom> liste = null;
-        ArrayList<Competences> comp = null;
-        String email = utilisateur.getEmail();
-        String emailCommanditaire = null;
-        TacheAtom tache;
-        ResultSet rs, rsDist;
+        ArrayList<Competences> comp;
+        String emailCommanditaire;
         String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
+            String email = utilisateur.getEmail();
+            ResultSet rs;
             if(utilisateur.getRayon() == -1){
                 requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
                         + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
@@ -580,7 +571,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         }
                         else {
                             emailCommanditaire =rs.getString("idcommanditaire");
-                            comp = new ArrayList<Competences>();
+                            comp = new ArrayList<>();
                             comp.add(new Competences(rs.getString("competence")));
                             liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
                                 rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
@@ -593,7 +584,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
             else {
                 int rayon = utilisateur.getRayon();
                 GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyCIhR44YdJoRc8tqOQ8SFslDZ3PX-SYDtQ");
-                try { 
+                try {
                     requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
                         + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
                         + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
@@ -618,7 +609,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                                     liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
                                 }
                                 else {
-                                    comp = new ArrayList<Competences>();
+                                    comp = new ArrayList<>();
                                     comp.add(new Competences(rs.getString("competence")));
                                     liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
                                         rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
@@ -628,7 +619,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                             }
                         }
                     }
-                }catch (Exception ex) { 
+                } catch (Exception ex) { 
                     throw new DAOException("Erreur Geocoding " + ex.getMessage(), ex);
                 }
             }
@@ -647,17 +638,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @throws DAOException 
      */
     public ArrayList<TacheAtom> getTachesExecutantFinies(Utilisateurs utilisateur) throws DAOException {
-        ArrayList<TacheAtom> liste = new ArrayList<TacheAtom>();
+        ArrayList<TacheAtom> liste = new ArrayList<>();
         String email = utilisateur.getEmail();
         TacheAtom tache;
-        ResultSet rs;
-        String requeteSQL;
         Connection conn = null;
         try {
             conn = getConnection();
             Statement st = conn.createStatement();
-            requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "' AND indicateurFin = 1";
-            rs = st.executeQuery(requeteSQL);
+            String requeteSQL = "SELECT * FROM TachesAtom WHERE idExecutant='" + email + "' AND indicateurFin = 1";
+            ResultSet rs = st.executeQuery(requeteSQL);
             while (rs.next()) {
                 tache = new TacheAtom(rs.getInt("idTacheAtom"),
                                 rs.getInt("idTacheMere"),
