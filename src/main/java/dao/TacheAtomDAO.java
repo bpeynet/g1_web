@@ -53,7 +53,14 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
     
-    public TacheAtom getTacheAtom(int idTacheAtom, UtilisateurDAO ut) throws DAOException {
+    /**
+     *
+     * @param idTacheAtom the value of idTacheAtom
+     * @param utilisateurDAO the value of utilisateurDAO
+     * @return 
+     * @throws DAOException
+     */
+    public TacheAtom getTacheAtom(int idTacheAtom, UtilisateurDAO utilisateurDAO) throws DAOException {
         TacheAtom  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -65,11 +72,13 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
             rs = st.executeQuery(requeteSQL);
             if (rs.next()) {
                 String email = rs.getString("idCommanditaire");
-                tache = new TacheAtom(rs.getInt("idTacheAtom"), rs.getInt("idTacheMere"),rs.getString("titreTacheAtom"),
+                tache = new TacheAtom(rs.getInt("idTacheAtom"),
+                            rs.getInt("idTacheMere"),rs.getString("titreTacheAtom"),
                             rs.getString("descriptionTache"), rs.getFloat("prixTache"),
                             new Coordonnees(rs.getFloat("latitude"), rs.getFloat("longitude")),
-                            rs.getDate("datePlusTot"), rs.getDate("datePlusTard"), rs.getString("idCommanditaire"),
-                            null,ut.getAdresse(email));
+                            rs.getDate("datePlusTot"), rs.getDate("datePlusTard"),
+                            rs.getString("idCommanditaire"), rs.getString("idExecutant"),
+                            null, rs.getInt("indicateurFin"), utilisateurDAO.getAdresse(email));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);

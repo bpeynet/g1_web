@@ -30,8 +30,9 @@ public class TacheAtom {
     private Integer indicateurFin=null;
     private String adresse = null;
     
-    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
-            Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, String emailCommanditaire,
+    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom,
+            String descriptionTache, Float prixTache, Coordonnees localisation,
+            Date datePlusTot, Date datePlusTard, String emailCommanditaire,
             ArrayList<Competences> competences, String adresse) {
         this.idTacheAtom = idTacheAtom;
         this.idTache = idTache;
@@ -47,9 +48,11 @@ public class TacheAtom {
         this.adresse = adresse;
     }
     
-    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom, String descriptionTache,
-            Float prixTache, Coordonnees localisation, Date datePlusTot, Date datePlusTard, String emailCommanditaire,
-            String emailExecutant, ArrayList<Competences> competences, Integer indicateurFin, String adresse) {
+    public TacheAtom(Integer idTacheAtom, Integer idTache, String titreTacheAtom,
+            String descriptionTache, Float prixTache, Coordonnees localisation,
+            Date datePlusTot, Date datePlusTard, String emailCommanditaire,
+            String emailExecutant, ArrayList<Competences> competences,
+            Integer indicateurFin, String adresse) {
         this.idTacheAtom = idTacheAtom;
         this.idTache = idTache;
         this.titreTacheAtom = titreTacheAtom;
@@ -120,5 +123,9 @@ public class TacheAtom {
     
     public String getAdresse() {
         return adresse;
+    }
+    
+    public boolean estEntamee() {
+        return emailExecutant!=null ? true : false;
     }
 }

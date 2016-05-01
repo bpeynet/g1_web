@@ -62,11 +62,11 @@
                     out.println("Réalisation au plus tôt le</td>\n<td>");
                     out.println("Réalisation au plus tard le</td>\n<td>");
                     out.println("Récompense</td>\n<td>");
-                    out.println("Compétences nécessaires</td>\n<td>");
+                    out.println("Compétences nécessaires</td>\n");
                     if (t.getEmailCommanditaire().equals(utilisateur.getEmail())) {
-                        out.println("Exécutant");
+                        out.println("<td>Exécutant</td>");
                     }
-                    out.println("</td>\n</tr>");
+                    out.println("\n</tr>");
                     if (t.getTaches().size()==1) tUnique=true;
                     for (TacheAtom ta : t.getTaches()) {
                         out.println("<tr>\n<td>");
@@ -105,8 +105,8 @@
                                 }
                             }
                         } else {
-                            HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                             if (ta.getEmailExecutant() == null) {
+                                HashSet candidatures = (HashSet) request.getAttribute("candidatures");
                                 out.print("<td><a href='./controleur?action=");
                                 if (candidatures.contains(ta.getIdTacheAtom())) {
                                     out.println("Depostuler&idTacheAtom="

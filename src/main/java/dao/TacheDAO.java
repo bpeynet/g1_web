@@ -20,10 +20,12 @@ public class TacheDAO extends AbstractDataBaseDAO {
      * Récupère la tâche à partir de son id dans la base de données
      * @param id l'identifiant de la tâche recherchée
      * @param tacheAtomDAO
+     * @param competenceDAO
+     * @param utilisateur
      * @return la tâche trouvée ou null
      * @throws dao.DAOException
      */
-    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO, UtilisateurDAO ut) throws DAOException {
+    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO, UtilisateurDAO utilisateur) throws DAOException {
         Tache  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -37,7 +39,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                 tache = new Tache(rs.getInt("idTache"),
                     rs.getString("idCommanditaire"),
                     rs.getString("titreTache"),
-                    tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO, ut));
+                    tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO, utilisateur));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);

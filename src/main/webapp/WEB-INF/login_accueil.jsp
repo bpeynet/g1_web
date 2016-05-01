@@ -15,7 +15,6 @@
             <nav id="nav">
                 <ul>
                     <li><a href="#one">A propos</a></li>
-                    <li><a href="generic.html">Exemples</a></li>
                 </ul>
             </nav>
         </header>

@@ -158,7 +158,7 @@ public class controleur extends HttpServlet {
                     }
                     case "SupprimerTache": {
                         if (utilisateur != null) {
-                            actionSupprimerTache(request, response, tacheDAO, utilisateurDAO);
+                            actionSupprimerTache(request, response, tacheDAO, utilisateurDAO, tacheAtomDAO, competenceDAO);
                         } else {
                             response.sendRedirect("./controleur");
                         }
@@ -724,7 +724,8 @@ public class controleur extends HttpServlet {
         String idTacheAtom = request.getParameter("idTacheAtom");
         try {
             if (utilisateur != null
-                    && !utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), utilisateur)) {
+                    && !utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), utilisateur)
+                    && !tacheAtomDAO.getTacheAtom(Integer.valueOf(idTacheAtom), utilisateurDAO).estEntamee()) {
                 int idTacheRetour = tacheAtomDAO.postuler(utilisateur, Integer.valueOf(idTacheAtom), utilisateurDAO);
                 switch (idTacheRetour) {
                     case -1: {
@@ -790,21 +791,25 @@ public class controleur extends HttpServlet {
      * @param response
      * @param tacheDAO
      * @param utilisateurDAO
+     * @param tacheAtomDAO
+     * @param competenceDAO
      * @throws DAOException
      * @throws IOException
-     * @throws ServletException 
+     * @throws ServletException
      */
-    private void actionSupprimerTache(HttpServletRequest request,
-            HttpServletResponse response,
-            TacheDAO tacheDAO,
-            UtilisateurDAO utilisateurDAO) throws DAOException, IOException, ServletException {
+    private void actionSupprimerTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO) throws DAOException, IOException, ServletException {
         String idTache = request.getParameter("idTache");
-        if (idTache != null
+        try{
+            if (idTache != null
                 && utilisateurDAO.proposedThisTask(Integer.valueOf(idTache),
-                        ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))) {
+                        ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))
+                && !tacheDAO.getTache(Integer.valueOf(idTache), tacheAtomDAO, competenceDAO, utilisateurDAO).estEntamee()) {
             tacheDAO.supprimerTache(Integer.valueOf(request.getParameter("idTache")));
             actionVoirMesTaches(request, response, utilisateurDAO);
-        } else {
+            } else {
+                response.sendRedirect("./controleur");
+            }
+        } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
     }
@@ -838,8 +843,10 @@ public class controleur extends HttpServlet {
      */
     private void actionSupprimerTacheAtom(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO)
             throws DAOException, IOException, ServletException {
-        if (request.getParameter("idTacheAtom") != null
-                && utilisateurDAO.proposedThisAtomTask(Integer.valueOf(request.getParameter("idTacheAtom")), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))) {
+        String idTacheAtom = request.getParameter("idTacheAtom");
+        if (idTacheAtom != null
+                && utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))
+                && !tacheAtomDAO.getTacheAtom(Integer.valueOf(idTacheAtom), utilisateurDAO).estEntamee()) {
             tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
             actionVoirMesTaches(request, response, utilisateurDAO);
         } else {
