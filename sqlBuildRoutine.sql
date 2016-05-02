@@ -69,9 +69,12 @@ CREATE SEQUENCE TachesAtom_Sequence
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Escorte d''Elizabeth',
     'Attention! La mission contient un saut d''hélicoptère', 100.15, 51.487270, -0.124559, TO_date('04/05/2016','dd/mm/yyyy'),
     TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null,0);
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Eliminer SPECTRE',
+    'Des rencontres perturbantes sont à prévoir.', 100.15, 51.487270, -0.124559, TO_date('04/05/2016','dd/mm/yyyy'),
+    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une application Web de crowsourcing',
-    'En équipe de 5', 0, 51.487270, -0.124559, TO_date('04/05/2016','dd/mm/yyyy'),
-    TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', 'james.bond@mi6.gov.co.uk',0);
+    'En équipe de 5', 0, 45.200666, 5.725531, TO_date('04/05/2016','dd/mm/yyyy'),
+    TO_date('04/05/2017','dd/mm/yyyy'), 2, 'picsou@disney.com', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Battre le Chiffre au poker',
     '6 millions de livres appartenant au gouvernement seront mis à disposition. A rendre.',
     5005,51.487270, -0.124559, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
@@ -94,6 +97,8 @@ INSERT INTO Competences VALUES ('self-defense');
 INSERT INTO Competences VALUES ('informatique');
 INSERT INTO Competences VALUES ('plomberie');
 INSERT INTO Competences VALUES ('cuisine');
+INSERT INTO Competences VALUES ('chant');
+INSERT INTO Competences VALUES ('jardinage');
 
 CREATE TABLE CompetencesUtilisateurs (
     idUtilisateur varchar(100) NOT NULL references Utilisateurs(email) ON DELETE CASCADE,
@@ -103,6 +108,9 @@ CREATE TABLE CompetencesUtilisateurs (
 
 INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','self-defense');
 INSERT INTO CompetencesUtilisateurs VALUES ('picsou@disney.com','cuisine');
+INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','cuisine');
+INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','chant');
+INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','self-defense');
 
 CREATE SEQUENCE CompUtilisateurs_Sequence
     INCREMENT BY 1
