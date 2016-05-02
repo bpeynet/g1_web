@@ -101,14 +101,14 @@
                         out.print("proposé par <i>" + t.getEmailCommanditaire() + "</i>");
                         out.println("<br>" + t.getPrix() + "&euro;<br>");
                         out.println("</a></td>");
-                        if (largeur == 2) {
+                        largeur++;
+                        if (largeur == 3) {
                             out.println("</tr>");
                             largeur = 0;
                         }
-                        largeur++;
                     }
                     out.println("</tr></table></div>");
-                } else {
+                } else if (request.getParameter("action")!=null) {
                     if (request.getParameter("action").equals("Rechercher")) {
                         out.println("<br><form action='./controleur' id='Recherche' method='post'>"
                                 + "<input type='hidden' value='Rechercher' name='action'>\n"
@@ -118,6 +118,8 @@
                     } else {
                         out.println("<h2>Pas de tâche disponible.</h2>");
                     }
+                } else {
+                    out.println("<h2>Pas de tâche disponible.</h2>");
                 }
          }
         %>
