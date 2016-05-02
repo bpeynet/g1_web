@@ -68,6 +68,8 @@ public class TacheDAO extends AbstractDataBaseDAO {
      * Récupère la liste des tâches auxquelles l'utilisateur peut postuler
      * @param utilisateur
      * @param tacheAtomDAO
+     * @param competenceDAO
+     * @param ut
      * @return
      * @throws DAOException 
      */

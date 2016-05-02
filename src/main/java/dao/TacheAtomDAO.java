@@ -237,7 +237,8 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
 
     /**
      * Indique une tâche comme finie
-     * @param valueOf 
+     * @param idTacheAtom 
+     * @throws dao.DAOException 
      */
     public void finir(int idTacheAtom) throws DAOException {
         Connection conn = null;

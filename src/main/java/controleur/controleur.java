@@ -799,7 +799,7 @@ public class controleur extends HttpServlet {
      */
     private void actionSupprimerTache(HttpServletRequest request, HttpServletResponse response, TacheDAO tacheDAO, UtilisateurDAO utilisateurDAO, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO) throws DAOException, IOException, ServletException {
         String idTache = request.getParameter("idTache");
-        try{
+        try {
             if (idTache != null
                 && utilisateurDAO.proposedThisTask(Integer.valueOf(idTache),
                         ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))
@@ -843,13 +843,17 @@ public class controleur extends HttpServlet {
      */
     private void actionSupprimerTacheAtom(HttpServletRequest request, HttpServletResponse response, TacheAtomDAO tacheAtomDAO, UtilisateurDAO utilisateurDAO)
             throws DAOException, IOException, ServletException {
-        String idTacheAtom = request.getParameter("idTacheAtom");
-        if (idTacheAtom != null
-                && utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))
-                && !tacheAtomDAO.getTacheAtom(Integer.valueOf(idTacheAtom), utilisateurDAO).estEntamee()) {
-            tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")));
-            actionVoirMesTaches(request, response, utilisateurDAO);
-        } else {
+        try {
+            String idTacheAtom = request.getParameter("idTacheAtom");
+            if (idTacheAtom != null
+                    && utilisateurDAO.proposedThisAtomTask(Integer.valueOf(idTacheAtom), ((Utilisateurs) request.getSession(false).getAttribute("utilisateur")))
+                    && !tacheAtomDAO.getTacheAtom(Integer.valueOf(idTacheAtom), utilisateurDAO).estEntamee()) {
+                tacheAtomDAO.supprimerTacheAtom(Integer.valueOf(idTacheAtom));
+                actionVoirMesTaches(request, response, utilisateurDAO);
+            } else {
+                response.sendRedirect("./controleur");
+            }
+        } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
     }
@@ -875,7 +879,7 @@ public class controleur extends HttpServlet {
             UtilisateurDAO utilisateurDAO,
             TacheAtomDAO tacheAtomDAO)
             throws IOException, DAOException, ServletException {
-        if (request.getParameter("idTacheAtom") != null) {
+        try {
             Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
             int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
             if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
@@ -885,7 +889,7 @@ public class controleur extends HttpServlet {
             } else {
                 response.sendRedirect("./controleur");
             }
-        } else {
+        } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
 
@@ -896,20 +900,24 @@ public class controleur extends HttpServlet {
             TacheAtomDAO tacheAtomDAO,
             UtilisateurDAO utilisateurDAO)
             throws DAOException, IOException, ServletException {
-        if (request.getParameter("idTacheAtom") != null
-                && request.getParameter("idCandidat") != null) {
-            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
-            int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
-            String idCandidat = request.getParameter("idCandidat");
-            if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
-                if (tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom) == -1) {
-                    request.setAttribute("Message", "Impossible d'accepter la candidature car elle a été retirée.");
+        try {
+            if (request.getParameter("idTacheAtom") != null
+                    && request.getParameter("idCandidat") != null) {
+                Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+                int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
+                String idCandidat = request.getParameter("idCandidat");
+                if (utilisateurDAO.proposedThisAtomTask(idTacheAtom, utilisateur)) {
+                    if (tacheAtomDAO.accepterCandidature(idCandidat, idTacheAtom) == -1) {
+                        request.setAttribute("Message", "Impossible d'accepter la candidature car elle a été retirée.");
+                    }
+                    actionVoirMesTaches(request, response, utilisateurDAO);
+                } else {
+                    response.sendRedirect("./controleur");
                 }
-                actionVoirMesTaches(request, response, utilisateurDAO);
             } else {
                 response.sendRedirect("./controleur");
             }
-        } else {
+        } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
     }
@@ -927,14 +935,18 @@ public class controleur extends HttpServlet {
             TacheAtomDAO tacheAtomDAO,
             UtilisateurDAO utilisateurDAO)
             throws DAOException, ServletException, IOException {
-        if (request.getParameter("idTacheAtom") != null
-                && request.getParameter("idCandidat") != null) {
-            tacheAtomDAO.finir(Integer.valueOf(request.getParameter("idTacheAtom")));
-            request.setAttribute("commanditaire", (Utilisateurs) request.getSession(false).getAttribute("utilisateur"));
-            request.setAttribute("tache", tacheAtomDAO.getTacheAtom(Integer.valueOf(request.getParameter("idTacheAtom")), utilisateurDAO));
-            request.setAttribute("executant", utilisateurDAO.getUtilisateur(request.getParameter("idCandidat")));
-            getServletContext().getRequestDispatcher("/WEB-INF/evaluations.jsp").forward(request, response);
-        } else {
+        try {
+            int idTacheAtom = Integer.valueOf(request.getParameter("idTacheAtom"));
+            if (request.getParameter("idCandidat") != null) {
+                tacheAtomDAO.finir(idTacheAtom);
+                request.setAttribute("commanditaire", (Utilisateurs) request.getSession(false).getAttribute("utilisateur"));
+                request.setAttribute("tache", tacheAtomDAO.getTacheAtom(idTacheAtom, utilisateurDAO));
+                request.setAttribute("executant", utilisateurDAO.getUtilisateur(request.getParameter("idCandidat")));
+                getServletContext().getRequestDispatcher("/WEB-INF/evaluations.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("./controleur");
+            }
+        } catch (NumberFormatException e) {
             response.sendRedirect("./controleur");
         }
     }
