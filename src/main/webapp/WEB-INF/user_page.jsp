@@ -84,7 +84,12 @@
                 HashMap<Integer,TacheAtom> rs = (HashMap<Integer,TacheAtom>) request.getAttribute("tachesExecutant");
                 
                 if (rs.size() > 0) {
-                    out.println("<br><h2> Candidatez ! </h2>\n\t<div  class='cards'>\n\t\t<table id='cardtable'>");
+                    out.println("<br><h2 id='titreCandidatez'>Candidatez !</h2>"
+                            + "<form action='./controleur' id='Recherche'>"
+                            + "<input type='hidden' value='Rechercher' name='action'>\n"
+                            + "<input type='text' name='recherche' placeholder='Rechercher parmi les tâches'>"
+                            + "</form>");
+                    out.println("\t<div  class='cards'>\n\t\t<table id='cardtable'>");
                     int largeur = 0;
                     Collection<TacheAtom> result = rs.values();
                     for (TacheAtom t : result) {
@@ -106,8 +111,6 @@
                 }
             }
         %>
-        
-        
     </div> 
     </section>
 </body>

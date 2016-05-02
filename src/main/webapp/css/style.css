@@ -909,6 +909,18 @@ input[type="button"]:disabled,
     opacity: 0.25;
 }
 
+#titreCandidatez {
+    display: inline-block;
+}
+
+#Recherche {
+    float: right;
+}
+
+#Recherche input {
+    color: black;
+}
+
 /* CardTable & Card */
 
 #cardtable td{

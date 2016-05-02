@@ -568,8 +568,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         int idTacheAtom = rs.getInt("idTacheAtom");
                         if (liste.containsKey(idTacheAtom)) {
                             liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
-                        }
-                        else {
+                        } else {
                             emailCommanditaire =rs.getString("idcommanditaire");
                             comp = new ArrayList<>();
                             comp.add(new Competences(rs.getString("competence")));
@@ -818,5 +817,52 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
         } finally {
             closeConnection(conn);
         }
+    }
+
+    public HashMap<Integer,TacheAtom> getTachesPotentiellesRecherchees(Utilisateurs utilisateur, String recherche) throws DAOException {
+        HashMap<Integer,TacheAtom> liste = null;
+        ArrayList<Competences> comp;
+        String emailCommanditaire;
+        String requeteSQL;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement st = conn.createStatement();
+            String email = utilisateur.getEmail();
+            ResultSet rs;
+            requeteSQL = "SELECT * FROM TachesAtom t LEFT JOIN CompetencesTaches c "//Pour avoir toutes les tâches
+                    + "ON t.idtacheatom=c.idtacheatom AND t.idcommanditaire=c.idcommanditaire "//associées à leurs compétences
+                    + "WHERE t.idCommanditaire !='" + email + "' AND t.indicateurfin = 0"//Sauf celles proposées par celui qui consulte la liste et sauf celles qui sont finies
+                    /*+ "AND ("
+                        + "c.competence IN (SELECT competence FROM CompetencesUtilisateurs WHERE idutilisateur='" + email + "')"
+                        + " OR"
+                        + " c.competence is null)"
+                    + " AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')"*/
+                    + " AND titreTacheAtom LIKE '%" + recherche + "'"
+                    + " AND t.idExecutant is null";
+            rs = st.executeQuery(requeteSQL);
+            if (rs.getFetchSize()>0) {
+                liste = new HashMap<>();
+                while (rs.next()) {
+                    int idTacheAtom = rs.getInt("idTacheAtom");
+                    if (liste.containsKey(idTacheAtom)) {
+                        liste.get(idTacheAtom).ajouterCompetences(rs.getString("competence"));
+                    } else {
+                        emailCommanditaire = rs.getString("idcommanditaire");
+                        comp = new ArrayList<>();
+                        comp.add(new Competences(rs.getString("competence")));
+                        liste.put(idTacheAtom,new TacheAtom(idTacheAtom, rs.getInt("idTacheMere"), rs.getString("titretacheatom"),rs.getString("descriptiontache"), 
+                            rs.getFloat("prixtache"), new Coordonnees(rs.getDouble("latitude"), rs.getDouble("longitude")),
+                            rs.getDate("dateplustot"), rs.getDate("dateplustard"), rs.getString("idcommanditaire"),
+                            comp, getAdresse(emailCommanditaire)));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Erreur SQL 'recherche' " + ex.getMessage(), ex);
+        } finally {
+            closeConnection(conn);
+        }
+        return liste;
     }
 }

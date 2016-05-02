@@ -229,6 +229,13 @@ public class controleur extends HttpServlet {
                         }
                         break;
                     }
+                    case "Rechercher": {
+                        if (utilisateur != null) {
+                            actionRecherche(request, response, utilisateurDAO);
+                        } else {
+                            response.sendRedirect("./controleur");
+                        }
+                    }
                     default: {
                         response.sendRedirect("./controleur");
                         break;
@@ -1031,6 +1038,19 @@ public class controleur extends HttpServlet {
                 request.setAttribute("utilisateurConsulte", utilisateurConsulte);
                 getServletContext().getRequestDispatcher("/WEB-INF/profil.jsp").forward(request, response);
             }
+        }
+    }
+
+    private void actionRecherche(HttpServletRequest request, HttpServletResponse response, UtilisateurDAO utilisateurDAO) throws ServletException, IOException, DAOException {
+        String recherche = request.getParameter("recherche");
+        if (recherche != null) {
+            Utilisateurs utilisateur = (Utilisateurs) request.getSession(false).getAttribute("utilisateur");
+            request.setAttribute("tachesCommanditaire", utilisateurDAO.getTachesCommanditaire(utilisateur.getEmail()));
+            request.setAttribute("tachesEnCours", utilisateurDAO.getTachesEnCours(utilisateur.getEmail()));
+            request.setAttribute("tachesExecutant", utilisateurDAO.getTachesPotentiellesRecherchees(utilisateur, recherche));
+            getServletContext().getRequestDispatcher("/WEB-INF/user_page.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("./controleur");
         }
     }
 }
