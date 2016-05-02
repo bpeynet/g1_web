@@ -80,7 +80,7 @@ INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Rattrapper l''afric
     'Savoir monter et sauter sur une grue',
     5005,51.487270, -0.124559, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
     3,'m@mi6.gov.co.uk', null,0);
-INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire un niche pour Pluto',
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une niche pour Pluto',
     'En bois', 1, 45.200666, 5.725531, TO_date('18/09/1995','dd/mm/yyyy'), TO_date('19/09/1995','dd/mm/yyyy'),
     2,'picsou@disney.com', null,0);
 

@@ -838,7 +838,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
                         + " OR"
                         + " c.competence is null)"
                     + " AND t.idTacheATom NOT IN (SELECT idTacheAtom FROM Candidatures WHERE idCandidat ='" + email + "')"*/
-                    + " AND titreTacheAtom LIKE '%" + recherche + "'"
+                    + " AND titreTacheAtom LIKE '%" + recherche + "%'"
                     + " AND t.idExecutant is null";
             rs = st.executeQuery(requeteSQL);
             if (rs.getFetchSize()>0) {

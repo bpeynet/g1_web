@@ -85,7 +85,7 @@
                 
                 if (rs.size() > 0) {
                     out.println("<br><h2 id='titreCandidatez'>Candidatez !</h2>"
-                            + "<form action='./controleur' id='Recherche'>"
+                            + "<form action='./controleur' id='Recherche' method='post'>"
                             + "<input type='hidden' value='Rechercher' name='action'>\n"
                             + "<input type='text' name='recherche' placeholder='Rechercher parmi les tâches'>"
                             + "</form>");
@@ -108,10 +108,20 @@
                         largeur++;
                     }
                     out.println("</tr></table></div>");
+                } else {
+                    if (request.getParameter("action").equals("Rechercher")) {
+                        out.println("<h2 style='text-align:center'>Aucune tâche ne correspond à votre recherche.</h2>"
+                            + "<form action='./controleur' id='Recherche' method='post'>"
+                            + "<input type='hidden' value='Rechercher' name='action'>\n"
+                            + "<input type='text' name='recherche' placeholder='Rechercher parmi les tâches'>"
+                            + "</form>");
+                    } else {
+                        out.println("<h2>Pas de tâche disponible.</h2>");
+                    }
                 }
-            }
+         }
         %>
-    </div> 
+        </div> 
     </section>
 </body>
 </html>
