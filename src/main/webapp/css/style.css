@@ -915,6 +915,7 @@ input[type="button"]:disabled,
 
 #Recherche {
     float: right;
+    width: 20%;
 }
 
 #Recherche input {

@@ -110,11 +110,11 @@
                     out.println("</tr></table></div>");
                 } else {
                     if (request.getParameter("action").equals("Rechercher")) {
-                        out.println("<h2 style='text-align:center'>Aucune tâche ne correspond à votre recherche.</h2>"
-                            + "<form action='./controleur' id='Recherche' method='post'>"
-                            + "<input type='hidden' value='Rechercher' name='action'>\n"
-                            + "<input type='text' name='recherche' placeholder='Rechercher parmi les tâches'>"
-                            + "</form>");
+                        out.println("<br><form action='./controleur' id='Recherche' method='post'>"
+                                + "<input type='hidden' value='Rechercher' name='action'>\n"
+                                + "<input type='text' name='recherche' placeholder='Rechercher parmi les tâches'>"
+                                + "</form><br>"
+                                + "<h2 style='text-align:center'>Aucune tâche ne correspond à votre recherche.</h2>");
                     } else {
                         out.println("<h2>Pas de tâche disponible.</h2>");
                     }
