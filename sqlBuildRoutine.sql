@@ -145,6 +145,8 @@ CREATE TABLE Evaluations (
     --Cette contrainte d'intégrité est vitale afin de vérifier que l'évaluation
     --est donnée pour une tâche vraiment proposée par le bon commanditaire associé
     --au bon exécutant.
+    constraint FK_Ev_Taches foreign key (idTache, idEvaluateur)
+        references Taches(idTache, idCommanditaire) ON DELETE CASCADE,
     commentaire varchar(300),
     CHECK (evaluation >= 0 AND evaluation <= 10),
     CHECK (idEvalue != idEvaluateur)
