@@ -19,13 +19,13 @@ public class TacheDAO extends AbstractDataBaseDAO {
     /**
      * Récupère la tâche à partir de son id dans la base de données
      * @param id l'identifiant de la tâche recherchée
-     * @param tacheAtomDAO
-     * @param competenceDAO
-     * @param utilisateur
+     * @param tacheAtomDAO DAO TacheAtom
+     * @param competenceDAO DAO Competence
+     * @param utilisateurDAO DAO Utilisateur
      * @return la tâche trouvée ou null
-     * @throws dao.DAOException
+     * @throws dao.DAOException DAO Exception
      */
-    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO, UtilisateurDAO utilisateur) throws DAOException {
+    public Tache getTache(int id, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO, UtilisateurDAO utilisateurDAO) throws DAOException {
         Tache  tache = null ;
         ResultSet rs;
         String requeteSQL;
@@ -39,7 +39,7 @@ public class TacheDAO extends AbstractDataBaseDAO {
                 tache = new Tache(rs.getInt("idTache"),
                     rs.getString("idCommanditaire"),
                     rs.getString("titreTache"),
-                    tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO, utilisateur));
+                    tacheAtomDAO.getTaches(rs.getInt("idTache"), competenceDAO, utilisateurDAO));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage(), e);
@@ -49,6 +49,12 @@ public class TacheDAO extends AbstractDataBaseDAO {
         return tache;
     }
 
+    /**
+     * Ajoute une tâche
+     * @param titre titre de la tâche
+     * @param idCommanditaire email du commanditaire
+     * @throws DAOException DAO Exception
+     */
     public void ajouterTache(String titre, String idCommanditaire ) throws DAOException {
         Connection conn = null ;
         try {
@@ -66,12 +72,12 @@ public class TacheDAO extends AbstractDataBaseDAO {
     
     /**
      * Récupère la liste des tâches auxquelles l'utilisateur peut postuler
-     * @param utilisateur
-     * @param tacheAtomDAO
-     * @param competenceDAO
-     * @param ut
-     * @return
-     * @throws DAOException 
+     * @param utilisateur utilisateur
+     * @param tacheAtomDAO DAO TacheAtom
+     * @param competenceDAO DAO Competence
+     * @param ut DAO Utilisateur
+     * @return Liste des tâches potentielles
+     * @throws DAOException DAO Exception
      */
     public ArrayList<Tache> getTaches(Utilisateurs utilisateur, TacheAtomDAO tacheAtomDAO, CompetenceDAO competenceDAO, UtilisateurDAO ut) throws DAOException {
         ArrayList<Tache> liste = null;
@@ -98,6 +104,11 @@ public class TacheDAO extends AbstractDataBaseDAO {
         return liste;
     }
 
+    /**
+     * Supprime une tâche
+     * @param idTache id de la tâche à supprimer
+     * @throws DAOException DAO Exception
+     */
     public void supprimerTache(Integer idTache) throws DAOException {
         Connection conn = null;
         try {

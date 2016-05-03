@@ -10,7 +10,6 @@ import java.util.Date;
 /**
  *
  * @author ralambom
- * @date 31/03/2016
  */
 public class Evaluation {
     private Integer idEvaluation;

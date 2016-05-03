@@ -43,7 +43,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * Récupère l'utilisateur à partir de son email dans la base de données
      * @param email email de l'utilisateur recherché
      * @return Objet Utilisateur ayant email pour email. null sinon.
-     * @throws dao.DAOException
+     * @throws dao.DAOException DAO Exception
      */
     public Utilisateurs getUtilisateur(String email) throws DAOException {
         Utilisateurs  utilisateur = null ;
@@ -210,15 +210,15 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Modifie les données existantes dans la relation Utilisateurs dont la clé primaire est email.
-     * @param email
-     * @param mdp
-     * @param nom
-     * @param prenom
-     * @param genre
-     * @param date
-     * @param adresse
-     * @param rayon
-     * @throws dao.DAOException
+     * @param email email
+     * @param mdp mdp
+     * @param nom nom
+     * @param prenom prenom
+     * @param genre genre
+     * @param date date
+     * @param adresse adresse
+     * @param rayon rayon
+     * @throws dao.DAOException DAO Exception
      */
     public void mettreAJourUtilisateur(String email,
                                         String mdp,
@@ -261,7 +261,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * Récupère les tâches d'un utilisateur (en tant que commanditaire) dans la base de données
      * @param email l'identifiant de l'utilisateur dont on recherche les tâches
      * @return la liste des tâches trouvées ou null
-     * @throws dao.DAOException
+     * @throws dao.DAOException DAO Exception
      */
     public ArrayList<Tache> getTachesCommanditaire(String email) throws DAOException {
         ArrayList<Tache>  listeTaches = new ArrayList<>() ;
@@ -305,7 +305,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * Récupère les tâches d'un utilisateur (en tant que commanditaire) dans la base de données même les finies
      * @param email l'identifiant de l'utilisateur dont on recherche les tâches
      * @return la liste des tâches trouvées ou null
-     * @throws dao.DAOException
+     * @throws dao.DAOException DAO Exception
      */
     public ArrayList<Tache> getToutesTachesCommanditaire(String email) throws DAOException {
         ArrayList<Tache>  listeTaches = new ArrayList<>() ;
@@ -344,8 +344,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     /**
      * Récupère l'id de la dernière tâche ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
      * @param email l'identifiant du commanditaire
-     * @return  idTache l'id de la dernière tâche ajoutée
-     * @throws dao.DAOException
+     * @return idTache l'id de la dernière tâche ajoutée
+     * @throws dao.DAOException DAO Exception
      */
     public int getIdLastTache(String email) throws DAOException {
         Connection conn = null;
@@ -369,8 +369,8 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     /**
      * Récupère l'id de la dernière tâche atomique ajoutée par un utilisateur (en tant que commanditaire) dans la base de données
      * @param email l'identifiant du commanditaire
-     * @return  idTache l'id de la dernière tâche ajoutée
-     * @throws dao.DAOException
+     * @return idTache l'id de la dernière tâche ajoutée
+     * @throws dao.DAOException DAO Exception
      */
     public int getIdLastTacheAtom(String email) throws DAOException {
         Connection conn = null;
@@ -393,9 +393,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Retourne liste des idTacheAtom des tâches où il a candidaté
-     * @param utilisateur
-     * @return
-     * @throws DAOException 
+     * @param utilisateur utilisateur
+     * @return Liste des tâches auxquelles l'utilisateur a postulées
+     * @throws dao.DAOException DAO Exception
      */
     public HashSet<Integer> getCandidaturesExecutant(Utilisateurs utilisateur) throws DAOException {
         HashSet<Integer> candidatures = new HashSet<>();
@@ -420,7 +420,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * Récupère le nombre de candidatures reçues par le commanditaire pour toutes ses tâches (atomiques)
      * @param utilisateur commanditaire
      * @return table de hachage liant les numéros des tâches du commanditaire au nombre de candidature qu'a chaque tâche (atomique)
-     * @throws DAOException 
+     * @throws dao.DAOException DAO Exception
      */
     public HashMap<Integer, Integer> getNbCandidaturesCommanditaire(Utilisateurs utilisateur) throws DAOException {
         HashMap<Integer, Integer> candidatures = new HashMap<>();
@@ -447,7 +447,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * @param utilisateur commanditaire
      * @param idTacheAtom numéro de tâche atomique dont on veut récupérer les candidatures
      * @return Liste contenant les emails des candidats à une tâche atomique
-     * @throws DAOException 
+     * @throws dao.DAOException DAO Exception
      */
     public ArrayList<String> getCandidaturesCommanditaire(Utilisateurs utilisateur, int idTacheAtom) throws DAOException {
         ArrayList<String> listeCandidats = new ArrayList<>();
@@ -492,10 +492,10 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Indique si la tache atomique d'id idTacheAtom a été proposée par l'utilisateur utilisateur
-     * @param idTacheAtom
-     * @param utilisateur
+     * @param idTacheAtom id de la tâche atomique
+     * @param utilisateur utilisateur
      * @return true si l'utilisateur a bien proposé cette tâche
-     * @throws DAOException 
+     * @throws dao.DAOException DAO Exception
      */
     public boolean proposedThisAtomTask(int idTacheAtom, Utilisateurs utilisateur) throws DAOException {
         Connection conn = null;
@@ -535,9 +535,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     /**
      * Récupère la liste des tâches auxquelles l'utilisateur peut postuler, 
      * selon ses compétences
-     * @param utilisateur
-     * @return
-     * @throws DAOException 
+     * @param utilisateur utilisateur
+     * @return Liste des tâches
+     * @throws dao.DAOException DAO Exception
      */
     public HashMap<Integer,TacheAtom> getTachesPotentielles(Utilisateurs utilisateur) throws DAOException{
         HashMap<Integer,TacheAtom> liste = null;
@@ -632,9 +632,9 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Retourne les tâches finies de l'exécutant
-     * @param utilisateur
-     * @return
-     * @throws DAOException 
+     * @param utilisateur utilisateur
+     * @return Liste des tâches finies
+     * @throws dao.DAOException DAO Exception
      */
     public ArrayList<TacheAtom> getTachesExecutantFinies(Utilisateurs utilisateur) throws DAOException {
         ArrayList<TacheAtom> liste = new ArrayList<>();
@@ -673,7 +673,7 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
      * Récupère les tâches (atomiques) pour lequel un utilisateur est exécutant et qui ne sont pas finies
      * @param email utilisateur dont on veut trouver les tâches qu'il exécute
      * @return une liste des tâches atomiques
-     * @throws DAOException 
+     * @throws dao.DAOException DAO Exception
      */
     public ArrayList<TacheAtom> getTachesEnCours(String email) throws DAOException {
         Connection conn = null;
@@ -708,10 +708,10 @@ public class UtilisateurDAO extends AbstractDataBaseDAO {
     
     /**
      * Génère la facture (en pdf)
-     * @param idTacheAtom
-     * @param out
-     * @throws DAOException
-     * @throws IOException 
+     * @param idTacheAtom id de la tâche atomique
+     * @param out output stream
+     * @throws dao.DAOException DAO Exception
+     * @throws java.io.IOException IO Exception
      */
     public void genereFacture(int idTacheAtom, OutputStream out) throws DAOException, IOException {
         Connection conn = null;

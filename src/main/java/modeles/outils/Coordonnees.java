@@ -5,11 +5,6 @@
  */
 package modeles.outils;
 
-/**
- *
- * @author ralambom
- * @date 31/03/2016
- */
 public class Coordonnees {
     private double latitude;
     private double longitude;

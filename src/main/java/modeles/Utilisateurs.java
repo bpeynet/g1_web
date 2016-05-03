@@ -10,11 +10,6 @@ import java.util.Date;
 import modeles.outils.Competences;
 import modeles.outils.Coordonnees;
 
-/**
- *
- * @author ralambom
- * @date 31/03/2016
- */
 public class Utilisateurs {
     private String email;
     private String mdp;
