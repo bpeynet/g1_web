@@ -72,7 +72,7 @@ INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Escorte d''Elizabet
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Eliminer SPECTRE',
     'Des rencontres perturbantes sont à prévoir.', 100.15, 51.487270, -0.124559, TO_date('04/05/2016','dd/mm/yyyy'),
     TO_date('04/05/2017','dd/mm/yyyy'), 1, 'm@mi6.gov.co.uk', null,0);
-INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une application Web de crowsourcing',
+INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Construire une application Web de crowdsourcing',
     'En équipe de 5', 0, 45.200666, 5.725531, TO_date('04/05/2016','dd/mm/yyyy'),
     TO_date('04/05/2017','dd/mm/yyyy'), 2, 'picsou@disney.com', null,0);
 INSERT INTO TachesAtom VALUES (tachesAtom_sequence.NEXTVAL, 'Battre le Chiffre au poker',
@@ -128,6 +128,7 @@ CREATE TABLE CompetencesTaches (
 );
 
 INSERT INTO CompetencesTaches VALUES (1, 'm@mi6.gov.co.uk','self-defense');
+INSERT INTO CompetencesTaches VALUES (3, 'picsou@disney.com','self-defense');
 
 CREATE TABLE Candidatures (
     idTacheAtom integer NOT NULL,
