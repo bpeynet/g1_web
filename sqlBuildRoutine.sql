@@ -93,7 +93,7 @@ CREATE TABLE Competences (
 
 INSERT INTO Competences VALUES ('bricolage');
 INSERT INTO Competences VALUES ('couture');
-INSERT INTO Competences VALUES ('self-defense');
+INSERT INTO Competences VALUES ('arts martiaux');
 INSERT INTO Competences VALUES ('informatique');
 INSERT INTO Competences VALUES ('plomberie');
 INSERT INTO Competences VALUES ('cuisine');
@@ -106,11 +106,11 @@ CREATE TABLE CompetencesUtilisateurs (
     PRIMARY KEY (idUtilisateur, competence)
 );
 
-INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','self-defense');
+INSERT INTO CompetencesUtilisateurs VALUES ('james.bond@mi6.gov.co.uk','arts martiaux');
 INSERT INTO CompetencesUtilisateurs VALUES ('picsou@disney.com','cuisine');
 INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','cuisine');
 INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','chant');
-INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','self-defense');
+INSERT INTO CompetencesUtilisateurs VALUES ('bpeynet@free.fr','arts martiaux');
 
 CREATE SEQUENCE CompUtilisateurs_Sequence
     INCREMENT BY 1
@@ -127,8 +127,8 @@ CREATE TABLE CompetencesTaches (
     competence varchar(100) NOT NULL references Competences(competence) ON DELETE CASCADE
 );
 
-INSERT INTO CompetencesTaches VALUES (1, 'm@mi6.gov.co.uk','self-defense');
-INSERT INTO CompetencesTaches VALUES (3, 'picsou@disney.com','self-defense');
+INSERT INTO CompetencesTaches VALUES (1, 'm@mi6.gov.co.uk','arts martiaux');
+INSERT INTO CompetencesTaches VALUES (3, 'picsou@disney.com','arts martiaux');
 
 CREATE TABLE Candidatures (
     idTacheAtom integer NOT NULL,
