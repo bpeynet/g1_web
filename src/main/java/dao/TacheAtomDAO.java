@@ -146,34 +146,61 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return listTachesAtomiques;
     }
 
+    /**
+     * Ajoute une candidature pour un utilisateur et une tâche.
+     * @param utilisateur utilisateur
+     * @param idTacheAtom id de la tâche atomique
+     * @param ut DAO Utilisateur
+     * @return id de la tâche à laquelle appartient la tâche atomique pour laquelle on a postulé
+     * @throws DAOException DAOException 
+     */
     public int postuler(Utilisateurs utilisateur, int idTacheAtom, UtilisateurDAO ut) throws DAOException {
         Connection conn = null;
         TacheAtom ta = getTacheAtom(idTacheAtom,ut);
+        int idTacheARetourner;
         if (ta != null) {
-            int idTacheARetourner = ta.getIdTacheMere();
+            idTacheARetourner = ta.getIdTacheMere();
             String emailCommanditaire = ta.getEmailCommanditaire();
             try {
                 conn = getConnection();
                 Statement st = conn.createStatement();
-                String requeteSQL = "SELECT * FROM Candidatures WHERE idCandidat='"
-                        + utilisateur.getEmail() + "' AND idTacheAtom=" + idTacheAtom;
+                String requeteSQL = "SELECT DISTINCT idTacheAtom FROM CompetencesTaches WHERE idTacheAtom="
+                        + idTacheAtom
+                        + " AND competence IN (SELECT competence FROM CompetencesUtilisateurs WHERE idUtilisateur='"
+                        + utilisateur.getEmail() + "')";
                 ResultSet rs = st.executeQuery(requeteSQL);
-                if (!rs.next()) {
-                    requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
-                            + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
-                    st.executeUpdate(requeteSQL);
+                if (rs.next()) {
+                    requeteSQL = "SELECT * FROM Candidatures WHERE idCandidat='"
+                            + utilisateur.getEmail() + "' AND idTacheAtom=" + idTacheAtom;
+                    rs = st.executeQuery(requeteSQL);
+                    if (!rs.next()) {
+                        requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
+                                + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
+                        st.executeUpdate(requeteSQL);
+                    }
+                } else {
+                    idTacheARetourner = -2;//Pas les compétences
                 }
             } catch (SQLException e) {
-                throw new DAOException("Erreur SQL 'postuler'",e);
+                throw new DAOException("Erreur SQL 'postuler' " + e.getMessage(),e);
             } finally {
                 closeConnection(conn);
             }
-            return idTacheARetourner;
         } else {
-            return -1;
+            idTacheARetourner = -1;//Tâche inexistante
         }
+        return idTacheARetourner;
     }
 
+    /**
+     * Retire la candidature d'un utilisateur pour une tâche.
+     * @param utilisateur utilisateur
+     * @param idTacheAtom id de la tâche atomique
+     * @param ut DAO Utilisateur
+     * @return l'id de la tâche mère à laquelle appartient la tâche atomique
+     *          pour laquelle on retire sa candidature
+     * @throws DAOException DAOException 
+     */
     public int depostuler(Utilisateurs utilisateur, Integer idTacheAtom, UtilisateurDAO ut) throws DAOException {
         Connection conn = null;
         TacheAtom ta = getTacheAtom(idTacheAtom, ut);

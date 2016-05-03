@@ -740,6 +740,11 @@ public class controleur extends HttpServlet {
                         allerPageAccueilConnecté(request, response, utilisateurDAO);
                         break;
                     }
+                    case -2: {
+                        request.setAttribute("succesMessage", "Vous n'avez pas les compétences pour postuler à cette tâche.");
+                        allerPageAccueilConnecté(request, response, utilisateurDAO);
+                        break;
+                    }
                     default: {
                         request.setAttribute("tache", tacheDAO.getTache(idTacheRetour, tacheAtomDAO, competenceDAO, utilisateurDAO));
                         request.setAttribute("candidatures", utilisateurDAO.getCandidaturesExecutant((Utilisateurs) request.getSession().getAttribute("utilisateur")));
