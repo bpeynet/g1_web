@@ -18,6 +18,12 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         super(ds);
     }
     
+    /**
+     * Vérifie si une tâche est finie.
+     * @param idTacheAtom id de la tâche qui est vérifiée
+     * @return true si la tâche est finie
+     * @throws DAOException DAOException 
+     */
     public boolean isOver(int idTacheAtom) throws DAOException {
         Connection conn = null;
         boolean fini = false;
@@ -37,6 +43,13 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return fini;
     }
     
+    /**
+     * Ajoute une compétence nécessaire à une tâche.
+     * @param id id de la tâche concernée par cette compétence
+     * @param emailC email du commanditaire de la tâche
+     * @param competence compétence ajoutée
+     * @throws DAOException DAOException 
+     */
     public void ajouterCompetence(int id, String emailC, String competence) throws DAOException {
         ResultSet rs = null;
         String requeteSQL;
@@ -54,11 +67,11 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
     }
     
     /**
-     *
-     * @param idTacheAtom the value of idTacheAtom
-     * @param utilisateurDAO the value of utilisateurDAO
-     * @return 
-     * @throws DAOException
+     * Récupère la tâche atomique d'id idTacheAtom
+     * @param idTacheAtom id de la tâche atomique
+     * @param utilisateurDAO DAO Utilisateur
+     * @return la tâche atomique demandée ou null
+     * @throws DAOException DAOException
      */
     public TacheAtom getTacheAtom(int idTacheAtom, UtilisateurDAO utilisateurDAO) throws DAOException {
         TacheAtom  tache = null ;
@@ -88,6 +101,19 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         return tache;
     }
     
+    /**
+     * Ajoute une tâche atomique à la base de données.
+     * @param titre titre de la tâche
+     * @param description description de la tâche
+     * @param prix récompense offerte pour la tâche
+     * @param datetot date au plus tôt du début d'exécution
+     * @param datetard date au plus tard du début d'exécution
+     * @param idCommanditaire email du commanditaire de la tâche
+     * @param idMere id de la tâche à laquelle appartient cette tâche
+     * @param listCompetences liste des compétences nécessaires pour cette tâche
+     * @param utilisateurDAO DAO Utilisateur
+     * @throws DAOException DAOException 
+     */
     public void ajouterTacheAtom(String titre, String description, double prix, 
         String datetot, String datetard, String idCommanditaire, int idMere,
         ArrayList<Competences> listCompetences, UtilisateurDAO utilisateurDAO) throws DAOException {
@@ -118,7 +144,14 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
         
-        
+    /**
+     * Récuppère l'ensemble des tâches atomiques appartenant à la tâche mère demandée
+     * @param idTacheMere id de la tâche mère
+     * @param competenceDAO DAO Competence
+     * @param ut DAO Utilisateur
+     * @return la liste des tâches atomiques de cette tâche
+     * @throws DAOException DAOException 
+     */  
     public ArrayList<TacheAtom> getTaches(int idTacheMere, CompetenceDAO competenceDAO, UtilisateurDAO ut) throws DAOException {
         Connection conn=null;
         ResultSet rs;
@@ -223,6 +256,11 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
     
+    /**
+     * Supprimer de la base de données une tâche atomique
+     * @param idTacheAtom id de la tâche atomique
+     * @throws DAOException DAO Exception
+     */
     public void supprimerTacheAtom(Integer idTacheAtom) throws DAOException {
         Connection conn = null;
         try {
@@ -237,6 +275,15 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
         }
     }
 
+    /**
+     * Accepte une candidature en enregistrant l'email du candidat retenu
+     * après avoir vérifié que la candidature existe toujours.
+     * Supprime ensuite toutes les candidatures pour cette tâche.
+     * @param idCandidat email du candidat retenu
+     * @param idTacheAtom id de la tâche pour laquelle le candidat est retenu
+     * @return 0 si une candidature a bien été trouvée et acceptée, -1 sinon.
+     * @throws DAOException DAOException 
+     */
     public int accepterCandidature(String idCandidat, int idTacheAtom) throws DAOException {
         Connection conn = null;
         boolean erreur = false;
@@ -264,7 +311,7 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
 
     /**
      * Indique une tâche comme finie
-     * @param idTacheAtom 
+     * @param idTacheAtom id de la tâche atomique
      * @throws dao.DAOException 
      */
     public void finir(int idTacheAtom) throws DAOException {
