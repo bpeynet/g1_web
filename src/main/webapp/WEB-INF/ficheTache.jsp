@@ -115,7 +115,9 @@
                                     out.println("Postuler&idTacheAtom="
                                             + ta.getIdTacheAtom() + "'>Postuler</a></td></tr>");
                                 }
-                            } else if (ta.getIndicateurFin()==1) {
+                            } else if (ta.getIndicateurFin()==1
+                                    && (ta.getEmailCommanditaire().equals(utilisateur.getEmail())
+                                        || ta.getEmailExecutant().equals(utilisateur.getEmail()))) {
                                 out.println("<td> Tâche finie </td><td><a href='./controleur?action=Facture&idTacheAtom=" + ta.getIdTacheAtom() + "' target='_blank'>Facture</a></td>");
                             } else {
                                 out.println("</tr>");
