@@ -212,7 +212,21 @@ public class TacheAtomDAO extends AbstractDataBaseDAO{
                         st.executeUpdate(requeteSQL);
                     }
                 } else {
-                    idTacheARetourner = -2;//Pas les compétences
+                    requeteSQL = "SELECT idTacheAtom FROM CompetencesTaches WHERE idTacheAtom="
+                            + idTacheAtom;
+                    rs = st.executeQuery(requeteSQL);
+                    if (!rs.next()) {
+                       requeteSQL = "SELECT * FROM Candidatures WHERE idCandidat='"
+                            + utilisateur.getEmail() + "' AND idTacheAtom=" + idTacheAtom;
+                        rs = st.executeQuery(requeteSQL);
+                        if (!rs.next()) {
+                            requeteSQL = "INSERT INTO Candidatures VALUES (" + idTacheAtom
+                                    + ",'" + emailCommanditaire + "','" + utilisateur.getEmail() + "')";
+                            st.executeUpdate(requeteSQL);
+                        } 
+                    } else {
+                        idTacheARetourner = -2;//Pas les compétences
+                    }
                 }
             } catch (SQLException e) {
                 throw new DAOException("Erreur SQL 'postuler' " + e.getMessage(),e);
